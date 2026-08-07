@@ -1,0 +1,400 @@
+/* =========================
+   DASHBOARD PAGE
+========================= */
+
+.delivery-dashboard-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.delivery-dashboard-main {
+  flex: 1;
+  padding: 25px;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.delivery-dashboard-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.delivery-dashboard-title {
+  font-size: 32px;
+  color: #222;
+}
+
+.delivery-dashboard-subtitle {
+  color: #777;
+  margin-top: 5px;
+}
+
+.delivery-dashboard-profile {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.delivery-dashboard-bell {
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.delivery-dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: white;
+  padding: 10px 18px;
+  border-radius: 12px;
+}
+
+.delivery-dashboard-user-icon {
+  font-size: 40px;
+  color: #8e44ad;
+}
+
+.delivery-dashboard-user span {
+  color: green;
+  font-size: 14px;
+}
+
+/* =========================
+   STATS
+========================= */
+
+.delivery-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.delivery-dashboard-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  transition: 0.3s;
+}
+
+.delivery-dashboard-card:hover {
+  transform: translateY(-4px);
+}
+
+.delivery-dashboard-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delivery-dashboard-card-icon {
+  font-size: 28px;
+}
+
+.delivery-dashboard-card h3 {
+  font-size: 32px;
+  margin: 15px 0 5px;
+}
+
+.delivery-dashboard-card p {
+  color: #777;
+}
+
+/* COLORS */
+
+.purple {
+  color: #8e44ad;
+}
+
+.orange {
+  color: #f39c12;
+}
+
+.blue {
+  color: #3498db;
+}
+
+.green {
+  color: #27ae60;
+}
+
+/* =========================
+   CHART GRID
+========================= */
+
+.delivery-dashboard-chart-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   CHART CARD
+========================= */
+
+.delivery-dashboard-chart-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+}
+
+.delivery-dashboard-chart-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.delivery-dashboard-chart-header button {
+  border: none;
+  background: #8e44ad;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.delivery-dashboard-pie-title {
+  margin-bottom: 15px;
+}
+
+/* =========================
+   LEGEND
+========================= */
+
+.delivery-dashboard-legend {
+  margin-top: 20px;
+}
+
+.delivery-dashboard-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .delivery-dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .delivery-dashboard-chart-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+
+  .delivery-dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-dashboard-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+}
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width: 1024px){
+
+  .delivery-dashboard-main{
+    padding:20px;
+  }
+
+  .delivery-dashboard-stats{
+    grid-template-columns:repeat(2,1fr);
+    gap:15px;
+  }
+
+  .delivery-dashboard-chart-grid{
+    grid-template-columns:1fr;
+  }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:768px){
+
+  .delivery-dashboard-page{
+    display:block;
+  }
+
+  .delivery-dashboard-main{
+    padding:15px;
+  }
+
+  .delivery-dashboard-navbar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:15px;
+    margin-bottom:20px;
+  }
+
+  .delivery-dashboard-title{
+    font-size:24px;
+  }
+
+  .delivery-dashboard-subtitle{
+    font-size:14px;
+  }
+
+  .delivery-dashboard-profile{
+    width:100%;
+  }
+
+  .delivery-dashboard-user{
+    width:100%;
+    padding:12px;
+  }
+
+  .delivery-dashboard-user-icon{
+    font-size:32px;
+  }
+
+  .delivery-dashboard-stats{
+    grid-template-columns:1fr;
+    gap:15px;
+  }
+
+  .delivery-dashboard-card{
+    padding:18px;
+  }
+
+  .delivery-dashboard-card h3{
+    font-size:24px;
+  }
+
+  .delivery-dashboard-card p{
+    font-size:14px;
+  }
+
+  .delivery-dashboard-chart-grid{
+    grid-template-columns:1fr;
+    gap:15px;
+  }
+
+  .delivery-dashboard-chart-card{
+    padding:15px;
+    overflow-x:auto;
+  }
+
+  .delivery-dashboard-chart-header{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .delivery-dashboard-chart-header button{
+    width:100%;
+  }
+
+  .delivery-dashboard-pie-title{
+    font-size:18px;
+  }
+
+  .delivery-dashboard-legend{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width:480px){
+
+  .delivery-dashboard-main{
+    padding:12px;
+  }
+
+  .delivery-dashboard-title{
+    font-size:20px;
+  }
+
+  .delivery-dashboard-subtitle{
+    font-size:13px;
+  }
+
+  .delivery-dashboard-user{
+    padding:10px;
+    border-radius:10px;
+  }
+
+  .delivery-dashboard-user-icon{
+    font-size:28px;
+  }
+
+  .delivery-dashboard-user h4{
+    font-size:14px;
+  }
+
+  .delivery-dashboard-user span{
+    font-size:12px;
+  }
+
+  .delivery-dashboard-card{
+    padding:15px;
+    border-radius:14px;
+  }
+
+  .delivery-dashboard-card-icon{
+    font-size:22px;
+  }
+
+  .delivery-dashboard-card h3{
+    font-size:22px;
+  }
+
+  .delivery-dashboard-card p{
+    font-size:13px;
+  }
+
+  .delivery-dashboard-chart-card{
+    padding:12px;
+    border-radius:14px;
+  }
+
+  .delivery-dashboard-chart-header h3{
+    font-size:15px;
+  }
+
+  .delivery-dashboard-chart-header button{
+    padding:10px;
+    font-size:13px;
+  }
+
+  .delivery-dashboard-legend-item{
+    font-size:13px;
+  }
+
+}

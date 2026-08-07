@@ -1,0 +1,547 @@
+.adpay-layout{
+  display:flex;
+  min-height:100vh;
+  background:#f4f7fb;
+}
+
+/* PAGE */
+
+.adpay-page{
+  flex:1;
+  padding:28px;
+  min-height:100vh;
+  overflow-x:auto;
+}
+
+/* HEADER */
+
+.adpay-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:28px;
+}
+
+.adpay-header h2{
+  font-size:30px;
+  font-weight:700;
+  color:#111827;
+  margin:0;
+}
+
+/* SUMMARY */
+
+.adpay-summary-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(240px,1fr));
+  gap:22px;
+  margin-bottom:28px;
+}
+
+.adpay-summary-card{
+  background:#fff;
+  padding:24px;
+  border-radius:24px;
+  border:1px solid #edf0f7;
+  box-shadow:
+    0 10px 30px rgba(15,23,42,0.05);
+  transition:0.3s;
+}
+
+.adpay-summary-card:hover{
+  transform:translateY(-4px);
+}
+
+.adpay-summary-card h4{
+  font-size:14px;
+  color:#6b7280;
+  margin-bottom:12px;
+  font-weight:600;
+}
+
+.adpay-summary-card p{
+  font-size:34px;
+  font-weight:800;
+  color:#111827;
+  margin:0;
+}
+
+/* TABLE */
+
+.adpay-table-wrapper{
+  background:#fff;
+  border-radius:28px;
+  padding:22px;
+  overflow-x:auto;
+  border:1px solid #edf0f7;
+  box-shadow:
+    0 10px 35px rgba(15,23,42,0.05);
+}
+
+.adpay-table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+.adpay-table thead{
+  background:#f8fafc;
+}
+
+.adpay-table th{
+  padding:18px 16px;
+  text-align:left;
+  color:#6b7280;
+  font-size:13px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+}
+
+.adpay-table td{
+  padding:20px 16px;
+  border-bottom:1px solid #f1f5f9;
+  vertical-align:middle;
+}
+
+.adpay-table tr:last-child td{
+  border-bottom:none;
+}
+
+/* PARTNER */
+
+.adpay-partner-box{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.adpay-avatar{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #374151
+    );
+
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:20px;
+  font-weight:700;
+
+  flex-shrink:0;
+}
+
+.adpay-partner-box h4{
+  margin:0;
+  font-size:16px;
+  color:#111827;
+  font-weight:700;
+}
+
+.adpay-partner-box p{
+  margin-top:4px;
+  font-size:13px;
+  color:#6b7280;
+}
+
+/* AMOUNT */
+
+.adpay-amount{
+  font-size:20px;
+  font-weight:800;
+  color:#111827;
+}
+
+/* STATUS */
+
+.adpay-status{
+  padding:9px 16px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.adpay-status.Pending{
+  background:#fff7e6;
+  color:#d97706;
+}
+
+.adpay-status.Approved{
+  background:#ecfdf3;
+  color:#15803d;
+}
+
+.adpay-status.Rejected{
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+/* BUTTON */
+
+.adpay-view-btn{
+  background:#111827;
+  color:#fff;
+  border:none;
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+  transition:0.3s;
+}
+
+.adpay-view-btn:hover{
+  transform:translateY(-2px);
+  background:#000;
+}
+
+/* EMPTY */
+
+.adpay-empty{
+  text-align:center;
+  padding:35px;
+  color:#9ca3af;
+  font-size:15px;
+}
+
+/* ========================= */
+/* MODAL */
+/* ========================= */
+
+.adpay-modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.55);
+  backdrop-filter:blur(4px);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  z-index:999;
+  padding:20px;
+}
+
+.modern-modal{
+  width:720px;
+  max-width:100%;
+
+  background:#fff;
+
+  border-radius:30px;
+
+  padding:30px;
+
+  max-height:92vh;
+  overflow-y:auto;
+
+  box-shadow:
+    0 25px 60px rgba(0,0,0,0.18);
+
+  animation:popup 0.25s ease;
+}
+
+@keyframes popup{
+
+  from{
+    opacity:0;
+    transform:scale(0.95);
+  }
+
+  to{
+    opacity:1;
+    transform:scale(1);
+  }
+
+}
+
+/* TOP */
+
+.adpay-modal-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:28px;
+}
+
+.adpay-modal-top h2{
+  margin:0;
+  font-size:30px;
+  font-weight:800;
+  color:#111827;
+}
+
+.adpay-modal-top p{
+  margin-top:6px;
+  color:#6b7280;
+  font-size:14px;
+}
+
+.adpay-close-icon{
+  width:42px;
+  height:42px;
+  border:none;
+  border-radius:50%;
+  background:#f3f4f6;
+  cursor:pointer;
+  font-size:18px;
+  transition:0.3s;
+}
+
+.adpay-close-icon:hover{
+  background:#e5e7eb;
+}
+
+/* INFO CARD */
+
+.adpay-info-card{
+  background:#f9fafb;
+  border:1px solid #eef2f7;
+  border-radius:24px;
+  padding:22px;
+
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:25px;
+}
+
+.adpay-user-left{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.adpay-big-avatar{
+  width:68px;
+  height:68px;
+
+  border-radius:50%;
+
+  background:
+    linear-gradient(
+      135deg,
+      #111827,
+      #374151
+    );
+
+  color:#fff;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:28px;
+  font-weight:800;
+}
+
+.adpay-user-left h3{
+  margin:0;
+  font-size:20px;
+  color:#111827;
+}
+
+.adpay-user-left p{
+  margin-top:5px;
+  color:#6b7280;
+  font-size:14px;
+}
+
+/* STATUS PILL */
+
+.adpay-status-pill{
+  padding:10px 18px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:700;
+}
+
+.adpay-status-pill.Pending{
+  background:#fff7e6;
+  color:#d97706;
+}
+
+.adpay-status-pill.Approved{
+  background:#ecfdf3;
+  color:#15803d;
+}
+
+.adpay-status-pill.Rejected{
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+/* WALLET GRID */
+
+.adpay-wallet-grid{
+  display:grid;
+  grid-template-columns:
+    repeat(2,1fr);
+
+  gap:18px;
+  margin-bottom:26px;
+}
+
+.adpay-wallet-card{
+  background:#e2b6f6;
+  border:1px solid #eef2f7;
+  border-radius:22px;
+  padding:22px;
+}
+
+.adpay-wallet-card span{
+  font-size:13px;
+  color:#6b7280;
+  font-weight:600;
+}
+
+.adpay-wallet-card h2{
+  margin-top:12px;
+  margin-bottom:0;
+
+  font-size:32px;
+  font-weight:800;
+
+  color:#111827;
+}
+
+/* VERIFY */
+
+.adpay-verify-card{
+  background:#e5e6e8;
+  border:1px solid #eef2f7;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:28px;
+}
+
+.adpay-verify-card h3{
+  margin-top:0;
+  color:#111827;
+}
+
+.adpay-success-box,
+.adpay-fail-box{
+  margin-top:18px;
+
+  padding:16px 18px;
+
+  border-radius:18px;
+
+  display:flex;
+  align-items:center;
+  gap:12px;
+
+  font-weight:700;
+}
+
+.adpay-success-box{
+  background:#ecfdf3;
+  color:#15803d;
+}
+
+.adpay-fail-box{
+  background:#fef2f2;
+  color:#dc2626;
+}
+
+/* ACTIONS */
+
+.adpay-modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:14px;
+  flex-wrap:wrap;
+}
+
+.adpay-approve-btn,
+.adpay-reject-btn,
+.adpay-close-btn{
+  border:none;
+  padding:14px 24px;
+  border-radius:16px;
+  cursor:pointer;
+  font-weight:700;
+  transition:0.3s;
+}
+
+.adpay-approve-btn{
+  background:#111827;
+  color:#fff;
+}
+
+.adpay-approve-btn:hover{
+  transform:translateY(-2px);
+}
+
+.adpay-reject-btn{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+.adpay-close-btn{
+  background:#f3f4f6;
+  color:#111827;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  .adpay-page{
+    padding:16px;
+  }
+
+  .adpay-header h2{
+    font-size:24px;
+  }
+
+  .adpay-summary-grid{
+    grid-template-columns:1fr;
+  }
+
+  .adpay-wallet-grid{
+    grid-template-columns:1fr;
+  }
+
+  .adpay-info-card{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:18px;
+  }
+
+  .modern-modal{
+    padding:22px;
+    border-radius:24px;
+  }
+
+  .adpay-modal-top{
+    gap:12px;
+  }
+
+  .adpay-modal-top h2{
+    font-size:24px;
+  }
+
+  .adpay-modal-actions{
+    flex-direction:column;
+  }
+
+  .adpay-approve-btn,
+  .adpay-reject-btn,
+  .adpay-close-btn{
+    width:100%;
+  }
+
+}

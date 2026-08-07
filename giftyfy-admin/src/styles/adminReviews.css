@@ -1,0 +1,142 @@
+.admin-review-layout{
+  display: flex;
+  background: #f7f7f7;
+  min-height: 100vh;
+}
+
+.admin-review-content{
+  flex: 1;
+  padding: 25px;
+  overflow-x: auto;
+}
+
+.admin-review-title{
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.admin-review-table-wrapper{
+  background: white;
+  border-radius: 14px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.admin-review-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-review-table th{
+  background: #8858e8;
+  padding: 14px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #eee;
+}
+
+.admin-review-table td{
+  padding: 16px 14px;
+  border-bottom: 1px solid #f1f1f1;
+  vertical-align: middle;
+}
+
+.admin-review-product{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.admin-review-product-img{
+  width: 55px;
+  height: 55px;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.admin-review-comment{
+  max-width: 280px;
+  line-height: 1.5;
+}
+
+.admin-review-active{
+  color: green;
+  font-weight: 600;
+}
+
+.admin-review-blocked{
+  color: red;
+  font-weight: 600;
+}
+
+.admin-review-block-btn{
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-review-unblock-btn{
+  background: green;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.admin-review-block-btn:hover,
+.admin-review-unblock-btn:hover{
+  opacity: 0.9;
+}
+
+
+.admin-review-pagination-wrapper {
+  padding: 20px;
+}
+
+.admin-review-pagination-info {
+  text-align: center;
+  margin-bottom: 12px;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.admin-review-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-review-pagination button {
+  min-width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f5f9;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.admin-review-pagination button:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.admin-review-pagination .active-page {
+  background: #2563eb;
+  color: white;
+}
+
+.admin-review-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

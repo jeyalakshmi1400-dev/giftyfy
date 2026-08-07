@@ -1,0 +1,662 @@
+/* =========================================
+   GIFTYFY PRODUCT PAGE
+========================================= */
+
+.giftyfy-product-page{
+  min-height:100vh;
+  padding:24px;
+}
+
+/* =========================================
+   PRODUCT STATS LAYOUT
+========================================= */
+
+.giftyfy-product-stats{
+  width:100%;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+  gap:24px;
+
+  margin-bottom:28px;
+}
+
+.giftyfy-product-stat-col{
+  width:100%;
+}
+
+/* =========================================
+   PRODUCT STAT CARD
+========================================= */
+
+.giftyfy-product-stat-card{
+  width:100%;
+  min-height:150px;
+
+  position:relative;
+
+  border:none;
+  border-radius:24px;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff 0%,
+      #f8fafc 100%
+    );
+
+  border:1px solid #eef2f7;
+
+  box-shadow:
+    0 10px 35px rgba(15,23,42,0.06),
+    0 2px 10px rgba(15,23,42,0.04);
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease;
+}
+
+/* TOP BORDER */
+
+.giftyfy-product-stat-card::before{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:5px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #7c3aed,
+      #a855f7,
+      #c084fc
+    );
+}
+
+/* HOVER */
+
+.giftyfy-product-stat-card:hover{
+  transform:translateY(-5px);
+
+  box-shadow:
+    0 18px 45px rgba(124,58,237,0.14),
+    0 6px 18px rgba(15,23,42,0.08);
+}
+
+/* =========================================
+   CARD BODY
+========================================= */
+
+.giftyfy-product-stat-body{
+  height:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  padding:28px;
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
+.giftyfy-product-stat-content{
+  display:flex;
+  flex-direction:column;
+}
+
+/* TITLE */
+
+.giftyfy-stat-title{
+  font-size:13px;
+  font-weight:700;
+
+  letter-spacing:.8px;
+
+  color:#64748b;
+
+  text-transform:uppercase;
+
+  margin-bottom:12px;
+}
+
+/* COUNT */
+
+.giftyfy-stat-count{
+  font-size:38px;
+  font-weight:800;
+
+  color:#111827;
+
+  margin:0;
+
+  line-height:1;
+}
+
+/* =========================================
+   ICON BOX
+========================================= */
+
+.giftyfy-product-stat-icon{
+  width:72px;
+  height:72px;
+
+  min-width:72px;
+
+  border-radius:22px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(124,58,237,0.12),
+      rgba(168,85,247,0.20)
+    );
+
+  box-shadow:
+    inset 0 1px 1px rgba(255,255,255,.6);
+}
+
+.giftyfy-product-stat-icon i{
+  font-size:30px;
+  color:#7c3aed;
+}
+
+/* =========================================
+   FILTER CARD
+========================================= */
+
+.giftyfy-product-filter-card{
+  background:#fff;
+
+  border-radius:22px;
+
+  border:1px solid #edf1f7;
+
+  padding:22px;
+
+  margin-bottom:24px;
+
+  box-shadow:
+    0 8px 25px rgba(15,23,42,0.05);
+}
+
+.giftyfy-product-filter-wrap{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+
+/* =========================================
+   INPUTS
+========================================= */
+
+.giftyfy-product-page .form-control,
+.giftyfy-product-page .form-select{
+  min-width:220px;
+  min-height:48px;
+
+  border-radius:14px;
+
+  border:1px solid #dbe2ea;
+
+  background:#fff;
+
+  padding:0 16px;
+
+  font-size:14px;
+  font-weight:500;
+
+  color:#111827;
+
+  box-shadow:none;
+
+  transition:.25s ease;
+}
+
+.giftyfy-product-page .form-control:focus,
+.giftyfy-product-page .form-select:focus{
+  border-color:#8b5cf6;
+
+  box-shadow:
+    0 0 0 4px rgba(139,92,246,0.12);
+}
+
+/* =========================================
+   TABLE CARD
+========================================= */
+
+.giftyfy-product-table-card{
+  background:#fff;
+
+  border-radius:24px;
+
+  overflow:hidden;
+
+  border:1px solid #edf1f7;
+
+  box-shadow:
+    0 8px 25px rgba(15,23,42,0.05);
+}
+
+/* =========================================
+   TABLE
+========================================= */
+
+.giftyfy-product-page table{
+  width:100%;
+  margin:0;
+
+  border-collapse:separate;
+  border-spacing:0;
+}
+
+/* TABLE HEAD */
+
+.giftyfy-product-page thead{
+  background:
+    linear-gradient(
+      90deg,
+      #111827,
+      #1f2937
+    );
+}
+
+.giftyfy-product-page thead th{
+  color:#0f0b0b;
+
+  font-size:14px;
+  font-weight:700;
+
+  padding:18px 16px;
+
+  border:none;
+
+  text-transform:uppercase;
+
+  letter-spacing:.5px;
+
+  white-space:nowrap;
+}
+
+/* TABLE BODY */
+
+.giftyfy-product-page tbody tr{
+  transition:.25s ease;
+}
+
+.giftyfy-product-page tbody tr:hover{
+  background:#faf7ff;
+}
+
+.giftyfy-product-page tbody td{
+  padding:18px 14px;
+
+  vertical-align:middle;
+
+  border-bottom:1px solid #eef2f7;
+
+  color:#374151;
+
+  font-size:14px;
+}
+
+/* =========================================
+   PRODUCT INFO
+========================================= */
+
+.giftyfy-product-info{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.giftyfy-product-image{
+  width:64px;
+  height:64px;
+
+  min-width:64px;
+
+  border-radius:16px;
+
+  object-fit:cover;
+
+  border:1px solid #e5e7eb;
+
+  background:#fff;
+
+  transition:.3s ease;
+}
+
+.giftyfy-product-image:hover{
+  transform:scale(1.06);
+}
+
+.giftyfy-product-name{
+  font-size:14px;
+  font-weight:700;
+
+  color:#111827;
+
+  line-height:1.4;
+}
+
+/* =========================================
+   CATEGORY
+========================================= */
+
+.giftyfy-product-category{
+  font-size:13px;
+  font-weight:700;
+
+  color:#7c3aed;
+
+  margin-bottom:4px;
+}
+
+.giftyfy-product-subcategory{
+  font-size:12px;
+  color:#64748b;
+}
+
+/* =========================================
+   CITY
+========================================= */
+
+.giftyfy-product-city{
+  font-size:13px;
+  font-weight:500;
+
+  color:#334155;
+
+  line-height:1.7;
+}
+
+/* =========================================
+   PINCODE BADGES
+========================================= */
+
+.giftyfy-pincode-wrap{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+}
+
+.giftyfy-pincode-badge{
+  background:#ede9fe;
+
+  color:#6d28d9;
+
+  border-radius:30px;
+
+  padding:6px 10px;
+
+  font-size:11px;
+  font-weight:700;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* MORE BUTTON */
+
+.giftyfy-more-btn{
+  border:none;
+  background:none;
+
+  color:#7c3aed;
+
+  font-size:12px;
+  font-weight:700;
+
+  padding:0;
+
+  margin-top:4px;
+}
+
+/* =========================================
+   QTY BADGE
+========================================= */
+
+.giftyfy-qty-badge{
+  min-width:42px;
+  height:34px;
+
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#f3f0ff;
+
+  color:#6d28d9;
+
+  border:1px solid #ddd6fe;
+
+  border-radius:10px;
+
+  font-size:13px;
+  font-weight:700;
+}
+
+/* =========================================
+   ACTION BUTTONS
+========================================= */
+
+.giftyfy-product-actions{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+}
+
+/* VIEW */
+
+.giftyfy-btn-view{
+  background:#7c3aed !important;
+
+  color:#fff !important;
+
+  border:none !important;
+
+  border-radius:10px !important;
+
+  padding:7px 15px !important;
+
+  font-size:13px !important;
+  font-weight:700 !important;
+
+  transition:.25s ease !important;
+}
+
+.giftyfy-btn-view:hover{
+  background:#6d28d9 !important;
+
+  transform:translateY(-2px);
+}
+
+/* EDIT */
+
+.giftyfy-btn-edit{
+  border:1px solid #8b5cf6 !important;
+
+  color:#7c3aed !important;
+
+  background:#fff !important;
+
+  border-radius:10px !important;
+
+  padding:7px 15px !important;
+
+  font-size:13px !important;
+  font-weight:700 !important;
+
+  transition:.25s ease !important;
+}
+
+.giftyfy-btn-edit:hover{
+  background:#f5f3ff !important;
+}
+
+/* DELETE */
+
+.giftyfy-btn-delete{
+  border:1px solid #ef4444 !important;
+
+  color:#ef4444 !important;
+
+  background:#fff !important;
+
+  border-radius:10px !important;
+
+  padding:7px 15px !important;
+
+  font-size:13px !important;
+  font-weight:700 !important;
+
+  transition:.25s ease !important;
+}
+
+.giftyfy-btn-delete:hover{
+  background:#fef2f2 !important;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media(max-width:992px){
+
+  .giftyfy-product-page{
+    padding:16px;
+  }
+
+  .giftyfy-product-filter-wrap{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .giftyfy-product-page .form-control,
+  .giftyfy-product-page .form-select{
+    width:100%;
+    min-width:100%;
+  }
+
+}
+
+@media(max-width:768px){
+
+  .giftyfy-product-stats{
+    grid-template-columns:1fr;
+    gap:18px;
+  }
+
+  .giftyfy-product-stat-card{
+    min-height:125px;
+  }
+
+  .giftyfy-product-stat-body{
+    padding:20px;
+  }
+
+  .giftyfy-stat-count{
+    font-size:30px;
+  }
+
+  .giftyfy-product-stat-icon{
+    width:60px;
+    height:60px;
+
+    min-width:60px;
+  }
+
+  .giftyfy-product-stat-icon i{
+    font-size:24px;
+  }
+
+  .giftyfy-product-image{
+    width:54px;
+    height:54px;
+
+    min-width:54px;
+  }
+
+  .giftyfy-product-name{
+    font-size:13px;
+  }
+
+  .giftyfy-product-actions{
+    flex-wrap:wrap;
+  }
+
+}
+
+@media(max-width:576px){
+
+  .giftyfy-product-page{
+    padding:12px;
+  }
+
+  .giftyfy-product-table-card{
+    border-radius:18px;
+  }
+
+  .giftyfy-product-page thead th{
+    font-size:12px;
+    padding:14px 12px;
+  }
+
+  .giftyfy-product-page tbody td{
+    padding:14px 10px;
+  }
+
+}
+
+.giftyfy-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.giftyfy-pagination button {
+  border: none;
+  min-width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.giftyfy-pagination button:hover {
+  background: #2563eb;
+  color: #fff;
+}
+
+.giftyfy-pagination .active-page {
+  background: #2563eb;
+  color: #fff;
+}
+
+.giftyfy-pagination button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

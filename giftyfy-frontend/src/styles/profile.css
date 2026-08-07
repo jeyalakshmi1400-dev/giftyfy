@@ -1,0 +1,450 @@
+/* ========================================
+   PROFILE PAGE
+======================================== */
+
+.gfp-page{
+  display:flex;
+  min-height:100vh;
+  background:#f4f6fb;
+  font-family:"Poppins",sans-serif;
+}
+
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.gfp-sidebar{
+  width:260px;
+  background:#fff;
+  padding:25px;
+  border-right:1px solid #e5e7eb;
+  box-shadow:0 0 20px rgba(0,0,0,0.04);
+}
+
+.gfp-sidebar button{
+  width:100%;
+  border:none;
+  padding:14px 16px;
+  margin-bottom:12px;
+  border-radius:12px;
+  background:#f8fafc;
+  color:#374151;
+  font-size:15px;
+  font-weight:500;
+  cursor:pointer;
+  transition:.3s;
+}
+
+.gfp-sidebar button:hover{
+  background:#eef2ff;
+  color:#4f46e5;
+}
+
+.gfp-sidebar button.active{
+  background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  color:#fff;
+}
+
+.gfp-sidebar .logout{
+  background:#ef4444;
+  color:#fff;
+}
+
+.gfp-sidebar .logout:hover{
+  background:#dc2626;
+}
+
+/* ========================================
+   CONTENT
+======================================== */
+
+.gfp-content{
+  flex:1;
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+}
+
+/* ========================================
+   HEADER
+======================================== */
+
+.gfp-header{
+  width:100%;
+  max-width:850px;
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  display:flex;
+  align-items:center;
+  gap:25px;
+  box-shadow:0 10px 30px rgba(0,0,0,.05);
+  margin-bottom:25px;
+}
+
+.gfp-image-wrapper{
+  position:relative;
+  width:120px;
+}
+
+.gfp-avatar{
+  width:120px;
+  height:120px;
+  border-radius:50%;
+  object-fit:cover;
+  border:4px solid #4f46e5;
+}
+
+.gfp-upload-btn{
+  position:absolute;
+  right:0;
+  bottom:0;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:#4f46e5;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  font-size:18px;
+}
+
+.gfp-save-image-btn{
+  margin-top:10px;
+  padding:10px 18px;
+  border:none;
+  border-radius:10px;
+  background:#4f46e5;
+  color:#fff;
+  cursor:pointer;
+}
+
+/* ========================================
+   COMMON CARD
+======================================== */
+
+.gfp-card{
+  width:100%;
+  max-width:850px;
+  background:#fff;
+  border-radius:20px;
+  padding:25px;
+  box-shadow:0 10px 25px rgba(0,0,0,.05);
+}
+
+/* ========================================
+   FORM
+======================================== */
+
+.gfp-card input,
+.gfp-modal input,
+.gfp-modal textarea{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:1px solid #dbe0e7;
+  border-radius:12px;
+  outline:none;
+  font-size:14px;
+}
+
+.gfp-card input:focus,
+.gfp-modal input:focus,
+.gfp-modal textarea:focus{
+  border-color:#6366f1;
+}
+
+.gfp-edit-btn{
+  margin-top:15px;
+  border:none;
+  padding:12px 24px;
+  background:#4f46e5;
+  color:#fff;
+  border-radius:12px;
+  cursor:pointer;
+}
+
+.gfp-save-profile-btn{
+  margin-top:15px;
+  border:none;
+  padding:12px 24px;
+  background:#10b981;
+  color:#fff;
+  border-radius:12px;
+  cursor:pointer;
+}
+.gfp-info-row{
+  padding:12px 0;
+  border-bottom:1px solid #eee;
+  font-size:15px;
+}
+
+.gfp-info-row strong{
+  display:inline-block;
+  width:90px;
+  color:#374151;
+}
+
+.gfp-edit-btn{
+  margin-top:20px;
+}
+
+/* ========================================
+   ORDERS
+======================================== */
+
+.gfp-order-card{
+  background:#fff;
+  border-radius:16px;
+  padding:20px;
+  margin-top:15px;
+  border:1px solid #edf1f7;
+}
+
+.gfp-order-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.gfp-order-item{
+  display:flex;
+  gap:15px;
+  margin-top:15px;
+  align-items:center;
+}
+
+.gfp-order-item img{
+  width:75px;
+  height:75px;
+  object-fit:cover;
+  border-radius:10px;
+}
+
+.gfp-status{
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+}
+
+.gfp-status-delivered{
+  background:#dcfce7;
+  color:#15803d;
+}
+
+.gfp-status-pending{
+  background:#fef3c7;
+  color:#b45309;
+}
+
+.gfp-status-cancelled{
+  background:#fee2e2;
+  color:#dc2626;
+}
+
+/* ========================================
+   ADDRESS
+======================================== */
+
+.gfp-address-card{
+  background:#fff;
+  border-radius:16px;
+  padding:18px;
+  border:1px solid #edf1f7;
+  margin-top:15px;
+}
+
+.gfp-address-actions{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.gfp-address-edit-btn{
+  border:none;
+  background:#22c55e;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+.gfp-address-delete-btn{
+  border:none;
+  background:#ef4444;
+  color:#fff;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+/* ========================================
+   MODAL
+======================================== */
+
+.gfp-modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px;
+  z-index: 9999;
+}
+
+.gfp-modal{
+  width: 100%;
+  max-width: 500px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.gfp-modal h3{
+  margin-bottom: 15px;
+}
+
+.gfp-modal input,
+.gfp-modal textarea{
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.gfp-modal textarea{
+  min-height: 90px;
+  resize: vertical;
+}
+
+.gfp-modal-actions{
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.gfp-save-btn,
+.gfp-cancel-btn{
+  flex: 1;
+  height: 45px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.gfp-save-btn{
+  background: #4f46e5;
+  color: white;
+}
+
+.gfp-cancel-btn{
+  background: #e5e7eb;
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media(max-width:768px){
+
+  .gfp-page{
+    flex-direction:column;
+  }
+
+  .gfp-sidebar{
+    width:100%;
+    display:flex;
+    gap:10px;
+    overflow-x:auto;
+    border-right:none;
+    border-bottom:1px solid #eee;
+  }
+
+  .gfp-sidebar button{
+    min-width:120px;
+    margin-bottom:0;
+  }
+
+  .gfp-content{
+    padding:15px;
+  }
+
+  .gfp-header{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .gfp-order-top{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+  }
+
+  .gfp-order-item{
+    flex-direction:column;
+    text-align:center;
+  }
+
+  .gfp-address-actions,
+  .gfp-modal-actions{
+    flex-direction:column;
+  }
+
+  .gfp-edit-btn,
+  .gfp-save-profile-btn,
+  .gfp-address-edit-btn,
+  .gfp-address-delete-btn{
+    width:100%;
+  }
+ .gfp-modal-overlay{
+    padding: 10px;
+    align-items: flex-end;
+  }
+
+  .gfp-modal{
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: 18px;
+    max-height: 85vh;
+  }
+
+  .gfp-modal-actions{
+    flex-direction: column;
+  }
+
+  .gfp-save-btn,
+  .gfp-cancel-btn{
+    width: 100%;
+  }
+
+}
+
+@media (max-width: 480px){
+
+  .gfp-modal{
+    padding: 15px;
+  }
+
+  .gfp-modal input,
+  .gfp-modal textarea{
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .gfp-save-btn,
+  .gfp-cancel-btn{
+    height: 42px;
+  }
+}

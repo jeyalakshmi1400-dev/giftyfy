@@ -1,0 +1,690 @@
+/* =====================================================================
+   InvoicePDF.css
+   Professional shipping-label + tax-invoice stylesheet
+   Palette:  primary #1F3A5F | accent #2E5A8C | ink #1A1A1A
+             muted #6B7280 | line #E2E6EC | surface #F7F9FC
+             success #16794F | success-bg #E6F4EC
+             cod #92400E | cod-bg #FEF3E2
+   ===================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.invoice-pdf-root {
+  --color-primary: #1f3a5f;
+  --color-primary-dark: #142943;
+  --color-accent: #2e5a8c;
+  --color-ink: #1a1a1a;
+  --color-muted: #6b7280;
+  --color-muted-light: #9aa2af;
+  --color-line: #e2e6ec;
+  --color-line-strong: #c9d1dd;
+  --color-surface: #f7f9fc;
+  --color-surface-alt: #eef2f7;
+  --color-white: #ffffff;
+  --color-success: #16794f;
+  --color-success-bg: #e6f4ec;
+  --color-cod: #92400e;
+  --color-cod-bg: #fef3e2;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow-soft: 0 1px 3px rgba(20, 41, 67, 0.08), 0 1px 2px rgba(20, 41, 67, 0.06);
+  --shadow-card: 0 2px 8px rgba(20, 41, 67, 0.07);
+
+  font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.invoice-pdf-root b {
+  font-weight: 600;
+}
+
+/* =====================================================================
+   SHARED PAGE FRAME
+   ===================================================================== */
+
+.shipping-label-page,
+.invoice-page {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 12mm 10mm;
+  background: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.page-break {
+  page-break-after: always;
+  break-after: page;
+}
+
+/* =====================================================================
+   PAGE 1 — SHIPPING LABEL
+   ===================================================================== */
+
+.sl-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 14px;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.sl-seller {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.sl-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.sl-company-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sl-company-name {
+  font-size: 17px;
+  color: var(--color-primary);
+  letter-spacing: 0.2px;
+}
+
+.sl-company-line {
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+.sl-label-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.sl-badge {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 6px 16px;
+  border-radius: var(--radius-sm);
+}
+
+.sl-info-table {
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.sl-info-table td {
+  padding: 2px 6px;
+  text-align: left;
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.sl-info-table td:first-child {
+  color: var(--color-muted);
+  padding-left: 0;
+}
+
+.sl-payment-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  margin-left: 4px;
+}
+
+.sl-payment-cod {
+  background: var(--color-cod-bg);
+  color: var(--color-cod);
+}
+
+.sl-payment-paid {
+  background: var(--color-success-bg);
+  color: var(--color-success);
+}
+
+/* ---- Address section ---- */
+
+.sl-address-section {
+  display: flex;
+  gap: 16px;
+}
+
+.sl-address-card {
+  flex: 1;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.sl-address-card-header {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.8px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sl-address-card-body {
+  padding: 12px 14px;
+  font-size: 12.5px;
+  color: var(--color-ink);
+}
+
+.sl-address-to .sl-address-card-header {
+  background: var(--color-primary);
+  color: var(--color-white);
+}
+
+.sl-ship-to-name {
+  margin: 0 0 6px;
+  font-size: 16px;
+  color: var(--color-ink);
+}
+
+.sl-ship-to-details {
+  font-size: 12.5px;
+  color: var(--color-ink);
+}
+
+.sl-pin-badge {
+  display: inline-block;
+  background: var(--color-surface);
+  border: 1px solid var(--color-line-strong);
+  padding: 3px 10px;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 12px;
+}
+
+/* ---- Items section ---- */
+
+.sl-items-section {
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.sl-items-header {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.8px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sl-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.sl-item-row:last-child {
+  border-bottom: none;
+}
+
+.sl-item-row-alt {
+  background: var(--color-surface);
+}
+
+.sl-item-image {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+  flex-shrink: 0;
+}
+
+.sl-item-details {
+  flex: 1;
+  font-size: 12.5px;
+  color: var(--color-ink);
+}
+
+.sl-item-name {
+  font-size: 13px;
+}
+
+.sl-item-price {
+  font-size: 13px;
+  color: var(--color-primary);
+  white-space: nowrap;
+}
+
+/* ---- Package / barcode ---- */
+
+.sl-package-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dashed var(--color-line-strong);
+  border-radius: var(--radius-md);
+  padding: 14px 18px;
+}
+
+.sl-package-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.8px;
+  color: var(--color-muted);
+  margin-bottom: 4px;
+}
+
+.sl-barcode {
+  font-family: "Libre Barcode 39", monospace;
+  font-size: 30px;
+  letter-spacing: 2px;
+  color: var(--color-ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.sl-package-section small {
+  color: var(--color-muted);
+  font-size: 11px;
+}
+
+.sl-qr-box {
+  width: 64px;
+  height: 64px;
+  border: 1px solid var(--color-line-strong);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--color-muted);
+  background: var(--color-surface);
+  flex-shrink: 0;
+}
+
+.sl-footer {
+  margin-top: auto;
+  text-align: center;
+  padding-top: 14px;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 12px;
+}
+
+/* =====================================================================
+   PAGE 2 — TAX INVOICE
+   ===================================================================== */
+
+.invoice-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.inv-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.inv-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inv-logo {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.inv-company-name {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: 0.3px;
+}
+
+.inv-company-details {
+  font-size: 12px;
+  color: var(--color-muted);
+  line-height: 1.6;
+}
+
+.inv-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.inv-badge {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 6px 18px;
+  border-radius: var(--radius-sm);
+}
+
+.inv-meta-table {
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.inv-meta-table td {
+  padding: 2px 0 2px 16px;
+  text-align: right;
+}
+
+.inv-meta-label {
+  color: var(--color-muted);
+  padding-left: 0 !important;
+  padding-right: 10px;
+}
+
+/* ---- Billing section ---- */
+
+.inv-billing-section {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.inv-bill-col {
+  flex: 1;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-soft);
+}
+
+.inv-bill-title {
+  background: var(--color-surface-alt);
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0.8px;
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--color-line);
+}
+
+.inv-bill-details {
+  padding: 12px 14px;
+  font-size: 12.5px;
+  color: var(--color-ink);
+  line-height: 1.6;
+}
+
+/* ---- Product table ---- */
+
+.inv-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 18px;
+  font-size: 12.5px;
+}
+
+.inv-th {
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-weight: 600;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+  text-align: left;
+  padding: 9px 12px;
+}
+
+.inv-th:nth-child(2),
+.inv-th:nth-child(4) {
+  text-align: center;
+}
+
+.inv-th:nth-child(3),
+.inv-th:nth-child(5) {
+  text-align: right;
+}
+
+.inv-table tbody tr {
+  border-bottom: 1px solid var(--color-line);
+}
+
+.inv-table tbody tr:nth-child(even) {
+  background: var(--color-surface);
+}
+
+.inv-table td {
+  padding: 10px 12px;
+  vertical-align: top;
+}
+
+.inv-item-cell {
+  width: 46%;
+}
+
+.inv-item-flex {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.inv-item-image {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+  flex-shrink: 0;
+}
+
+.inv-item-name {
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--color-ink);
+  margin-bottom: 2px;
+}
+
+.inv-item-meta {
+  font-size: 11.5px;
+  color: var(--color-muted);
+}
+
+.inv-extra-images {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+}
+
+.inv-extra-image {
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+}
+
+.inv-td-center {
+  text-align: center;
+}
+
+.inv-td-right {
+  text-align: right;
+}
+
+.inv-td-bold {
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ---- Bottom section: terms + totals ---- */
+
+.inv-bottom-section {
+  display: flex;
+  gap: 24px;
+  margin-top: 18px;
+  align-items: flex-start;
+}
+
+.inv-terms {
+  flex: 1.1;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-md);
+  padding: 14px 16px;
+  background: var(--color-surface);
+}
+
+.inv-terms-title {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  color: var(--color-primary);
+  letter-spacing: 0.4px;
+}
+
+.inv-terms-body {
+  font-size: 11px;
+  color: var(--color-muted);
+  line-height: 1.9;
+}
+
+.inv-totals {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inv-totals-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+
+.inv-totals-table td {
+  padding: 5px 4px;
+}
+
+.inv-totals-label {
+  color: var(--color-muted);
+}
+
+.inv-totals-value {
+  text-align: right;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.inv-totals-divider-row td {
+  border-top: 1px solid var(--color-line-strong);
+  padding-top: 8px;
+}
+
+.inv-totals-bold {
+  font-weight: 700;
+  color: var(--color-ink);
+}
+
+.inv-total-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-primary);
+  color: var(--color-white);
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+/* ---- Signature — pinned to bottom of the page via flex ---- */
+
+.inv-signature-section {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 28px;
+}
+
+.inv-signature-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  width: 180px;
+}
+
+.inv-signature-img {
+  width: 120px;
+  object-fit: contain;
+}
+
+.inv-signature-line {
+  width: 100%;
+  text-align: center;
+  border-top: 1px solid var(--color-line-strong);
+  padding-top: 6px;
+  font-size: 11.5px;
+  color: var(--color-muted);
+}
+
+.inv-footer {
+  text-align: center;
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--color-line);
+  color: var(--color-muted);
+  font-size: 11.5px;
+}
+
+/* =====================================================================
+   PRINT / A4 SUPPORT
+   ===================================================================== */
+
+@media print {
+  .shipping-label-page,
+  .invoice-page {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+}
+
+@page {
+  size: A4;
+  margin: 0;
+}

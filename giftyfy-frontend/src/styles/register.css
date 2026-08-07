@@ -1,0 +1,260 @@
+.register-wrapper {
+  height: 100vh;
+  background: white;
+}
+
+.register-box {
+  width: 420px;
+  background: #f7f3f7;
+  border: 1px solid #ee8bee;
+  padding: 40px;
+  border-radius: 20px;
+  transition: 0.3s;
+}
+
+.register-box:hover {
+  transform: translateY(-5px);
+}
+
+.brand {
+  color: #6a11cb;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Custom Input */
+.form-group-custom {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.form-group-custom input {
+  width: 100%;
+  padding: 12px 40px;
+  border-radius: 30px;
+  border: 1px solid #f2eaea;
+  outline: none;
+  transition: 0.3s;
+}
+
+.form-group-custom input:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+}
+
+.form-icon {
+  position: absolute;
+  top: 14px;
+  left: 15px;
+  color: #6a11cb;
+}
+
+/* Button */
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: 30px;
+  border: none;
+  background: #6a11cb;
+  color: white;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.register-btn:hover {
+  background: #5710a3;
+  transform: scale(1.05);
+}
+
+/* Login link */
+.login-link {
+  color: #6a11cb;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+/* Smooth card transition when switching to OTP step */
+.register-box {
+  transition: all 0.4s ease-in-out;
+}
+
+/* OTP input styling */
+.otp-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 30px;
+  border: 1px solid #f2eaea;
+  outline: none;
+  text-align: center;
+  letter-spacing: 4px;
+  font-size: 18px;
+  transition: 0.3s;
+}
+
+.otp-input:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 8px rgba(106, 17, 203, 0.3);
+}
+
+/* OTP message text */
+.otp-text {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+/* Disabled button effect (optional future use) */
+.register-btn:disabled {
+  background: #bba3e6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* OTP success animation (optional) */
+.otp-success {
+  color: green;
+  font-weight: 600;
+  text-align: center;
+  animation: fadeIn 0.5s ease-in;
+}
+
+/* Small fade animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* =========================
+   RESPONSIVE REGISTER PAGE
+========================= */
+
+/* Tablet */
+@media (max-width: 768px) {
+  .register-wrapper {
+    padding: 20px;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .register-box {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+  }
+
+  .brand {
+    font-size: 28px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .register-wrapper {
+    padding: 15px;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .register-box {
+    width: 100%;
+    max-width: 100%;
+    padding: 25px 20px;
+    border-radius: 16px;
+  }
+
+  .brand {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .form-group-custom {
+    margin-bottom: 16px;
+  }
+
+  .form-group-custom input {
+    height: 48px;
+    padding: 10px 15px 10px 42px;
+    font-size: 14px;
+  }
+
+  .form-icon {
+    left: 14px;
+    top: 15px;
+    font-size: 14px;
+  }
+
+  .register-btn {
+    height: 48px;
+    font-size: 15px;
+  }
+
+  .otp-input {
+    height: 48px;
+    font-size: 16px;
+    letter-spacing: 3px;
+  }
+
+  .otp-text,
+  .login-link,
+  .text-muted {
+    font-size: 13px;
+  }
+}
+
+/* Small Mobile */
+@media (max-width: 400px) {
+  .register-wrapper {
+    padding: 10px;
+  }
+
+  .register-box {
+    padding: 20px 15px;
+    border-radius: 14px;
+  }
+
+  .brand {
+    font-size: 22px;
+  }
+
+  .form-group-custom input {
+    height: 45px;
+    font-size: 13px;
+    padding-left: 38px;
+  }
+
+  .form-icon {
+    left: 12px;
+    top: 14px;
+    font-size: 13px;
+  }
+
+  .register-btn {
+    height: 45px;
+    font-size: 14px;
+  }
+
+  .otp-input {
+    height: 45px;
+    font-size: 15px;
+  }
+}
+
+/* Landscape Mobile */
+@media (max-height: 700px) {
+  .register-wrapper {
+    padding: 15px;
+  }
+
+  .register-box {
+    padding: 20px;
+  }
+}

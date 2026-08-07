@@ -1,0 +1,104 @@
+.contact-page {
+  background: #f7f7f7;
+  min-height: 100vh;
+}
+
+.contact-hero {
+  height: 320px;
+  background-image: url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.contact-overlay {
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.contact-overlay h1 {
+  font-size: 52px;
+  font-weight: bold;
+}
+
+.contact-overlay p {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.contact-container {
+  padding: 60px 8%;
+}
+
+.contact-card {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(250px,1fr));
+  gap: 25px;
+}
+
+.contact-box {
+  background: white;
+  padding: 35px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.07);
+  transition: 0.3s;
+}
+
+.contact-box:hover {
+  transform: translateY(-5px);
+}
+
+.contact-box h3 {
+  margin-bottom: 15px;
+  color: #e91e63;
+  font-size: 24px;
+}
+
+.contact-box p {
+  color: #555;
+  line-height: 1.8;
+}
+
+.contact-social {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.contact-social a {
+  background: #e91e63;
+  color: white;
+  padding: 14px 28px;
+  border-radius: 40px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.contact-social a:hover {
+  background: #d81b60;
+}
+
+@media(max-width:768px) {
+
+  .contact-overlay h1 {
+    font-size: 36px;
+  }
+
+  .contact-container {
+    padding: 30px 20px;
+  }
+
+  .contact-box {
+    padding: 25px;
+  }
+}

@@ -1,0 +1,657 @@
+/* ═══════════════════════════════════════════════════════════
+   success.css — Premium Order Success Page
+   Poppins font, glassmorphism card, animated checkmark,
+   receipt-tape bottom, CSS-only floating particles
+═══════════════════════════════════════════════════════════ */
+
+/* ── Poppins font ── */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Design tokens ── */
+:root {
+  --sc-green:          #22c55e;
+  --sc-green-mid:      #16a34a;
+  --sc-green-light:    #dcfce7;
+  --sc-green-xlight:   #f0fdf4;
+  --sc-teal-light:     #ecfeff;
+  --sc-dark:           #1f2937;
+  --sc-mid:            #374151;
+  --sc-muted:          #6b7280;
+  --sc-border:         rgba(34, 197, 94, 0.18);
+  --sc-white:          #ffffff;
+  --sc-shadow-card:    0 24px 64px rgba(34, 197, 94, 0.10),
+                       0 4px 24px rgba(0, 0, 0, 0.07);
+  --sc-shadow-btn:     0 4px 18px rgba(34, 197, 94, 0.40);
+  --sc-radius:         20px;
+  --sc-radius-sm:      10px;
+  --sc-font:           'Poppins', system-ui, sans-serif;
+  --sc-transition:     0.22s ease;
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ════════════════════════════════════════
+   ROOT — full-screen gradient background
+════════════════════════════════════════ */
+.sc-root {
+  min-height: 100vh;
+  width: 100%;
+  font-family: var(--sc-font);
+  background: linear-gradient(135deg, var(--sc-green-xlight) 0%, var(--sc-teal-light) 60%, #e0f2fe 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ════════════════════════════════════════
+   BACKGROUND PARTICLES (CSS-only confetti)
+════════════════════════════════════════ */
+.sc-particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.sc-particle {
+  position: absolute;
+  opacity: 0;
+  animation: sc-float linear infinite both;
+}
+
+.sc-particle--circle  { border-radius: 50%; }
+.sc-particle--square  { border-radius: 3px; }
+.sc-particle--diamond { border-radius: 3px; transform: rotate(45deg); }
+
+@keyframes sc-float {
+  0%   { opacity: 0;   transform: translateY(0)    scale(0.6) rotate(0deg); }
+  15%  { opacity: 0.55; }
+  80%  { opacity: 0.45; }
+  100% { opacity: 0;   transform: translateY(-120px) scale(1)   rotate(180deg); }
+}
+
+/* ════════════════════════════════════════
+   DECORATIVE EMOJI — floating corners
+════════════════════════════════════════ */
+.sc-deco {
+  position: fixed;
+  font-size: 2.4rem;
+  pointer-events: none;
+  z-index: 0;
+  animation: sc-deco-float 6s ease-in-out infinite;
+  opacity: 0.75;
+  filter: drop-shadow(0 4px 10px rgba(0,0,0,0.10));
+}
+
+.sc-deco--tl { top: 6%;  left: 4%;  animation-delay: 0s;   }
+.sc-deco--tr { top: 8%;  right: 5%; animation-delay: 1.4s; }
+.sc-deco--bl { bottom: 8%; left: 5%; animation-delay: 2.8s; }
+.sc-deco--br { bottom: 6%; right: 4%; animation-delay: 0.7s; }
+
+@keyframes sc-deco-float {
+  0%, 100% { transform: translateY(0)    rotate(-4deg); }
+  50%       { transform: translateY(-18px) rotate(4deg);  }
+}
+
+/* ════════════════════════════════════════
+   CARD
+════════════════════════════════════════ */
+.sc-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  border: 1.5px solid var(--sc-border);
+  border-radius: var(--sc-radius);
+  box-shadow: var(--sc-shadow-card);
+  overflow: hidden;
+
+  /* Entry animation — starts invisible, slides up */
+  opacity: 0;
+  transform: translateY(32px) scale(0.97);
+  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.sc-card--in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* ════════════════════════════════════════
+   CHECKMARK ANIMATION SYSTEM
+════════════════════════════════════════ */
+.sc-check-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 44px 0 28px;
+}
+
+/* Pulsing rings behind the circle */
+.sc-check-ring {
+  position: absolute;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--sc-green);
+  opacity: 0;
+  animation: sc-ring-pulse 2.6s ease-out infinite;
+}
+
+.sc-check-ring--outer {
+  width: 120px;
+  height: 120px;
+  animation-delay: 0.2s;
+}
+
+.sc-check-ring--inner {
+  width: 96px;
+  height: 96px;
+  animation-delay: 0.6s;
+}
+
+@keyframes sc-ring-pulse {
+  0%   { transform: scale(0.88); opacity: 0.6; }
+  70%  { transform: scale(1.18); opacity: 0;   }
+  100% { transform: scale(1.18); opacity: 0;   }
+}
+
+/* The filled circle */
+.sc-check-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--sc-green), var(--sc-green-mid));
+  box-shadow: 0 8px 28px rgba(34, 197, 94, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: sc-bounce-in 0.65s cubic-bezier(0.22, 1.5, 0.36, 1) both;
+  animation-delay: 0.2s;
+}
+
+@keyframes sc-bounce-in {
+  0%   { transform: scale(0);   opacity: 0; }
+  60%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
+}
+
+/* SVG checkmark with stroke-dashoffset draw animation */
+.sc-check-svg {
+  width: 44px;
+  height: 44px;
+  display: block;
+  overflow: visible;
+}
+
+.sc-check-svg__circle {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+}
+
+.sc-check-svg__mark {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 36;
+  stroke-dashoffset: 36;
+  animation: sc-draw-check 0.5s ease forwards;
+  animation-delay: 0.7s;
+}
+
+@keyframes sc-draw-check {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ════════════════════════════════════════
+   HEADING
+════════════════════════════════════════ */
+.sc-heading-wrap {
+  padding: 0 32px 28px;
+  text-align: center;
+}
+
+.sc-heading {
+  font-size: clamp(1.45rem, 4vw, 1.85rem);
+  font-weight: 800;
+  color: var(--sc-dark);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+
+.sc-subheading {
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--sc-muted);
+  line-height: 1.65;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+/* ════════════════════════════════════════
+   ORDER ID CARD
+════════════════════════════════════════ */
+.sc-orderid-card {
+  margin: 0 28px 24px;
+  background: var(--sc-green-xlight);
+  border: 1.5px solid var(--sc-green-light);
+  border-radius: var(--sc-radius-sm);
+  padding: 16px 20px;
+  box-shadow: inset 0 1px 3px rgba(34, 197, 94, 0.08);
+}
+
+.sc-orderid-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--sc-green-mid);
+  margin-bottom: 8px;
+}
+
+.sc-orderid-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sc-orderid-value {
+  font-family: 'Courier New', 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--sc-dark);
+  letter-spacing: 0.5px;
+  word-break: break-all;
+}
+
+/* Copy button */
+.sc-copy-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border: 1.5px solid var(--sc-border);
+  border-radius: 8px;
+  background: var(--sc-white);
+  color: var(--sc-muted);
+  font-size: 0.78rem;
+  font-weight: 500;
+  font-family: var(--sc-font);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all var(--sc-transition);
+}
+
+.sc-copy-btn:hover {
+  background: var(--sc-green-light);
+  border-color: var(--sc-green);
+  color: var(--sc-green-mid);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 10px rgba(34, 197, 94, 0.18);
+}
+
+.sc-copy-btn--done {
+  background: var(--sc-green);
+  border-color: var(--sc-green);
+  color: var(--sc-white);
+  transform: translateY(-1px);
+}
+
+.sc-copy-btn--done:hover {
+  background: var(--sc-green-mid);
+  border-color: var(--sc-green-mid);
+  color: var(--sc-white);
+}
+
+/* ════════════════════════════════════════
+   ORDER SUMMARY
+════════════════════════════════════════ */
+.sc-summary {
+  margin: 0 28px 28px;
+}
+
+.sc-summary-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--sc-muted);
+  margin-bottom: 12px;
+}
+
+.sc-summary-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sc-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--sc-radius-sm);
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  transition: background var(--sc-transition), transform var(--sc-transition);
+}
+
+.sc-summary-item:hover {
+  background: rgba(255, 255, 255, 0.95);
+  transform: translateX(3px);
+}
+
+.sc-summary-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.sc-summary-icon--green  { background: #dcfce7; color: #16a34a; }
+.sc-summary-icon--blue   { background: #dbeafe; color: #2563eb; }
+.sc-summary-icon--purple { background: #ede9fe; color: #7c3aed; }
+.sc-summary-icon--orange { background: #fef3c7; color: #d97706; }
+
+.sc-summary-key {
+  flex: 1;
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--sc-mid);
+}
+
+.sc-summary-val {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--sc-dark);
+}
+
+/* Status badges */
+.sc-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 600;
+}
+
+.sc-badge--green  { background: var(--sc-green-light);  color: #166534; }
+.sc-badge--orange { background: #fef3c7; color: #92400e; }
+
+/* ════════════════════════════════════════
+   ACTION BUTTONS
+════════════════════════════════════════ */
+.sc-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 28px 32px;
+}
+
+.sc-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 24px;
+  border-radius: var(--sc-radius-sm);
+  font-family: var(--sc-font);
+  font-size: 0.94rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all var(--sc-transition);
+  letter-spacing: 0.2px;
+}
+
+/* Primary — green gradient with ripple */
+.sc-btn--primary {
+  background: linear-gradient(135deg, var(--sc-green) 0%, var(--sc-green-mid) 100%);
+  color: var(--sc-white);
+  box-shadow: var(--sc-shadow-btn);
+  border: none;
+}
+
+.sc-btn--primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 28px rgba(34, 197, 94, 0.50);
+  background: linear-gradient(135deg, #34d399 0%, var(--sc-green) 100%);
+}
+
+.sc-btn--primary:active {
+  transform: translateY(-1px);
+}
+
+/* Ripple layer */
+.sc-btn-ripple {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.28) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.sc-btn--primary:hover .sc-btn-ripple {
+  opacity: 1;
+}
+
+/* Secondary */
+.sc-btn--secondary {
+  background: rgba(255, 255, 255, 0.70);
+  color: var(--sc-mid);
+  border: 1.5px solid var(--sc-border);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.sc-btn--secondary:hover {
+  background: var(--sc-white);
+  color: var(--sc-dark);
+  border-color: rgba(34, 197, 94, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+}
+
+/* ════════════════════════════════════════
+   RECEIPT TEAR EDGE + HELP SECTION
+════════════════════════════════════════ */
+.sc-tear {
+  width: 100%;
+  line-height: 0;
+  margin-bottom: -1px;
+}
+
+.sc-tear svg {
+  width: 100%;
+  height: 20px;
+  display: block;
+}
+
+.sc-tear path {
+  fill: rgba(240, 253, 244, 0.90);
+}
+
+.sc-help {
+  background: rgba(240, 253, 244, 0.90);
+  padding: 20px 28px 28px;
+  text-align: center;
+  border-top: 1px dashed rgba(34, 197, 94, 0.22);
+}
+
+.sc-help-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--sc-muted);
+  margin-bottom: 14px;
+}
+
+.sc-help-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+}
+
+.sc-help-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--sc-green-mid);
+  text-decoration: none;
+  transition: all var(--sc-transition);
+}
+
+.sc-help-link:hover {
+  background: var(--sc-green-light);
+  color: #166534;
+  transform: translateY(-1px);
+}
+
+.sc-help-divider {
+  width: 1px;
+  height: 18px;
+  background: rgba(34, 197, 94, 0.25);
+  flex-shrink: 0;
+}
+
+/* ════════════════════════════════════════
+   RESPONSIVE — Mobile first
+════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .sc-root {
+    padding: 24px 12px 16px;
+    align-items: flex-start;
+  }
+
+  .sc-card {
+    border-radius: 16px;
+  }
+
+  .sc-check-wrap {
+    padding: 36px 0 22px;
+  }
+
+  .sc-check-circle {
+    width: 68px;
+    height: 68px;
+  }
+
+  .sc-check-svg {
+    width: 36px;
+    height: 36px;
+  }
+
+  .sc-check-ring--outer { width: 100px; height: 100px; }
+  .sc-check-ring--inner { width: 82px;  height: 82px;  }
+
+  .sc-heading-wrap {
+    padding: 0 20px 22px;
+  }
+
+  .sc-heading {
+    font-size: 1.35rem;
+  }
+
+  .sc-orderid-card,
+  .sc-summary,
+  .sc-actions {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+
+  .sc-orderid-value {
+    font-size: 0.88rem;
+  }
+
+  .sc-help {
+    padding: 16px 16px 24px;
+  }
+
+  .sc-deco {
+    font-size: 1.6rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .sc-help-links {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .sc-help-divider {
+    width: 40px;
+    height: 1px;
+  }
+}
+
+/* ════════════════════════════════════════
+   REDUCED MOTION — accessibility
+════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .sc-card {
+    transition: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .sc-check-circle {
+    animation: none;
+  }
+
+  .sc-check-svg__mark {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .sc-check-ring {
+    animation: none;
+    display: none;
+  }
+
+  .sc-particle {
+    animation: none;
+    display: none;
+  }
+
+  .sc-deco {
+    animation: none;
+  }
+
+  .sc-btn--primary:hover {
+    transform: none;
+  }
+
+  .sc-btn--secondary:hover {
+    transform: none;
+  }
+}

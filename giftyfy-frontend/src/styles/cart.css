@@ -1,0 +1,688 @@
+/* =====================================================================
+   GIFTFY CART — PREMIUM ECOMMERCE REDESIGN
+   Design tokens, layout, components, and responsive breakpoints.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* ---- Color tokens ---- */
+  --gc-bg: #ffffff;
+  --gc-page-bg: #f7f7fb;
+  --gc-surface: #ffffff;
+  --gc-border: #ececf2;
+  --gc-border-strong: #e0e0ea;
+
+  --gc-primary: #6d28d9;
+  --gc-primary-dark: #4c1d95;
+  --gc-primary-light: #a78bfa;
+  --gc-accent: #db2777;
+  --gc-gradient: linear-gradient(135deg, #7c3aed 0%, #db2777 100%);
+  --gc-gradient-soft: linear-gradient(135deg, rgba(124, 58, 237, 0.08) 0%, rgba(219, 39, 119, 0.08) 100%);
+
+  --gc-success: #059669;
+  --gc-success-bg: #ecfdf5;
+  --gc-danger: #e11d48;
+  --gc-danger-bg: #fef2f4;
+
+  --gc-text-primary: #14121a;
+  --gc-text-secondary: #6b6876;
+  --gc-text-muted: #a5a2ad;
+
+  /* ---- Typography ---- */
+  --gc-font-display: 'Sora', 'Segoe UI', sans-serif;
+  --gc-font-body: 'Inter', 'Segoe UI', sans-serif;
+
+  /* ---- Shadows ---- */
+  --gc-shadow-sm: 0 2px 8px rgba(20, 18, 26, 0.05);
+  --gc-shadow-md: 0 8px 24px rgba(20, 18, 26, 0.07);
+  --gc-shadow-lg: 0 16px 40px rgba(20, 18, 26, 0.1);
+  --gc-shadow-hover: 0 20px 45px rgba(109, 40, 217, 0.15);
+
+  /* ---- Radii ---- */
+  --gc-radius-sm: 10px;
+  --gc-radius-md: 14px;
+  --gc-radius-lg: 20px;
+  --gc-radius-pill: 999px;
+
+  /* ---- Transitions ---- */
+  --gc-transition: 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* =====================================================================
+   PAGE
+   ===================================================================== */
+
+.giftfy-cart-page {
+  background: var(--gc-page-bg);
+  min-height: 100vh;
+  font-family: var(--gc-font-body);
+  padding: 48px 0 80px;
+}
+
+.giftfy-cart-page__container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.giftfy-cart-page__header {
+  margin-bottom: 32px;
+}
+
+.giftfy-cart-heading {
+  font-family: var(--gc-font-display);
+  font-size: 34px;
+  font-weight: 800;
+  color: var(--gc-text-primary);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.giftfy-cart-heading__count {
+  font-family: var(--gc-font-body);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--gc-text-secondary);
+  background: var(--gc-gradient-soft);
+  padding: 5px 14px;
+  border-radius: var(--gc-radius-pill);
+}
+
+/* =====================================================================
+   LAYOUT — 70 / 30 grid on desktop
+   ===================================================================== */
+
+.giftfy-cart-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.giftfy-cart-products {
+  display: flex;
+  flex-direction: column;
+}
+
+/* =====================================================================
+   PRODUCT CARD
+   ===================================================================== */
+
+@keyframes giftfy-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.giftfy-cart-product-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  background: var(--gc-surface);
+  padding: 24px;
+  border-radius: var(--gc-radius-lg);
+  margin-bottom: 20px;
+  position: relative;
+  border: 1px solid var(--gc-border);
+  box-shadow: var(--gc-shadow-sm);
+  cursor: pointer;
+  animation: giftfy-fade-in 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  transition: transform var(--gc-transition), box-shadow var(--gc-transition), border-color var(--gc-transition);
+}
+
+.giftfy-cart-product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--gc-shadow-hover);
+  border-color: rgba(124, 58, 237, 0.25);
+}
+
+.giftfy-cart-product-card__image-wrap {
+  width: 120px;
+  height: 120px;
+  border-radius: var(--gc-radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--gc-page-bg);
+}
+
+.giftfy-cart-product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.giftfy-cart-product-card:hover .giftfy-cart-product-image {
+  transform: scale(1.08);
+}
+
+.giftfy-cart-product-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.giftfy-cart-product-category {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gc-primary);
+  margin-bottom: 6px;
+}
+
+.giftfy-cart-product-name {
+  font-family: var(--gc-font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+  margin: 0 0 8px;
+  line-height: 1.3;
+}
+
+.giftfy-cart-product-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.giftfy-cart-product-meta__tag {
+  font-size: 13px;
+  color: var(--gc-text-secondary);
+  background: var(--gc-page-bg);
+  border: 1px solid var(--gc-border);
+  padding: 4px 11px;
+  border-radius: var(--gc-radius-pill);
+}
+
+.giftfy-cart-product-status {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 13px;
+  color: var(--gc-text-secondary);
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.giftfy-cart-product-status__stock {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--gc-success);
+  font-weight: 600;
+}
+
+.giftfy-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.giftfy-dot--success {
+  background: var(--gc-success);
+}
+
+.giftfy-cart-product-seller {
+  font-size: 13px;
+  color: var(--gc-text-muted);
+  margin: 0 0 10px;
+}
+
+.giftfy-cart-product-seller strong {
+  color: var(--gc-text-secondary);
+}
+
+/* PRICE */
+.giftfy-cart-product-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+}
+
+.giftfy-cart-product-price__current {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--gc-text-primary);
+  font-family: var(--gc-font-display);
+}
+
+.giftfy-cart-old-price {
+  text-decoration: line-through;
+  color: var(--gc-text-muted);
+  font-size: 15px;
+}
+
+.giftfy-cart-offer {
+  color: var(--gc-accent);
+  font-size: 13px;
+  font-weight: 700;
+  background: var(--gc-danger-bg);
+  padding: 3px 10px;
+  border-radius: var(--gc-radius-pill);
+}
+
+.giftfy-cart-saving {
+  color: var(--gc-success);
+  font-size: 13px;
+  font-weight: 600;
+  margin: 8px 0 0;
+}
+
+/* ACTIONS */
+.giftfy-cart-product-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.giftfy-cart-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--gc-border-strong);
+  background: var(--gc-surface);
+  color: var(--gc-text-secondary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: var(--gc-radius-pill);
+  cursor: pointer;
+  transition: all var(--gc-transition);
+}
+
+.giftfy-cart-action-btn:hover {
+  border-color: var(--gc-primary-light);
+  color: var(--gc-primary);
+  background: var(--gc-gradient-soft);
+}
+
+.giftfy-cart-action-btn--save.is-active {
+  color: var(--gc-accent);
+  border-color: var(--gc-accent);
+  background: var(--gc-danger-bg);
+}
+
+.giftfy-cart-action-btn--remove:hover {
+  color: var(--gc-danger);
+  border-color: var(--gc-danger);
+  background: var(--gc-danger-bg);
+}
+
+.giftfy-cart-action-btn__icon {
+  font-size: 15px;
+  line-height: 1;
+}
+
+/* QTY SELECTOR */
+.giftfy-cart-qty-box {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--gc-page-bg);
+  padding: 6px;
+  border-radius: var(--gc-radius-pill);
+  flex-shrink: 0;
+}
+
+.giftfy-cart-qty-box__btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: var(--gc-surface);
+  color: var(--gc-text-primary);
+  cursor: pointer;
+  font-size: 17px;
+  font-weight: 600;
+  box-shadow: var(--gc-shadow-sm);
+  transition: all var(--gc-transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.giftfy-cart-qty-box__btn:hover {
+  background: var(--gc-gradient);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.giftfy-cart-qty-box__value {
+  min-width: 28px;
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+  animation: giftfy-fade-in 200ms ease;
+}
+
+/* =====================================================================
+   ORDER SUMMARY — sticky glassmorphic card
+   ===================================================================== */
+
+.giftfy-cart-summary-wrap {
+  position: relative;
+}
+
+.giftfy-cart-summary-box {
+  position: sticky;
+  top: 32px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  padding: 30px;
+  border-radius: var(--gc-radius-lg);
+  border: 1px solid var(--gc-border);
+  box-shadow: var(--gc-shadow-lg);
+}
+
+.giftfy-cart-summary-box__heading {
+  font-family: var(--gc-font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+  margin: 0 0 22px;
+}
+
+.giftfy-summary-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--gc-border);
+}
+
+.giftfy-summary-line p {
+  margin: 0;
+  font-size: 15px;
+  color: var(--gc-text-secondary);
+}
+
+.giftfy-summary-line h5 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+}
+
+.giftfy-summary-red {
+  color: var(--gc-danger) !important;
+}
+
+.giftfy-summary-green {
+  color: var(--gc-success) !important;
+}
+
+.giftfy-summary-tax {
+  font-size: 12.5px;
+  color: var(--gc-text-muted);
+  margin: 14px 0 0;
+}
+
+.giftfy-summary-delivery-estimate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gc-text-secondary);
+  background: var(--gc-success-bg);
+  padding: 10px 14px;
+  border-radius: var(--gc-radius-sm);
+  margin-top: 16px;
+}
+
+.giftfy-summary-divider {
+  border: none;
+  border-top: 1px dashed var(--gc-border-strong);
+  margin: 20px 0;
+}
+
+.giftfy-summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.giftfy-summary-total p {
+  margin: 0;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+}
+
+.giftfy-summary-total h4 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 800;
+  font-family: var(--gc-font-display);
+  background: var(--gc-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* CHECKOUT BUTTON */
+.giftfy-cart-checkout-btn {
+  width: 100%;
+  padding: 17px;
+  border: none;
+  border-radius: var(--gc-radius-pill);
+  background: var(--gc-gradient);
+  background-size: 160% 160%;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--gc-font-body);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.35);
+  transition: background-position var(--gc-transition), transform var(--gc-transition), box-shadow var(--gc-transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.giftfy-cart-checkout-btn:hover {
+  background-position: 100% 0;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px rgba(219, 39, 119, 0.4);
+}
+
+.giftfy-cart-checkout-btn:active {
+  transform: translateY(0);
+}
+
+.giftfy-cart-checkout-btn__arrow {
+  transition: transform var(--gc-transition);
+}
+
+.giftfy-cart-checkout-btn:hover .giftfy-cart-checkout-btn__arrow {
+  transform: translateX(4px);
+}
+
+.giftfy-summary-secure-note {
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--gc-text-muted);
+  margin: 14px 0 0;
+}
+
+/* =====================================================================
+   EMPTY CART
+   ===================================================================== */
+
+.giftfy-empty-cart {
+  background: var(--gc-surface);
+  padding: 70px 30px;
+  border-radius: var(--gc-radius-lg);
+  text-align: center;
+  border: 1px solid var(--gc-border);
+  box-shadow: var(--gc-shadow-md);
+}
+
+.giftfy-empty-cart__illustration {
+  width: 160px;
+  margin: 0 auto 20px;
+}
+
+.giftfy-empty-cart__svg {
+  width: 100%;
+  height: auto;
+}
+
+.giftfy-empty-cart__heading {
+  font-family: var(--gc-font-display);
+  font-size: 25px;
+  font-weight: 700;
+  color: var(--gc-text-primary);
+  margin: 0 0 10px;
+}
+
+.giftfy-empty-cart__description {
+  color: var(--gc-text-secondary);
+  font-size: 15px;
+  margin: 0 0 26px;
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.giftfy-shop-btn {
+  border: none;
+  background: var(--gc-gradient);
+  color: #fff;
+  padding: 14px 32px;
+  border-radius: var(--gc-radius-pill);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  box-shadow: 0 12px 28px rgba(124, 58, 237, 0.3);
+  transition: transform var(--gc-transition), box-shadow var(--gc-transition);
+}
+
+.giftfy-shop-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(219, 39, 119, 0.35);
+}
+
+/* =====================================================================
+   RESPONSIVE BREAKPOINTS
+   ===================================================================== */
+
+/* Laptop */
+@media (max-width: 1180px) {
+  .giftfy-cart-page__container {
+    padding: 0 28px;
+  }
+
+  .giftfy-cart-wrapper {
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+  }
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .giftfy-cart-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .giftfy-cart-summary-box {
+    position: static;
+  }
+
+  .giftfy-cart-heading {
+    font-size: 28px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .giftfy-cart-page {
+    padding: 28px 0 60px;
+  }
+
+  .giftfy-cart-page__container {
+    padding: 0 16px;
+  }
+
+  .giftfy-cart-heading {
+    font-size: 23px;
+  }
+
+  .giftfy-cart-product-card {
+    flex-direction: column;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .giftfy-cart-product-card__image-wrap {
+    width: 100%;
+    height: 200px;
+  }
+
+  .giftfy-cart-qty-box {
+    align-self: flex-start;
+  }
+
+  .giftfy-cart-product-actions {
+    flex-wrap: wrap;
+  }
+
+  .giftfy-cart-summary-box {
+    padding: 22px;
+  }
+
+  .giftfy-summary-total h4 {
+    font-size: 22px;
+  }
+}
+
+/* Small mobile */
+@media (max-width: 400px) {
+  .giftfy-cart-product-name {
+    font-size: 17px;
+  }
+
+  .giftfy-cart-product-price__current {
+    font-size: 19px;
+  }
+
+  .giftfy-cart-checkout-btn {
+    font-size: 15px;
+    padding: 15px;
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .giftfy-cart-product-card,
+  .giftfy-cart-product-image,
+  .giftfy-cart-qty-box__btn,
+  .giftfy-cart-checkout-btn,
+  .giftfy-shop-btn {
+    transition: none;
+    animation: none;
+  }
+}

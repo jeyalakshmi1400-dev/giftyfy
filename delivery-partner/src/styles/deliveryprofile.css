@@ -1,0 +1,475 @@
+/* =========================
+   DELIVERY PROFILE PAGE
+========================= */
+
+.delivery-profile-page {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f6fa;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+
+.delivery-profile-main {
+  flex: 1;
+  padding: 25px;
+}
+
+/* =========================
+   TOP NAVBAR
+========================= */
+
+.delivery-profile-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.delivery-profile-navbar h2 {
+  font-size: 28px;
+  color: #222;
+  font-weight: 700;
+}
+
+.delivery-profile-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.delivery-profile-nav-icon {
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+/* =========================
+   PROFILE CARD
+========================= */
+
+.delivery-profile-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+  margin-bottom: 25px;
+}
+
+/* Header */
+
+.delivery-profile-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.delivery-profile-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.delivery-profile-title h3 {
+  font-size: 24px;
+  color: #333;
+}
+
+/* Edit Button */
+
+.delivery-profile-edit-btn {
+  background: #8e44ad;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.delivery-profile-edit-btn:hover {
+  background: #732d91;
+}
+
+/* =========================
+   PROFILE BODY
+========================= */
+
+.delivery-profile-body {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.delivery-profile-left {
+  width: 260px;
+  text-align: center;
+}
+
+.delivery-profile-image {
+  width: 250px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 18px;
+  border: 4px solid #8e44ad;
+}
+
+.delivery-profile-name {
+  margin-top: 15px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #222;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.delivery-profile-right {
+  flex: 1;
+}
+
+.delivery-profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.delivery-profile-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #666;
+}
+
+.delivery-profile-value {
+  font-size: 16px;
+  color: #222;
+  font-weight: 500;
+}
+
+.delivery-profile-input{
+  width:100%;
+  height:46px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  padding:0 14px;
+  font-size:14px;
+  outline:none;
+  transition:0.3s;
+}
+
+.delivery-profile-input:focus{
+  border-color:#7c3aed;
+  box-shadow:
+    0 0 0 4px rgba(124,58,237,0.12);
+}
+
+.delivery-profile-save-btn{
+  margin-top:20px;
+  width:100%;
+  height:50px;
+  border:none;
+  border-radius:14px;
+  background:
+    linear-gradient(
+      135deg,
+      #7c3aed,
+      #5b21b6
+    );
+  color:#fff;
+  font-size:15px;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+.delivery-profile-save-btn:hover{
+  transform:translateY(-2px);
+}
+/* =========================
+   BOTTOM CARDS
+========================= */
+
+.delivery-profile-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* =========================
+   INFO CARD
+========================= */
+
+.delivery-profile-info-card {
+  background: white;
+  border-radius: 18px;
+  padding: 25px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.06);
+}
+
+.delivery-profile-info-card h3 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* =========================
+   EARNING BOX
+========================= */
+
+.delivery-profile-earning-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.delivery-profile-earning-box span {
+  font-size: 18px;
+  color: #666;
+}
+
+.delivery-profile-earning-box h2 {
+  color: #27ae60;
+  font-size: 32px;
+}
+
+/* =========================
+   REQUEST BUTTON
+========================= */
+
+.delivery-profile-request-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.delivery-profile-request-btn:hover {
+  background: #1f8b4d;
+}
+
+/* =========================
+   RECENT UPDATE
+========================= */
+
+.delivery-profile-update-text {
+  margin-bottom: 14px;
+  color: #555;
+  font-size: 16px;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+  .delivery-profile-body {
+    flex-direction: column;
+  }
+
+  .delivery-profile-left {
+    width: 100%;
+  }
+
+  .delivery-profile-bottom {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .delivery-profile-page {
+    flex-direction: column;
+  }
+
+  .delivery-profile-main {
+    padding: 15px;
+  }
+
+  /* Navbar */
+  .delivery-profile-navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .delivery-profile-navbar h2 {
+    font-size: 24px;
+  }
+
+  .delivery-profile-nav-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  /* Profile Card */
+  .delivery-profile-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .delivery-profile-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .delivery-profile-edit-btn {
+    width: 100%;
+  }
+
+  /* Profile Body */
+  .delivery-profile-body {
+    flex-direction: column;
+    gap: 25px;
+  }
+
+  .delivery-profile-left {
+    width: 100%;
+    text-align: center;
+  }
+
+  .delivery-profile-image {
+    width: 140px;
+    height: 140px;
+  }
+
+  .delivery-profile-name {
+    font-size: 22px;
+  }
+
+  /* Details */
+  .delivery-profile-right {
+    width: 100%;
+  }
+
+  .delivery-profile-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 14px 0;
+  }
+
+  .delivery-profile-label,
+  .delivery-profile-value {
+    font-size: 14px;
+  }
+
+  .delivery-profile-input {
+    height: 44px;
+    font-size: 14px;
+  }
+
+  .delivery-profile-save-btn {
+    height: 46px;
+    font-size: 14px;
+  }
+
+  /* Bottom Cards */
+  .delivery-profile-bottom {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .delivery-profile-info-card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+
+  .delivery-profile-info-card h3 {
+    font-size: 18px;
+  }
+
+  .delivery-profile-earning-box {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .delivery-profile-earning-box h2 {
+    font-size: 28px;
+  }
+
+  .delivery-profile-request-btn {
+    width: 100%;
+  }
+
+  .delivery-profile-update-text {
+    font-size: 14px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 480px) {
+
+  .delivery-profile-main {
+    padding: 10px;
+  }
+
+  .delivery-profile-card,
+  .delivery-profile-info-card {
+    padding: 15px;
+  }
+
+  .delivery-profile-navbar h2 {
+    font-size: 22px;
+  }
+
+  .delivery-profile-title h3 {
+    font-size: 20px;
+  }
+
+  .delivery-profile-image {
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
+  }
+
+  .delivery-profile-name {
+    font-size: 20px;
+  }
+
+  .delivery-profile-label,
+  .delivery-profile-value {
+    font-size: 13px;
+  }
+
+  .delivery-profile-earning-box h2 {
+    font-size: 24px;
+  }
+
+  .delivery-profile-request-btn,
+  .delivery-profile-edit-btn,
+  .delivery-profile-save-btn {
+    font-size: 13px;
+    padding: 12px;
+  }
+}

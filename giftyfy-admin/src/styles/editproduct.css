@@ -1,0 +1,132 @@
+/* PAGE LAYOUT */
+.productPage {
+  flex: 1;
+  padding: 20px;
+  background: #f4f6f9;
+  min-height: 100vh;
+}
+
+/* TITLE */
+.productPage h2 {
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* GRID INPUTS */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.form-grid input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* TEXTAREA */
+textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  margin-bottom: 20px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* IMAGE SECTION */
+.image-section {
+  margin-bottom: 25px;
+}
+
+.preview-box {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.preview-box img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+/* VARIANT SECTION */
+.variant-section {
+  margin-top: 20px;
+}
+
+.variant-section h3 {
+  margin-bottom: 10px;
+}
+
+/* ADD COLOR BUTTON */
+.variant-section button {
+  margin-bottom: 10px;
+}
+
+/* COLOR BOX */
+.color-box {
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+}
+
+/* COLOR INPUT */
+.color-box input[type="text"] {
+  width: 200px;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+/* SIZE ROW */
+.size-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.size-row input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+/* ADD SIZE BUTTON */
+.color-box button {
+  margin-top: 5px;
+}
+
+/* UPDATE BUTTON */
+.update-btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  background: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.update-btn:hover {
+  background: #43a047;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .size-row {
+    flex-direction: column;
+  }
+}

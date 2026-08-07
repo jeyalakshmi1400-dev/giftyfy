@@ -1,0 +1,89 @@
+/* =========================
+   ADMIN LAYOUT
+========================= */
+
+.admin-layout{
+    display:flex;
+    min-height:100vh;
+    width:100%;
+    background:#f4f5f9;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.admin-main{
+    flex:1;
+    min-width:0;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    overflow-x:hidden;
+    transition:margin-left .3s ease;
+}
+
+
+/* =========================
+   NAVBAR
+========================= */
+
+.admin-navbar{
+    position:sticky;
+    top:0;
+    z-index:999;
+    padding:20px 24px;
+    background:#f4f5f9;
+    flex-shrink:0;
+}
+
+/* =========================
+   PAGE CONTENT
+========================= */
+
+.admin-page-content{
+    flex:1;
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0 24px 30px;
+    box-sizing:border-box;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (max-width:1200px){
+
+    .admin-main.sidebar-open{
+        margin-left:260px;
+    }
+
+    .admin-main.sidebar-collapsed{
+        margin-left:84px;
+    }
+
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width:768px){
+
+    .admin-main,
+    .admin-main.sidebar-open,
+    .admin-main.sidebar-collapsed{
+        margin-left:0;
+    }
+
+    .admin-navbar{
+        padding:15px;
+    }
+
+    .admin-page-content{
+        padding:0 15px 20px;
+    }
+
+}

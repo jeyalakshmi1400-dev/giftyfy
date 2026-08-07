@@ -1,0 +1,298 @@
+/* =========================
+   FULL PAGE BACKGROUND
+========================= */
+.login-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a11cb 0%, #8e44ad 50%, #eae7ed 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+/* =========================
+   LOGIN CARD
+========================= */
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(12px);
+  border-radius: 24px;
+  padding: 35px;
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.12),
+    0 5px 15px rgba(106, 17, 203, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: fadeIn 0.5s ease;
+}
+
+/* =========================
+   LOGO / BRAND
+========================= */
+.brand-title {
+  font-size: 32px;
+  font-weight: 800;
+  color: #6a11cb;
+  letter-spacing: 2px;
+  margin-bottom: 8px;
+}
+
+.brand-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 25px;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.input-group {
+  margin-bottom: 18px;
+}
+
+.input-group-text {
+  background: #b93bef;
+  color: white;
+  border: none;
+  border-radius: 12px 0 0 12px;
+  width: 50px;
+  justify-content: center;
+}
+
+.form-control {
+  border: 1px solid #ddd;
+  border-left: none;
+  height: 52px;
+  font-size: 15px;
+  border-radius: 0 12px 12px 0;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: #6a11cb;
+  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.12);
+}
+
+/* =========================
+   BUTTON
+========================= */
+.btn-purple {
+  width: 100%;
+  background: linear-gradient(135deg, #6a11cb, #8e44ad);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 13px;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-purple:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+}
+
+.btn-purple:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   FORGOT PASSWORD
+========================= */
+.forgot-password {
+  text-align: right;
+  margin-bottom: 18px;
+}
+
+.forgot-password a {
+  color: #6a11cb;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   REGISTER LINK
+========================= */
+.register-text {
+  text-align: center;
+  margin-top: 20px;
+  color: #666;
+  font-size: 15px;
+}
+
+.register-link {
+  color: #6a11cb;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+/* =========================
+   DIVIDER
+========================= */
+.divider {
+  display: flex;
+  align-items: center;
+  margin: 20px 0;
+  color: #999;
+  font-size: 13px;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #ddd;
+}
+
+.divider span {
+  padding: 0 12px;
+}
+
+/* =========================
+   SOCIAL BUTTONS
+========================= */
+.social-btn {
+  width: 100%;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: white;
+  padding: 11px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.social-btn:hover {
+  background: #f8f8f8;
+}
+
+/* =========================
+   ANIMATION
+========================= */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================
+   TABLET VIEW
+========================= */
+@media (max-width: 768px) {
+  .login-card {
+    max-width: 450px;
+    padding: 30px;
+  }
+
+  .brand-title {
+    font-size: 28px;
+  }
+}
+
+/* =========================
+   MOBILE VIEW
+========================= */
+@media (max-width: 576px) {
+  .login-container {
+    padding: 15px;
+    align-items: center;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 25px 20px;
+    border-radius: 18px;
+  }
+
+  .brand-title {
+    font-size: 24px;
+    letter-spacing: 1px;
+  }
+
+  .brand-subtitle {
+    font-size: 13px;
+  }
+
+  .form-control {
+    height: 48px;
+    font-size: 14px;
+  }
+
+  .input-group-text {
+    width: 46px;
+  }
+
+  .btn-purple {
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  .register-text {
+    font-size: 14px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+@media (max-width: 400px) {
+  .login-container {
+    padding: 10px;
+  }
+
+  .login-card {
+    padding: 20px 15px;
+  }
+
+  .brand-title {
+    font-size: 22px;
+  }
+
+  .form-control {
+    height: 45px;
+    font-size: 13px;
+  }
+
+  .btn-purple {
+    font-size: 14px;
+    padding: 11px;
+  }
+
+  .register-text {
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   LANDSCAPE MOBILE
+========================= */
+@media (max-height: 700px) {
+  .login-container {
+    padding: 15px;
+  }
+
+  .login-card {
+    padding: 20px;
+  }
+
+  .brand-title {
+    margin-bottom: 5px;
+  }
+}

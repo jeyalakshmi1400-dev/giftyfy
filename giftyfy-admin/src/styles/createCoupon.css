@@ -1,0 +1,339 @@
+/* ================= CREATE COUPON PAGE ================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  --cc-primary: #4f46e5;
+  --cc-primary-dark: #4338ca;
+  --cc-success: #16a34a;
+  --cc-bg: #f8fafc;
+  --cc-border: #e5e7eb;
+  --cc-text: #111827;
+  --cc-text-muted: #6b7280;
+  --cc-radius: 18px;
+}
+
+/* Content area */
+.createCoupon-content {
+  min-height: 100vh;
+  background: var(--cc-bg);
+  padding: 40px 20px;
+  display: flex;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  color: var(--cc-text);
+}
+
+/* Card wrapper */
+.createCoupon-card {
+  width: 100%;
+  max-width: 880px;
+  background: #ffffff;
+  border-radius: var(--cc-radius);
+  box-shadow: 0 10px 15px -3px rgba(17, 24, 39, 0.06),
+    0 4px 6px -4px rgba(17, 24, 39, 0.06);
+  padding: 36px 40px 44px;
+}
+
+/* Header */
+.createCoupon-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--cc-border);
+}
+
+.createCoupon-icon {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--cc-primary), #7c6cf2);
+  color: #ffffff;
+}
+
+.createCoupon-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--cc-text);
+  letter-spacing: -0.02em;
+}
+
+.createCoupon-subtitle {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--cc-text-muted);
+}
+
+/* Form grid: 2 columns on desktop */
+.createCoupon-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group-full {
+  grid-column: 1 / -1;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cc-text);
+  letter-spacing: 0.01em;
+}
+
+/* Inputs + select — equal height, modern borders */
+.createCoupon-input,
+.createCoupon-select,
+.createCoupon-textarea {
+  width: 100%;
+  height: 46px;
+  padding: 0 14px;
+  border: 1.5px solid var(--cc-border);
+  border-radius: 10px;
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--cc-text);
+  background: #ffffff;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.createCoupon-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+.createCoupon-textarea {
+  height: auto;
+  min-height: 100px;
+  padding: 12px 14px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.createCoupon-input::placeholder,
+.createCoupon-textarea::placeholder {
+  color: #9ca3af;
+}
+
+.createCoupon-input:focus,
+.createCoupon-select:focus,
+.createCoupon-textarea:focus {
+  border-color: var(--cc-primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
+}
+
+/* Category grid — responsive pill cards */
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.category-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border: 1.5px solid var(--cc-border);
+  border-radius: 999px;
+  background: #ffffff;
+  cursor: pointer;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cc-text);
+  transition: border-color 0.3s ease, background 0.3s ease, color 0.3s ease,
+    transform 0.15s ease;
+  user-select: none;
+}
+
+.category-pill:hover {
+  border-color: var(--cc-primary);
+  background: #f5f4ff;
+}
+
+.category-pill:active {
+  transform: scale(0.98);
+}
+
+.category-pill input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.category-pill span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.category-pill-active {
+  background: rgba(79, 70, 229, 0.08);
+  border-color: var(--cc-primary);
+  color: var(--cc-primary);
+  font-weight: 600;
+}
+
+/* Toggle switch — First Order Only */
+.toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.toggle-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-track {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: #d1d5db;
+  transition: background 0.3s ease;
+  flex-shrink: 0;
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.toggle-switch input:checked + .toggle-track {
+  background: var(--cc-success);
+}
+
+.toggle-switch input:checked + .toggle-track .toggle-thumb {
+  transform: translateX(18px);
+}
+
+.toggle-switch input:focus-visible + .toggle-track {
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.25);
+}
+
+.toggle-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--cc-text-muted);
+}
+
+/* Submit button — gradient, full width */
+.createCoupon-btn {
+  width: 100%;
+  height: 50px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--cc-primary), var(--cc-primary-dark));
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: transform 0.2s ease, box-shadow 0.3s ease, filter 0.3s ease;
+  box-shadow: 0 8px 16px -6px rgba(79, 70, 229, 0.45);
+}
+
+.createCoupon-btn:hover {
+  filter: brightness(1.06);
+  box-shadow: 0 10px 20px -6px rgba(79, 70, 229, 0.55);
+  transform: translateY(-1px);
+}
+
+.createCoupon-btn:active {
+  transform: translateY(0);
+}
+
+.createCoupon-btn:focus-visible,
+.createCoupon-input:focus-visible,
+.createCoupon-select:focus-visible,
+.createCoupon-textarea:focus-visible,
+.category-pill:focus-within {
+  outline: none;
+}
+
+.category-pill:focus-within {
+  border-color: var(--cc-primary);
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15);
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+  .createCoupon-card {
+    padding: 28px 28px 34px;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Small tablet */
+@media (max-width: 700px) {
+  .createCoupon-form {
+    grid-template-columns: 1fr;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  .createCoupon-content {
+    padding: 20px 12px;
+  }
+
+  .createCoupon-card {
+    padding: 22px 18px 28px;
+    border-radius: 16px;
+  }
+
+  .createCoupon-header {
+    gap: 12px;
+  }
+
+  .createCoupon-title {
+    font-size: 20px;
+  }
+
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

@@ -1,0 +1,243 @@
+/* =========================
+   SIDEBAR
+========================= */
+
+.delivery-sidebar{
+  width:260px;
+  min-height:100vh;
+  background:#fff;
+  border-right:1px solid #eee;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  padding:20px 0;
+  transition:0.3s;
+  z-index:100;
+}
+
+/* =========================
+   LOGO
+========================= */
+
+.sidebar-logo{
+  padding:0 25px;
+}
+
+.sidebar-logo h2{
+  color:#7b2cbf;
+  font-size:28px;
+  font-weight:800;
+}
+
+/* =========================
+   MENU
+========================= */
+
+.sidebar-menu{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-top:30px;
+}
+
+.sidebar-menu a{
+  display:flex;
+  align-items:center;
+  gap:15px;
+  padding:14px 25px;
+  color:#555;
+  text-decoration:none;
+  font-size:16px;
+  font-weight:500;
+  transition:.3s;
+  border-left:4px solid transparent;
+  position:relative;
+}
+
+.sidebar-menu a:hover{
+  background:#f5f0ff;
+  color:#7b2cbf;
+}
+
+.sidebar-menu a.active{
+  background:#f3e8ff;
+  color:#7b2cbf;
+  border-left:4px solid #7b2cbf;
+}
+
+/* =========================
+   NOTIFICATION BADGE
+========================= */
+
+.sidebar-badge{
+  position:absolute;
+  right:12px;
+  top:10px;
+  min-width:22px;
+  height:22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#ff3b30;
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  border-radius:50%;
+}
+
+/* =========================
+   LOGOUT
+========================= */
+
+.logout-btn{
+  margin:20px;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  background:#ffebee;
+  color:#d32f2f;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  transition:.3s;
+}
+
+.logout-btn:hover{
+  background:#ffcdd2;
+}
+
+/* =========================
+   OVERLAY
+========================= */
+
+.mobile-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.4);
+  z-index:1999;
+}
+
+.close-sidebar{
+  display:none;
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media(max-width:992px){
+
+  .delivery-sidebar{
+    width:220px;
+  }
+
+  .sidebar-logo h2{
+    font-size:24px;
+  }
+
+  .sidebar-menu a{
+    padding:13px 18px;
+    font-size:15px;
+  }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:768px){
+
+  .delivery-sidebar{
+    position:fixed;
+    top:0;
+    left:-280px;
+    width:260px;
+    height:100vh;
+    min-height:100vh;
+    background:#fff;
+    z-index:2000;
+    transition:left .3s ease;
+    border-right:1px solid #eee;
+    overflow-y:auto;
+    padding-top:60px;
+    box-shadow:0 0 20px rgba(0,0,0,0.15);
+  }
+
+  .delivery-sidebar.open{
+    left:0;
+  }
+
+  .close-sidebar{
+    display:block;
+    position:absolute;
+    top:15px;
+    right:15px;
+    border:none;
+    background:none;
+    font-size:24px;
+    cursor:pointer;
+  }
+
+  .sidebar-menu{
+    margin-top:10px;
+    gap:6px;
+  }
+
+  .sidebar-menu a{
+    width:100%;
+    padding:15px 20px;
+    border-left:4px solid transparent;
+    border-radius:0;
+    font-size:15px;
+  }
+
+  .sidebar-menu a.active{
+    border-left:4px solid #7b2cbf;
+    border-bottom:none;
+  }
+
+  .sidebar-badge{
+    right:15px;
+    top:14px;
+  }
+
+  .logout-btn{
+    margin:20px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media(max-width:480px){
+
+  .delivery-sidebar{
+    width:250px;
+  }
+
+  .sidebar-logo{
+    padding:0 12px;
+  }
+
+  .sidebar-logo h2{
+    font-size:20px;
+  }
+
+  .sidebar-menu a{
+    font-size:13px;
+    padding:12px 14px;
+    gap:8px;
+  }
+
+  .logout-btn{
+    margin:10px;
+    padding:10px;
+    font-size:13px;
+    border-radius:10px;
+  }
+}

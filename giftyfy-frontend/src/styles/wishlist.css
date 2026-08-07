@@ -1,0 +1,668 @@
+/* =========================================================================
+   WISHLIST — PREMIUM REDESIGN
+   -------------------------------------------------------------------------
+   DESIGN TOKENS
+   Palette:
+     --ink      #14141A  near-black, header + primary text
+     --paper    #FAFAF8  warm off-white page background
+     --surface  #FFFFFF  card background
+     --gold     #B8863F  muted premium accent — prices, primary CTA
+     --gold-2   #8C6425  darker gold for gradient depth
+     --rose     #E8425B  reserved ONLY for the wishlist heart
+     --sage     #2F6844  in-stock indicator
+     --line     #ECEAE4  hairline borders
+     --muted    #7A7873  secondary text
+
+   Type:
+     Display  'Sora'            — headings
+     Body     'Inter'           — copy, labels, buttons
+     Mono     'JetBrains Mono'  — prices (gives numbers a distinct,
+                                   receipt-like precision instead of
+                                   just being bold body text)
+
+   Signature element:
+     The heart-remove button "bursts" on click (a brief scale + colour
+     flip, no confetti gimmicks) and the skeleton loader sweeps with a
+     soft gold shimmer — both quiet, both premium, both about the one
+     material every wishlist is made of: things you meant to buy.
+   ========================================================================= */
+
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap");
+
+:root {
+  --ink: #14141a;
+  --paper: #faf9f6;
+  --surface: #ffffff;
+  --gold: #b8863f;
+  --gold-2: #8c6425;
+  --rose: #e8425b;
+  --sage: #2f6844;
+  --line: #ece9e2;
+  --muted: #7a7873;
+
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  --shadow-sm: 0 6px 18px rgba(20, 20, 26, 0.06);
+  --shadow-md: 0 16px 40px rgba(20, 20, 26, 0.1);
+  --shadow-lg: 0 24px 60px rgba(20, 20, 26, 0.16);
+
+  --font-display: "Sora", sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+body {
+  background: var(--paper);
+  font-family: var(--font-body);
+}
+
+/* =========================================================================
+   PAGE
+   ========================================================================= */
+.wl-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+  animation: wlFadeUp 0.5s ease both;
+}
+
+@keyframes wlFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================================================
+   HEADER — ink surface, gold radial glow, no purple-gradient default
+   ========================================================================= */
+.wl-header {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 34px 40px;
+  border-radius: 24px;
+  background: var(--ink);
+  color: #fff;
+  margin-bottom: 32px;
+}
+
+.wl-header::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -60px;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(184, 134, 63, 0.35) 0%,
+    rgba(184, 134, 63, 0) 70%
+  );
+}
+
+.wl-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 32px;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.wl-header-icon {
+  color: var(--rose);
+  font-size: 26px;
+}
+
+.wl-header p {
+  margin: 6px 0 0;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14.5px;
+}
+
+.wl-count {
+  position: relative;
+  z-index: 1;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 14px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  white-space: nowrap;
+}
+
+/* =========================================================================
+   GRID
+   ========================================================================= */
+.wl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(272px, 1fr));
+  gap: 26px;
+}
+
+/* =========================================================================
+   CARD
+   ========================================================================= */
+.wl-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: wlCardIn 0.45s ease both;
+}
+
+@keyframes wlCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.wl-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* removal micro-animation: card shrinks + fades before it leaves the DOM */
+.wl-card-removing {
+  animation: wlCardOut 0.26s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes wlCardOut {
+  to {
+    opacity: 0;
+    transform: scale(0.92) translateY(6px);
+  }
+}
+
+/* =========================================================================
+   IMAGE + RIBBON + HEART
+   ========================================================================= */
+.wl-image {
+  position: relative;
+  height: 280px;
+  background: #f2f1ec;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.wl-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.wl-card:hover .wl-image img {
+  transform: scale(1.06);
+}
+
+/* folded-corner discount ribbon, not just a rounded pill */
+.wl-ribbon {
+  position: absolute;
+  top: 16px;
+  left: -8px;
+  z-index: 5;
+  padding: 7px 16px 7px 20px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-2));
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-sm);
+  clip-path: polygon(0 0, 100% 0, 92% 50%, 100% 100%, 0 100%);
+}
+
+.wl-heart-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 6;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.14);
+  transition: transform 0.2s ease;
+}
+
+.wl-heart-btn:hover {
+  transform: scale(1.1);
+}
+
+.wl-heart-btn:active {
+  animation: wlHeartBurst 0.35s ease;
+}
+
+@keyframes wlHeartBurst {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.35);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.wl-heart-filled {
+  position: absolute;
+  color: var(--rose);
+  font-size: 18px;
+}
+
+.wl-heart-outline {
+  color: transparent;
+}
+
+/* on hover, the filled heart fades to show it's about to be removed */
+.wl-heart-btn:hover .wl-heart-filled {
+  animation: wlHeartPulse 0.5s ease infinite;
+}
+
+@keyframes wlHeartPulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.85);
+  }
+}
+
+.wl-oos-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 20, 26, 0.55);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.wl-oos-overlay svg {
+  font-size: 22px;
+}
+
+/* =========================================================================
+   DETAILS
+   ========================================================================= */
+.wl-details {
+  padding: 20px 20px 22px;
+}
+
+.wl-brand {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--gold-2);
+  margin-bottom: 6px;
+}
+
+.wl-name {
+  font-family: var(--font-display);
+  font-size: 16.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.4;
+  margin: 0 0 10px;
+  cursor: pointer;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 46px;
+}
+
+.wl-name:hover {
+  color: var(--gold-2);
+}
+
+/* rating */
+.wl-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.wl-rating-stars {
+  display: inline-flex;
+  gap: 2px;
+  color: var(--gold);
+  font-size: 13px;
+}
+
+.wl-rating-value {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* price */
+.wl-price-row {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 12px;
+  font-family: var(--font-mono);
+}
+
+.wl-price {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.wl-price-old {
+  font-size: 14px;
+  color: #b3b0a8;
+  text-decoration: line-through;
+}
+
+.wl-discount-pill {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #fdecef;
+  color: var(--rose);
+}
+
+/* stock */
+.wl-stock {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--sage);
+  margin-bottom: 18px;
+}
+
+.wl-stock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+}
+
+.wl-stock.out {
+  color: #b3413f;
+}
+
+.wl-stock.out .wl-stock-dot {
+  background: #b3413f;
+}
+
+/* actions */
+.wl-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.wl-btn {
+  flex: 1;
+  height: 46px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13.5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+.wl-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.wl-btn-ghost {
+  background: #fff;
+  color: var(--ink);
+  border: 1px solid var(--line);
+}
+
+.wl-btn-ghost:hover {
+  border-color: var(--ink);
+}
+
+.wl-btn-primary {
+  background: linear-gradient(135deg, var(--ink), #2b2b34);
+  color: #fff;
+}
+
+.wl-btn-primary:hover:not(:disabled) {
+  background: linear-gradient(135deg, var(--gold-2), var(--gold));
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(184, 134, 63, 0.32);
+}
+
+.wl-btn-cart-added {
+  background: #eef6f0;
+  color: var(--sage);
+  border: 1px solid #d3e8d8;
+}
+
+/* =========================================================================
+   SKELETON LOADING
+   ========================================================================= */
+.wl-skeleton {
+  cursor: default;
+}
+
+.wl-skel-img {
+  height: 280px;
+  background: #efeee9;
+}
+
+.wl-skel-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.wl-skel-line {
+  height: 12px;
+  border-radius: 6px;
+  background: #efeee9;
+}
+
+.wl-skel-btnrow {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.wl-skel-btn {
+  flex: 1;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  background: #efeee9;
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(184, 134, 63, 0.14),
+    transparent
+  );
+  animation: wlShimmer 1.4s infinite;
+}
+
+@keyframes wlShimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* =========================================================================
+   EMPTY STATE
+   ========================================================================= */
+.wl-empty {
+  max-width: 480px;
+  margin: 70px auto;
+  padding: 48px 36px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  animation: wlFadeUp 0.5s ease both;
+}
+
+.wl-empty-illustration {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+}
+
+.wl-empty h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 10px 0 10px;
+}
+
+.wl-empty p {
+  color: var(--muted);
+  font-size: 14.5px;
+  line-height: 1.7;
+  margin-bottom: 26px;
+}
+
+.wl-empty .wl-btn {
+  flex: none;
+  padding: 0 28px;
+}
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 992px) {
+  .wl-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .wl-container {
+    padding: 20px 16px 60px;
+  }
+
+  .wl-grid {
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .wl-header {
+    padding: 26px;
+  }
+
+  .wl-header h2 {
+    font-size: 26px;
+  }
+
+  .wl-image {
+    height: 230px;
+  }
+}
+
+@media (max-width: 560px) {
+  .wl-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .wl-header h2 {
+    font-size: 23px;
+  }
+
+  .wl-image {
+    height: 250px;
+  }
+
+  .wl-actions {
+    flex-direction: column;
+  }
+}
+
+/* =========================================================================
+   SCROLLBAR
+   ========================================================================= */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d6d3ca;
+  border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}

@@ -1,0 +1,437 @@
+/* ================= FULL PAGE ================= */
+
+.delivery-login-page {
+
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+
+  background: linear-gradient(
+    135deg,
+    #ddead0,
+    #ece8eb
+  );
+
+  overflow: hidden;
+}
+
+/* ================= LOGIN CARD ================= */
+
+.delivery-login-card {
+
+  width: 100%;
+  max-width: 420px;
+
+  background: rgba(255,255,255,0.95);
+
+  padding: 38px;
+
+  border-radius: 24px;
+
+  backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,0.12),
+    0 4px 12px rgba(0,0,0,0.08);
+
+  animation: fadeIn 0.5s ease;
+}
+
+/* ================= BRAND ================= */
+
+.brand-title {
+
+  text-align: center;
+
+  font-size: 34px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  color: #7c3aed;
+
+  margin-bottom: 6px;
+}
+
+/* ================= TITLE ================= */
+
+.delivery-login-card h2 {
+
+  text-align: center;
+
+  margin-bottom: 8px;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #111827;
+}
+
+/* ================= SUBTITLE ================= */
+
+.login-subtitle {
+
+  text-align: center;
+
+  color: #6b7280;
+
+  font-size: 15px;
+
+  margin-bottom: 28px;
+}
+
+/* ================= FORM GROUP ================= */
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+/* LABEL */
+
+.form-group label {
+
+  display: block;
+
+  margin-bottom: 8px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  color: #374151;
+}
+
+/* INPUT BOX */
+
+.input-box {
+
+  display: flex;
+  align-items: center;
+
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 14px;
+
+  overflow: hidden;
+
+  transition: 0.3s;
+}
+
+.input-box:focus-within {
+
+  border-color: #7c3aed;
+
+  box-shadow: 0 0 0 4px rgba(124,58,237,0.12);
+}
+
+/* ICON AREA */
+
+.input-icon {
+
+  width: 52px;
+  height: 52px;
+
+  background: #b93bef;
+
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 18px;
+}
+
+/* INPUT */
+
+.input-box input {
+
+  flex: 1;
+
+  height: 52px;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  padding: 0 15px;
+
+  font-size: 15px;
+
+  color: #111827;
+}
+
+/* ================= BUTTON ================= */
+
+.login-btn {
+
+  width: 100%;
+  height: 52px;
+
+  border: none;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    90deg,
+    #7c3aed,
+    #a855f7
+  );
+
+  color: white;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  margin-top: 12px;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 8px 18px rgba(124,58,237,0.25);
+}
+
+/* ================= REGISTER TEXT ================= */
+
+.register-text {
+
+  margin-top: 24px;
+
+  text-align: center;
+
+  font-size: 14px;
+
+  color: #4b5563;
+}
+
+.register-text a {
+
+  color: #7c3aed;
+
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.register-text a:hover {
+  text-decoration: underline;
+}
+
+/* ================= ANIMATION ================= */
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+}
+
+/* ================= MOBILE ================= */
+
+@media (max-width: 480px) {
+
+  .delivery-login-card {
+
+    padding: 28px 22px;
+  }
+
+  .brand-title {
+
+    font-size: 28px;
+  }
+
+  .delivery-login-card h2 {
+
+    font-size: 24px;
+  }
+
+}
+/* =========================
+   INPUT STYLE FIX
+========================= */
+
+.form-group input{
+  width:100%;
+  height:52px;
+  border:1px solid #dbe2ea;
+  border-radius:14px;
+  padding:0 16px;
+  font-size:15px;
+  background:#f8fafc;
+  outline:none;
+  transition:all 0.3s ease;
+  box-sizing:border-box;
+}
+
+.form-group input:focus{
+  border-color:#7c3aed;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(124,58,237,0.12);
+}
+
+/* =========================
+   TABLET VIEW
+========================= */
+
+@media (max-width:768px){
+
+  .delivery-login-page{
+    padding:20px;
+    align-items:center;
+  }
+
+  .delivery-login-card{
+    max-width:100%;
+    padding:30px 25px;
+    border-radius:20px;
+  }
+
+  .delivery-login-card h2{
+    font-size:26px;
+  }
+
+  .login-subtitle{
+    font-size:14px;
+    margin-bottom:24px;
+  }
+
+  .form-group{
+    margin-bottom:18px;
+  }
+
+  .form-group input{
+    height:50px;
+    font-size:14px;
+  }
+
+  .login-btn{
+    height:50px;
+    font-size:15px;
+  }
+}
+
+/* =========================
+   MOBILE VIEW
+========================= */
+
+@media (max-width:480px){
+
+  .delivery-login-page{
+    padding:15px;
+    background:linear-gradient(
+      135deg,
+      #f3f4f6,
+      #eef2ff
+    );
+  }
+
+  .delivery-login-card{
+    padding:24px 18px;
+    border-radius:18px;
+    max-width:100%;
+    box-shadow:
+      0 8px 25px rgba(0,0,0,0.08);
+  }
+
+  .delivery-login-card h2{
+    font-size:22px;
+    line-height:1.3;
+  }
+
+  .login-subtitle{
+    font-size:13px;
+    margin-bottom:20px;
+  }
+
+  .form-group label{
+    font-size:13px;
+  }
+
+  .form-group input{
+    height:48px;
+    font-size:14px;
+    border-radius:12px;
+    padding:0 14px;
+  }
+
+  .login-btn{
+    height:48px;
+    border-radius:14px;
+    font-size:14px;
+    margin-top:8px;
+  }
+
+  .register-text{
+    font-size:13px;
+    margin-top:18px;
+  }
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width:360px){
+
+  .delivery-login-page{
+    padding:10px;
+  }
+
+  .delivery-login-card{
+    padding:20px 15px;
+  }
+
+  .delivery-login-card h2{
+    font-size:20px;
+  }
+
+  .login-subtitle{
+    font-size:12px;
+  }
+
+  .form-group input{
+    height:45px;
+    font-size:13px;
+  }
+
+  .login-btn{
+    height:45px;
+    font-size:13px;
+  }
+
+  .register-text{
+    font-size:12px;
+  }
+}
+.login-logo{
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  display:block;
+  margin:0 auto 15px;
+}
+
+@media(max-width:480px){
+  .login-logo{
+    width:65px;
+    height:65px;
+  }
+}

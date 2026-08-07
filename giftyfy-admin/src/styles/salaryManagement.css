@@ -1,0 +1,312 @@
+/* ===========================
+   Salary Management
+=========================== */
+
+.salary-page {
+  padding: 25px;
+  background: #f5f7fb;
+  min-height: 100vh;
+}
+
+.salary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.salary-header h2 {
+  margin: 0;
+  font-size: 28px;
+  color: #222;
+  font-weight: 700;
+}
+
+.salary-header p {
+  margin-top: 5px;
+  color: #777;
+  font-size: 14px;
+}
+
+/* ===========================
+   Filters
+=========================== */
+
+.salary-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.salary-filters input,
+.salary-filters select {
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  outline: none;
+  background: white;
+  font-size: 14px;
+}
+
+.salary-filters input {
+  width: 280px;
+}
+
+.salary-filters select {
+  width: 180px;
+}
+
+/* ===========================
+   Card
+=========================== */
+
+.salary-card {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+  overflow-x: auto;
+}
+
+/* ===========================
+   Table
+=========================== */
+
+.salary-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.salary-table thead {
+  background: #2563eb;
+  color: white;
+}
+
+.salary-table th {
+  padding: 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.salary-table td {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.salary-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* ===========================
+   Status
+=========================== */
+
+.paid-badge {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.pending-badge {
+  background: #fef3c7;
+  color: #92400e;
+  padding: 6px 14px;
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* ===========================
+   Action Buttons
+=========================== */
+
+.salary-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.view-btn,
+.edit-btn,
+.paid-btn,
+.paid-done-btn,
+.save-btn,
+.cancel-btn,
+.close-btn {
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  color: white;
+  font-size: 13px;
+  transition: .3s;
+}
+
+.view-btn {
+  background: #2563eb;
+}
+
+.view-btn:hover {
+  background: #1d4ed8;
+}
+
+.edit-btn {
+  background: #f59e0b;
+}
+
+.edit-btn:hover {
+  background: #d97706;
+}
+
+.paid-btn {
+  background: #16a34a;
+}
+
+.paid-btn:hover {
+  background: #15803d;
+}
+
+.paid-done-btn {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.save-btn {
+  background: #2563eb;
+}
+
+.cancel-btn {
+  background: #ef4444;
+}
+
+.close-btn {
+  background: #6b7280;
+}
+
+/* ===========================
+   Modal
+=========================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.salary-modal,
+.salary-view-modal {
+  background: white;
+  width: 520px;
+  max-width: 95%;
+  border-radius: 16px;
+  padding: 25px;
+  animation: popup .25s ease;
+}
+
+.salary-modal h2,
+.salary-view-modal h2 {
+  margin-bottom: 20px;
+}
+
+.salary-modal label {
+  display: block;
+  margin-top: 12px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.salary-modal input,
+.salary-modal textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  outline: none;
+}
+
+.salary-modal textarea {
+  min-height: 90px;
+  resize: none;
+}
+
+.salary-modal h3 {
+  margin-top: 20px;
+  color: #16a34a;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* ===========================
+   Empty
+=========================== */
+
+.empty {
+  text-align: center;
+  color: gray;
+  padding: 35px;
+}
+
+.loading {
+  text-align: center;
+  padding: 30px;
+  font-size: 18px;
+}
+
+/* ===========================
+   Animation
+=========================== */
+
+@keyframes popup {
+  from {
+    transform: scale(.85);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ===========================
+   Responsive
+=========================== */
+
+@media(max-width:768px){
+
+  .salary-header{
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .salary-filters{
+    flex-direction: column;
+  }
+
+  .salary-filters input,
+  .salary-filters select{
+    width: 100%;
+  }
+
+  .salary-actions{
+    flex-direction: column;
+  }
+
+  .salary-table{
+    min-width: 1000px;
+  }
+
+}
