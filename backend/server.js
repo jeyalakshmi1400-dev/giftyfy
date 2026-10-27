@@ -5,8 +5,11 @@ const cors = require("cors");
 const path = require("path");
 
 
-require("./utils/whatsapp"); // ✅ ADD THIS
-
+if (process.env.ENABLE_WHATSAPP === "true") {
+  require("./utils/whatsapp");
+} else {
+  console.log("WhatsApp initialization skipped");
+}
 const startSalaryCron = require("./cron/salaryCron");
 const app = express();
 app.use(cors());
