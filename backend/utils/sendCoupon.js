@@ -1,8 +1,12 @@
 const nodemailer = require("nodemailer");
 const Coupon = require("../models/Coupon");
 
-const sendWhatsAppMessage = require("./whatsapp");
-
+const sendWhatsAppMessage =
+  process.env.ENABLE_WHATSAPP === "true"
+    ? require("./whatsapp")
+    : async () => {
+        console.log("WhatsApp disabled; skipping coupon message");
+      };
 // 🔥 GENERATE CODE
 const generateCouponCode = () => {
   return "NEW" + Math.floor(1000 + Math.random() * 9000);
