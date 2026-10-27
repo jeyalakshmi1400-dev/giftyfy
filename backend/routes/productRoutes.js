@@ -33,8 +33,11 @@ router.get("/category/:name", getcategories);
 router.get("/recommended/:id", getRecommendedProducts);
 router.get("/recommend/:id", getRecommendedProducts);
 router.post("/recent",recentproduct);
-
-
+router.get("/recent", (req, res) => {
+  return res.status(405).json({
+    message: "Use POST /api/product/recent with product IDs in the request body",
+  });
+});
 
 // existing routes
 router.get("/", getProducts);
