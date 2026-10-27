@@ -5,6 +5,7 @@ const Order = require("../models/Order");
 
 // Every 1 minute (Testing)
 // Production: 0 */1 * * *
+const startSalaryCron = () => {
 
 cron.schedule("* * * * *", async () => {
   try {
@@ -96,3 +97,6 @@ cron.schedule("* * * * *", async () => {
     console.error("Salary Cron Error:", err);
   }
 });
+};
+
+module.exports = startSalaryCron;
