@@ -335,15 +335,33 @@ const autoCategoryCoupon = async (req, res) => {
     const coupons = await Coupon.find({
       isActive: true,
     }).populate("categories", "category");
-    
 
-    // Category coupons only
+    // Category coupons மட்டும்
     const categoryCoupons = coupons.filter(
       (coupon) =>
-        coupon.categories && coupon.categories.length > 0
+        coupon.categories &&
+        coupon.categories.length > 0
     );
 
     for (const coupon of categoryCoupons) {
+
+      // ✅ Expiry Check
+      if (
+        coupon.expiryDate &&
+        new Date() > new Date(coupon.expiryDate)
+      ) {
+        continue;
+      }
+
+      // ✅ Minimum Order Check
+      if (
+        Number(cartTotal) <
+        Number(coupon.minOrderAmount || 0)
+      ) {
+        continue;
+      }
+
+      // Category Match
       let matched = false;
 
       for (const item of items) {
@@ -360,37 +378,39 @@ const autoCategoryCoupon = async (req, res) => {
         }
       }
 
-      if (matched) {
-        
-        let discount = 0;
+      if (!matched) continue;
 
-        if (coupon.discountType === "percentage") {
-          discount =
-            (cartTotal * coupon.discountValue) / 100;
+      // Discount Calculate
+      let discount = 0;
 
-          if (
-            coupon.maxDiscount &&
-            discount > coupon.maxDiscount
-          ) {
-            discount = coupon.maxDiscount;
-          }
-        } else {
-          discount = coupon.discountValue;
+      if (coupon.discountType === "percentage") {
+        discount =
+          (Number(cartTotal) * Number(coupon.discountValue)) / 100;
+
+        if (
+          coupon.maxDiscount &&
+          discount > coupon.maxDiscount
+        ) {
+          discount = coupon.maxDiscount;
         }
-
-        return res.json({
-          success: true,
-          couponCode: coupon.code,
-          discount,
-          finalAmount: cartTotal - discount,
-        });
+      } else {
+        discount = Number(coupon.discountValue);
       }
+
+      return res.json({
+        success: true,
+        couponCode: coupon.code,
+        discount,
+        minOrderAmount: coupon.minOrderAmount,
+        finalAmount: Number(cartTotal) - discount,
+      });
     }
 
     return res.json({
       success: false,
-      message: "No category coupon found",
+      message: "No eligible category coupon found",
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,

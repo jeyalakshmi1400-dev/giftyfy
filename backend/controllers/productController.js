@@ -48,19 +48,38 @@ const createProduct = async (req, res) => {
       }
     }
 
-    // ✅ LOCATIONS
-    let locations = JSON.parse(req.body.locations);
+    // =========================
+// DELIVERY TYPE
+// =========================
+const deliveryType = req.body.deliveryType || "all";
 
-    const updatedLocations = locations.map((loc) => ({
-      city: loc.city,
-      pincode: loc.pincode
-    }));
+// =========================
+// LOCATIONS
+// =========================
+let updatedLocations = [];
+
+if (deliveryType === "pincode") {
+  const locations = JSON.parse(req.body.locations || "[]");
+
+  updatedLocations = locations.map((loc) => ({
+    state: loc.state,
+    city: loc.city,
+    pincode: loc.pincode,
+  }));
+}
 
     // ✅ VARIANTS PARSE
     let variants = [];
     if (req.body.variants) {
       variants = JSON.parse(req.body.variants);
     }
+    let frameSizes=[];
+
+if(req.body.frameSizes){
+
+frameSizes=JSON.parse(req.body.frameSizes);
+
+}
 
     // ✅ VARIANT IMAGES MAP
     let imgIndex = 0;
@@ -103,7 +122,23 @@ const createProduct = async (req, res) => {
     const finalPrice =
       discountedPrice + (discountedPrice * gst) / 100;
 
-      
+    // =========================
+// CUSTOMIZATION
+// =========================
+let customization = {};
+
+try {
+  customization = req.body.customization
+    ? JSON.parse(req.body.customization)
+    : {};
+} catch {
+  customization = {};
+}
+
+if (req.files?.templateImage?.[0])
+  customization.templateImage = req.files.templateImage[0].filename;
+if (req.files?.maskImage?.[0])
+  customization.maskImage = req.files.maskImage[0].filename;
 
     // ✅ CREATE PRODUCT
   const product = await Product.create({
@@ -119,14 +154,17 @@ const createProduct = async (req, res) => {
           req.body.customizationFields
         )
       : [],
-
+  customization,
   price,
   discountValue: discount,
   gst,
   finalPrice,
+  deliveryType,
   locations: updatedLocations,
   image: images,
-  variants
+  variants,
+  frameSizes,
+
 
 });
 
@@ -142,181 +180,481 @@ const createProduct = async (req, res) => {
 // UPDATE PRODUCT (ADMIN ONLY)
 const updateProduct = async (req, res) => {
   try {
+
     console.log("🔥 UPDATE API HIT");
     console.log("BODY:", req.body);
     console.log("FILES:", req.files);
 
+
     // =========================
-    // ✅ NORMALIZE FILES
+    // NORMALIZE FILES
     // =========================
+
     let allFiles = [];
 
     if (Array.isArray(req.files)) {
+
       allFiles = req.files;
+
     } else if (req.files) {
+
       allFiles = Object.values(req.files).flat();
+
     }
 
+
+
     // =========================
-    // ✅ EXISTING MAIN IMAGES
+    // EXISTING MAIN IMAGES
     // =========================
+
     let existingImages = [];
 
     try {
-      existingImages = JSON.parse(req.body.existingImages || "[]");
+
+      existingImages =
+        JSON.parse(req.body.existingImages || "[]");
+
     } catch {
+
       existingImages = [];
+
     }
 
-    existingImages = [...new Set(existingImages.filter(Boolean))];
+
+    existingImages =
+      [...new Set(existingImages.filter(Boolean))];
+
+
 
     // =========================
-    // ✅ NEW MAIN IMAGES
+    // NEW MAIN IMAGES
     // =========================
-    const newImages = allFiles
-      .filter(f => f.fieldname === "images")
-      .map(f => f.filename);
 
-    const finalImages = [...existingImages, ...newImages];
+    const newImages =
+      allFiles
+        .filter(
+          file => file.fieldname === "images"
+        )
+        .map(
+          file => file.filename
+        );
+
+
+    const finalImages =
+      [
+        ...existingImages,
+        ...newImages
+      ];
+
+
 
     // =========================
-    // ✅ LOCATIONS
+    // LOCATIONS
     // =========================
+
+    const deliveryType =
+      req.body.deliveryType || "all";
+
+
     let locations = [];
 
-    try {
-      locations =
-        typeof req.body.locations === "string"
-          ? JSON.parse(req.body.locations)
-          : req.body.locations || [];
-    } catch {
-      locations = [];
+
+    if (deliveryType === "pincode") {
+
+      try {
+
+        locations =
+          typeof req.body.locations === "string"
+            ? JSON.parse(req.body.locations)
+            : req.body.locations || [];
+
+
+      } catch {
+
+        locations = [];
+
+      }
+
     }
 
-    locations = Array.isArray(locations) ? locations : [];
+
 
     // =========================
-    // ✅ VARIANTS
+    // VARIANTS
     // =========================
+
     let variants = [];
 
+
     try {
-      variants = JSON.parse(req.body.variants || "[]");
+
+      variants =
+        JSON.parse(
+          req.body.variants || "[]"
+        );
+
     } catch {
+
       variants = [];
+
     }
 
+
+
     // =========================
-    // ✅ EXISTING VARIANT IMAGES
+    // EXISTING VARIANT IMAGES
     // =========================
+
     let existingVariantImages = [];
 
+
     try {
-      if (req.body.existingVariantImages) {
-        if (Array.isArray(req.body.existingVariantImages)) {
-          existingVariantImages = req.body.existingVariantImages.map(item =>
-            JSON.parse(item || "[]")
-          );
-        } else {
+
+
+      if(req.body.existingVariantImages){
+
+
+        if(Array.isArray(req.body.existingVariantImages)){
+
+
+          existingVariantImages =
+            req.body.existingVariantImages.map(
+              item =>
+                JSON.parse(item || "[]")
+            );
+
+
+        }else{
+
+
           existingVariantImages = [
-            JSON.parse(req.body.existingVariantImages || "[]")
+
+            JSON.parse(
+              req.body.existingVariantImages || "[]"
+            )
+
           ];
+
         }
+
       }
+
+
     } catch {
+
       existingVariantImages = [];
+
     }
 
-    // =========================
-    // ✅ MERGE VARIANT IMAGES
-    // =========================
-    variants = variants.map((variant, index) => {
-      const existingImgs = existingVariantImages[index] || [];
 
-      const newImgs = allFiles
-        .filter(file =>
-          file.fieldname.includes("variantImages")
-        )
-        .map(file => file.filename);
 
-      return {
-        ...variant,
-        images: [...existingImgs, ...newImgs]
-      };
-    });
 
     // =========================
-    // ✅ PRICE CALCULATION
+    // MERGE VARIANT IMAGES
     // =========================
-    const price = Number(req.body.price || 0);
-    const discount = Number(req.body.discountValue || 0);
-    const gst = Number(req.body.gst || 0);
+
+    variants =
+      variants.map(
+        (variant,index)=>{
+
+
+          const existingImgs =
+            existingVariantImages[index] || [];
+
+
+
+          const newImgs =
+            allFiles
+            .filter(file =>
+              file.fieldname.includes(
+                "variantImages"
+              )
+            )
+            .map(file =>
+              file.filename
+            );
+
+
+
+          return {
+
+            ...variant,
+
+            images:[
+              ...existingImgs,
+              ...newImgs
+            ]
+
+          };
+
+
+        }
+      );
+
+
+
+
+    // =========================
+    // PRICE CALCULATION
+    // =========================
+
+    const price =
+      Number(req.body.price || 0);
+
+
+    const discount =
+      Number(req.body.discountValue || 0);
+
+
+    const gst =
+      Number(req.body.gst || 0);
+
+
 
     const discounted =
       req.body.discountType === "percentage"
-        ? price - (price * discount) / 100
-        : price - discount;
 
-    const finalPrice = discounted + (discounted * gst) / 100;
+      ? price - (price * discount) / 100
 
-    // =========================
-    // ✅ FINAL UPDATE DATA
-    // =========================
-    const updateData = {
-      name: req.body.name,
-      category: req.body.category,
-      subcategory: req.body.subcategory,
-      brand: req.body.brand,
-      isCustomized:
-  req.body.isCustomized === "true",
+      : price - discount;
 
-customizationFields:
-  req.body.customizationFields
-    ? JSON.parse(
-        req.body.customizationFields
-      )
-    : [],
-      price,
-       purchasePrice:
-    Number(req.body.purchasePrice || 0),
-      gst,
-      discountType: req.body.discountType,
-      discountValue: discount,
-      quantity: Number(req.body.quantity || 0),
-      description: req.body.description,
-      locations,
-      image: finalImages,
-      finalPrice,
-      variants:
-        req.body.category?.toLowerCase() === "dress"
-          ? variants
-          : []
-    };
 
-    console.log("FINAL UPDATE DATA 👉", updateData);
+
+    const finalPrice =
+      discounted +
+      (discounted * gst) / 100;
+
+
+
 
     // =========================
-    // ✅ UPDATE DB
+    // FRAME SIZE
     // =========================
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      { returnDocument: "after" }
-    );
 
-    if (!product) {
-      return res.status(404).json({ message: "Product not found" });
+    let frameSizes = [];
+
+
+    try {
+
+      frameSizes =
+        JSON.parse(
+          req.body.frameSizes || "[]"
+        );
+
+
+    } catch {
+
+      frameSizes = [];
+
     }
 
+
+
+
+    // =========================
+    // CUSTOMIZATION
+    // =========================
+
+    let customization = {};
+
+
+    try {
+
+      customization =
+        req.body.customization
+
+        ? JSON.parse(
+            req.body.customization
+          )
+
+        : {};
+
+
+    } catch {
+
+      customization = {};
+
+    }
+const tpl = allFiles.find((f) => f.fieldname === "templateImage");
+if (tpl) customization.templateImage = tpl.filename;
+const msk = allFiles.find((f) => f.fieldname === "maskImage");
+if (msk) customization.maskImage = msk.filename;
+
+
+
+    // =========================
+    // FINAL UPDATE DATA
+    // =========================
+
+    const updateData = {
+
+
+      name:req.body.name,
+
+      category:req.body.category,
+
+      subcategory:req.body.subcategory,
+
+      brand:req.body.brand,
+
+
+
+      isCustomized:
+        req.body.isCustomized === "true",
+
+
+
+      customizationFields:
+
+        req.body.customizationFields
+
+        ? JSON.parse(
+            req.body.customizationFields
+          )
+
+        : [],
+
+
+
+      customization,
+
+
+      price,
+
+
+      purchasePrice:
+        Number(
+          req.body.purchasePrice || 0
+        ),
+
+
+
+      gst,
+
+
+      discountType:
+        req.body.discountType,
+
+
+      discountValue:
+        discount,
+
+
+
+      quantity:
+        Number(
+          req.body.quantity || 0
+        ),
+
+
+
+      description:
+        req.body.description,
+
+
+
+      deliveryType,
+
+
+      locations,
+
+
+
+      image:
+        finalImages,
+
+
+
+      finalPrice,
+
+
+
+      variants:
+
+        req.body.category?.toLowerCase() === "dress"
+
+        ? variants
+
+        : [],
+
+
+
+      frameSizes
+
+
+    };
+
+
+
+    console.log(
+      "FINAL UPDATE DATA 👉",
+      updateData
+    );
+
+
+
+
+    // =========================
+    // UPDATE DB
+    // =========================
+
+
+    const product =
+      await Product.findByIdAndUpdate(
+
+        req.params.id,
+
+        updateData,
+
+        {
+          new:true
+        }
+
+      );
+
+
+
+    if(!product){
+
+      return res.status(404).json({
+
+        message:"Product not found"
+
+      });
+
+    }
+
+
+
     res.json({
-      message: "✅ Updated Successfully",
+
+      message:"✅ Updated Successfully",
+
       product
+
     });
 
-  } catch (error) {
-    console.log("❌ UPDATE ERROR:", error);
-    res.status(500).json({ message: error.message });
+
+
+  } catch(error){
+
+
+    console.log(
+      "❌ UPDATE ERROR:",
+      error
+    );
+
+
+    res.status(500).json({
+
+      message:error.message
+
+    });
+
+
   }
+
 };
 
 

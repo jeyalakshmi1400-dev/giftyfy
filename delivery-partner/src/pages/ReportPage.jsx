@@ -375,9 +375,7 @@ return (
 
                         #
                         {
-                          order._id.slice(
-                            -5
-                          )
+                          order.orderId
                         }
 
                       </div>

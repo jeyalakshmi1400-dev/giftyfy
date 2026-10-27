@@ -64,10 +64,11 @@ const PARTICLES = Array.from({ length: 22 }, (_, i) => ({
 
 export default function Success() {
   const { id } = useParams();
-  const location = useLocation();
+const location = useLocation();
 
-  const paymentMethod =
-    location.state?.paymentMethod || "Online";
+const paymentMethod = location.state?.paymentMethod || "Online";
+const order = location.state?.order;
+
 
   /* ── copy-to-clipboard state ── */
   const [copied, setCopied] = useState(false);
@@ -178,6 +179,65 @@ export default function Success() {
             </li>
           </ul>
         </div>
+        {order?.items?.length > 0 && (
+  <div className="sc-products">
+    <h3 className="sc-products-title">Products</h3>
+
+    {order.items.map((item, index) => (
+      <div className="sc-product-item" key={index}>
+        <img
+  src={`http://localhost:4000/uploads/${item.image}`}
+  alt={item.name}
+  className="sc-product-img"
+/>
+
+        <div className="sc-product-info">
+          <p className="sc-product-name">{item.name}</p>
+          <p className="sc-product-qty">
+            Qty : {item.quantity}
+          </p>
+        </div>
+
+        <span className="sc-product-price">
+          ₹{item.price * item.quantity}
+        </span>
+      </div>
+    ))}
+  </div>
+)}
+{order && (
+  <div className="sc-price-summary">
+
+    <div className="sc-price-row">
+      <span>Subtotal</span>
+      <span>₹{order.subtotal}</span>
+    </div>
+      <div className="sc-price-row">
+  <span>Delivery</span>
+  <span>
+    {Number(order.deliveryCharge ?? order.delivery ?? 0) === 0
+      ? "FREE"
+      : `₹${order.deliveryCharge ?? order.delivery}`}
+  </span>
+</div>
+
+    {order.discount > 0 && (
+      <div className="sc-price-row sc-discount">
+        <span>Discount</span>
+        <span>- ₹{Math.round(order.discount)}</span>
+      </div>
+    )}
+
+  
+
+  
+    <div className="sc-price-row sc-total">
+      <span>Total Paid</span>
+      <span>₹{order.totalAmount}</span>
+    </div>
+
+  </div>
+)}
 
         {/* CTA buttons */}
         <div className="sc-actions">

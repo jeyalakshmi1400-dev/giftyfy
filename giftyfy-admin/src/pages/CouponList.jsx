@@ -282,6 +282,7 @@ const categoryCoupons = useMemo(() => {
               <th>Coupon</th>
               <th>Category</th>
               <th>Discount</th>
+              <th>Min Order</th>
               <th>Expiry</th>
               <th>Status</th>
               <th>Actions</th>
@@ -327,6 +328,7 @@ const categoryCoupons = useMemo(() => {
                   </span>
 
                 </td>
+                <td>₹{c.minOrderAmount}</td>
 
                 <td>
 

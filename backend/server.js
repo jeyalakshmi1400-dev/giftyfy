@@ -140,10 +140,22 @@ app.use("/api/salary", salaryRoutes);
 
 const uploadRoutes = require("./routes/uploadRoutes");
 app.use("/api/upload", uploadRoutes);
+const pincodeRoutes = require("./routes/pincodeRoutes");
+
+app.use("/api/pincode", pincodeRoutes);
+const deliverySettingRoutes =require("./routes/deliverySettingRoutes");
+app.use("/api/delivery-setting",deliverySettingRoutes);
+
+const giftRoutes = require("./routes/giftRoutes");
+app.use("/api/gift-setting",giftRoutes);
+
+const partnerSettlementRoutes = require("./routes/partnerSettlementRoutes");
+app.use("/api/admin", partnerSettlementRoutes);
 
 // ✅ PORT from .env
-const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});

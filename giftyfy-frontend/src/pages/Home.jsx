@@ -126,6 +126,17 @@ const getProductImage = (product) => {
 
 // BASE PRICE (Dress + Normal fix)
 const getBasePrice = (product) => {
+  const isPhotoFrame =
+    product?.subcategory?.trim()?.toLowerCase() === "photo frame" ||
+    product?.category?.trim()?.toLowerCase() === "photo frame";
+
+  if (isPhotoFrame) {
+    return Number(
+      product?.frameSizes?.[0]?.price ??
+      product?.price ??
+      0
+    );
+  }
   if (product?.category === "Dress") {
     const variant = product?.variants?.find((v) => v.sizes?.length > 0);
     return variant?.sizes?.[0]?.price || 0;
@@ -317,17 +328,17 @@ function Home() {
   const [selectedImage, setSelectedImage] = useState("");
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [reviews, setReviews] = useState([]);
-
   // ===== Fetch Data =====
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [bannerRes, catRes, productRes, reviewRes] = await Promise.all([
+        const [bannerRes, catRes, productRes,reviewRes] = await Promise.all([
           axios.get("http://localhost:4000/api/banner/active"),
           axios.get("http://localhost:4000/api/categories"),
           axios.get("http://localhost:4000/api/product"),
           axios.get("http://localhost:4000/api/reviews/product-home"),
         ]);
+        
 
         setBanners(bannerRes.data);
         setCategories(catRes.data);
@@ -567,7 +578,9 @@ function Home() {
   return (
     <div className="giftyfy-home-container">
       {/* ===== HERO BANNER ===== */}
-      {/* ===== BANNER ===== */}
+      <div className="gfy-hero">
+
+{/* ===== BANNER ===== */}
 <div id="bannerCarousel" className="carousel slide carousel-fade">
 
   <div className="carousel-inner">
@@ -613,9 +626,7 @@ function Home() {
 
   </div>
 
-</div>
-
-
+</div>      </div>
 
       {/* ===== CATEGORIES ===== */}
       <div className="gfy-section" id="giftyfy-categories">
@@ -828,35 +839,36 @@ function Home() {
       <div className="gfy-section">
         <SectionHeading eyebrow="Real stories" title="Customer Reviews" align="center" />
 
-        <div className="gfy-reviews-grid">
-          {reviews.map((r) => (
-            <div className="gfy-review-card" key={r._id}>
-            <FaQuoteLeft className="gfy-review-quote" />
+       <div className="gfy-reviews-grid">
+  {reviews.map((r) => (
+    <div className="gfy-review-card" key={r._id}>
+      <FaQuoteLeft className="gfy-review-quote" />
 
-            <p className="gfy-review-text">
-              {r.comment}
-            </p>
+      <p className="gfy-review-text">{r.comment}</p>
 
-            <div className="gfy-review-stars">
-              {[1,2,3,4,5].map((n)=>(
-                <FaStar
-                  key={n}
-                  className={n <= r.rating ? "is-filled" : "is-empty"}
-                />
-              ))}
-            </div>
-            
+      <div className="gfy-review-stars">
+        {[1, 2, 3, 4, 5].map((n) => (
+          <FaStar
+            key={n}
+            className={n <= r.rating ? "is-filled" : "is-empty"}
+          />
+        ))}
+      </div>
 
-            <div className="gfy-review-person">
-              <span className="gfy-review-avatar">
-                {r.user?.name?.charAt(0).toUpperCase()}
-              </span>
+      <div className="gfy-review-person">
+        <span className="gfy-review-avatar">
+          {r.user?.name?.charAt(0).toUpperCase()}
+        </span>
 
-              <span>{r.user?.name}</span>
-            </div>
-          </div>
-          ))}
+        <div>
+          <strong>{r.user?.name}</strong>
+          <br />
+          <small>{r.product?.name}</small>
         </div>
+      </div>
+    </div>
+  ))}
+</div>
       </div>
 
       {/* ===== INSTAGRAM GALLERY ===== */}
@@ -885,7 +897,7 @@ function Home() {
       </div>
 
       {/* ===== NEWSLETTER ===== */}
-      {/* <div className="gfy-newsletter">
+      <div className="gfy-newsletter">
         <div className="gfy-newsletter-inner">
           <h2>Never Miss a Gifting Idea</h2>
           <p>Subscribe for early access to new drops, offers and gifting guides.</p>
@@ -902,7 +914,7 @@ function Home() {
             </button>
           </form>
         </div>
-      </div> */}
+      </div>
 
       {/* ===== FOOTER ===== */}
 

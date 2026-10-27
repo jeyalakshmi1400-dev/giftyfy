@@ -21,6 +21,7 @@ const productsPerPage = 10;
   // Fetch
   const fetchProducts = async () => {
     const res = await axios.get("http://localhost:4000/api/product");
+    console.log(res.data);
     setProducts(res.data);
   };
 
@@ -277,44 +278,69 @@ useEffect(() => {
 
               {/* CITY */}
               <td className="small">
-                {p.locations?.map((loc, i) => (
-                  <div key={i}>{loc.city}</div>
-                ))}
-              </td>
+
+  {p.deliveryType === "all" ? (
+    <div className="giftyfy-product-category">
+      All Over India
+    </div>
+  ) : (
+    p.locations?.map((loc, i) => (
+      <div key={i}>
+        {loc.city}
+      </div>
+    ))
+  )}
+
+</td>
 
              
 
               {/* PINCODE */}
-              <td className="text-start">
-                {p.locations?.map((loc, i) => {
-                  const pins = loc.pincode || [];
-                  const isExpanded = expandedPincode[p._id];
+              {/* PINCODE */}
+<td className="text-start">
 
-                  const visible = isExpanded ? pins : pins.slice(0, 2);
+  {p.deliveryType === "all" ? (
+    <span className="giftyfy-pincode-badge">
+      All Over India
+    </span>
+  ) : (
+    p.locations?.map((loc, i) => {
 
-                  return (
-                    <div key={i} className="mb-1">
+      const pins = loc.pincode || [];
+      const isExpanded = expandedPincode[p._id];
 
-                      {visible.map((pin, idx) => (
-                        <span
-                          key={idx}
-className="giftyfy-pincode-badge"                        >
-                          {pin}
-                        </span>
-                      ))}
+      const visible = isExpanded 
+        ? pins 
+        : pins.slice(0,2);
 
-                      {pins.length > 2 && (
-                        <button
-                          className="giftyfy-more-btn"
-                          onClick={() => togglePincode(p._id)}
-                        >
-                          {isExpanded ? "Less" : "More"}
-                        </button>
-                      )}
-                    </div>
-                  );
-                })}
-              </td>
+      return (
+        <div key={i}>
+
+          {visible.map((pin, idx)=>(
+            <span 
+              key={idx}
+              className="giftyfy-pincode-badge"
+            >
+              {pin}
+            </span>
+          ))}
+
+          {pins.length > 2 && (
+            <button
+              className="giftyfy-more-btn"
+              onClick={() => togglePincode(p._id)}
+            >
+              {isExpanded ? "Less" : "More"}
+            </button>
+          )}
+
+        </div>
+      );
+
+    })
+  )}
+
+</td>
 
               {/* QTY */}
               <td>

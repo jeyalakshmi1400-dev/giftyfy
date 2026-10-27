@@ -508,7 +508,7 @@ function ReturnPickup() {
 
                         <h3>
                           Order #
-                          {order._id.slice(-6)}
+                          {order.orderId}
                         </h3>
 
                         <span className="gf-card-subtitle">
@@ -697,7 +697,7 @@ function ReturnPickup() {
 
                           <td data-label="Order ID">
                             #
-                            {order._id.slice(-6)}
+                            {order.orderId}
                           </td>
 
                           <td data-label="Customer">

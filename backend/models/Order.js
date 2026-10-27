@@ -2,6 +2,12 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
+    orderId: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
@@ -185,10 +191,46 @@ codCollectedBy: {
   ref: "DeliveryPartner"
 },
 
+giftWrap:{
+ type:Boolean,
+ default:false
+},
+
+giftMessage:{
+ type:String,
+ default:""
+},
+
+giftWrapCharge:{
+ type:Number,
+ default:0
+},
 adminAmount: {
   type: Number,
   default: 0
 },
+
+
+//=========================
+// DELIVERY PARTNER SETTLEMENT
+// =========================
+partnerPaid: {
+  type: Boolean,
+  default: false,
+},
+
+partnerPaidDate: {
+  type: Date,
+  default: null,
+},
+
+partnerSettlementId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "PartnerSettlement",
+  default: null,
+},
+
+
     // 🎁 COUPON
     couponUsed: String,
 
@@ -294,9 +336,45 @@ isDelayed: {
   default: false,
 },
 
-    cancelReason: String
+    // =========================
+// ORDER CANCELLATION
+// =========================
+cancelReason: {
+  type: String,
+  default: "",
+},
+
+cancelledBy: {
+  type: String,
+ enum: ["Admin", "User", "Delivery Partner"],
+  default: null,
+},
+
+cancelledAt: {
+  type: Date,
+  default: null,
+},
+
+// =========================
+// DELIVERY PARTNER CANCELLATION
+// =========================
+deliveryCancelled: {
+  type: Boolean,
+  default: false,
+},
+
+deliveryCancelReason: {
+  type: String,
+  default: "",
+},
+
+deliveryCancelledAt: {
+  type: Date,
+  default: null,
+},
 
   },
+  
 
   
   { timestamps: true }

@@ -3,15 +3,33 @@ const Cart = require("../models/Cart");
 const DeliveryPartner = require("../models/DeliveryPartner");
 const OrderRequest = require("../models/OrderRequest");
 const { getPartnersByPincode } = require("./deliveryPartnerController");
-const Coupon = require("../models/coupon");
+const Coupon = require("../models/Coupon");
 const sendCouponNotification = require("../utils/sendCoupon");
 const User = require("../models/User");
 const Product = require("../models/Product");
 const Notification = require("../models/Notification");
-
 const Review = require("../models/Review");
 
 const Payment = require("../models/Payment");
+
+const crypto = require("crypto");
+
+async function generateOrderId() {
+  while (true) {
+    const orderId =
+      "GFT" +
+      crypto
+        .randomBytes(4)
+        .toString("hex")
+        .toUpperCase();
+
+    const exists = await Order.findOne({ orderId });
+
+    if (!exists) {
+      return orderId;
+    }
+  }
+}
 
 // =======================
 // PLACE ORDER
@@ -31,6 +49,11 @@ const placeOrder = async (req, res) => {
   buyNowItem,
    discount: frontendDiscount,
   totalAmount: frontendTotal,
+deliveryCharge,
+   giftWrap,
+  giftWrapCharge,
+  giftMessage,
+  frameSize,
 } = req.body;
 console.log("REQ BODY =>", req.body);
     if (!address || !phone || !pincode) {
@@ -169,8 +192,9 @@ else {
 
    const finalAmount = Number(frontendTotal || Math.max(total - discount, 0));
     // 🧾 CREATE ORDER
+    const orderId = await generateOrderId();
     const order = await Order.create({
-
+      orderId,
       user: req.user.id,
       name,  
       
@@ -255,6 +279,7 @@ items: items.map((item) => {
 
     size:
       item.size || null,
+    frameSize: item.frameSize || null,
 
 
     variant:
@@ -298,7 +323,7 @@ items: items.map((item) => {
       subtotal: total,
 
       discount,
-
+      delivery: Number(deliveryCharge || 0),
       totalAmount:
         finalAmount,
 
@@ -586,9 +611,17 @@ if (
     // ✅ CANCEL ORDER
     // =========================
 
-    order.status = "Cancelled";
+ order.status = "Cancelled";
 
-    await order.save();
+order.cancelledBy = "Customer";
+
+order.cancelReason = "Cancelled by Customer";
+
+order.adminCancelReason = "";
+
+order.deliveryCancelReason = "";
+
+await order.save();
 
     res.json({
       success: true,
@@ -698,7 +731,10 @@ const getAllOrders = async (req, res) => {
 
     const orders = await Order.find()
 
-      .populate("user")
+      .populate({
+    path: "user",
+    select: "name email"
+  })
 
       // ✅ DELIVERY PARTNER POPULATE
       .populate(
@@ -712,6 +748,7 @@ const getAllOrders = async (req, res) => {
       })
 
       .sort({ createdAt: -1 });
+    
 
     res.json({ orders });
 
@@ -737,14 +774,22 @@ const getAllOrders = async (req, res) => {
 
 const updateOrderStatus = async (req, res) => {
   try {
-    const { status, customizationStatus } = req.body;
+    const {
+      status,
+      customizationStatus,
+      reason
+    } = req.body;
 
     console.log("BODY =>", req.body);
 
+    // ===========================
+    // FIND ORDER
+    // ===========================
     const order = await Order.findById(req.params.id);
 
     if (!order) {
       return res.status(404).json({
+        success: false,
         message: "Order not found",
       });
     }
@@ -753,6 +798,7 @@ const updateOrderStatus = async (req, res) => {
     // UPDATE CUSTOMIZATION STATUS
     // ===========================
     if (customizationStatus) {
+
       const validFlow = {
         Requested: ["In Progress"],
         "In Progress": ["Completed"],
@@ -760,9 +806,12 @@ const updateOrderStatus = async (req, res) => {
 
       if (
         validFlow[order.customizationStatus] &&
-        !validFlow[order.customizationStatus].includes(customizationStatus)
+        !validFlow[order.customizationStatus].includes(
+          customizationStatus
+        )
       ) {
         return res.status(400).json({
+          success: false,
           message: "Invalid customization flow",
         });
       }
@@ -774,76 +823,279 @@ const updateOrderStatus = async (req, res) => {
     // UPDATE ORDER STATUS
     // ===========================
     if (status) {
+
+      // ===========================
+      // CANCEL VALIDATION
+      // ===========================
+      if (
+        status === "Cancelled" &&
+        !["Pending", "Confirmed"].includes(order.status)
+      ) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Only Pending and Confirmed orders can be cancelled.",
+        });
+      }
+
+      // ===========================
+      // UPDATE STATUS
+      // ===========================
       order.status = status;
 
+      // ===========================
+      // CANCEL DETAILS
+      // ===========================
+      if (status === "Cancelled") {
+
+        order.cancelledBy = "Admin";
+
+        order.cancelReason = reason || "";
+
+        order.adminCancelReason = reason || "";
+
+        order.deliveryCancelReason = "";
+      }
+
+      // ===========================
+      // DELIVERED DATE
+      // ===========================
       if (status === "Delivered") {
+
         order.deliveredAt = new Date();
       }
     }
 
-    console.log("Before Save:", order.status);
+    console.log(
+      "Before Save:",
+      order.status
+    );
 
+    // ===========================
+    // SAVE ORDER
+    // ===========================
     await order.save();
 
-    const updatedOrder = await Order.findById(order._id);
-
-    console.log("After Save:", updatedOrder.status);
-
     // ===========================
-    // SEND DELIVERY REQUEST
+    // GET UPDATED ORDER
     // ===========================
+    const updatedOrder = await Order.findById(
+      order._id
+    );
+
+    console.log(
+      "After Save:",
+      updatedOrder.status
+    );
+
+    // =====================================================
+    // SEND DELIVERY REQUEST TO ALL MATCHING PARTNERS
+    // =====================================================
     if (updatedOrder.status === "Shipped") {
-      const partners = await DeliveryPartner.find({
-        pincode: String(updatedOrder.deliveryPincode),
-        isApproved: true,
-      });
 
-      console.log("FOUND PARTNERS:", partners.length);
+      // ===========================
+      // GET DELIVERY PINCODE
+      // ===========================
+      const deliveryPincode =
+        String(
+          updatedOrder.deliveryPincode || ""
+        ).trim();
 
-      for (const partner of partners) {
-        const existingRequest = await OrderRequest.findOne({
-          order: updatedOrder._id,
-          deliveryPartner: partner._id,
-        });
+      console.log(
+        "=========================================="
+      );
 
-        if (!existingRequest) {
-          await OrderRequest.create({
-            order: updatedOrder._id,
-            deliveryPartner: partner._id,
+      console.log(
+        "SEARCHING DELIVERY PARTNERS"
+      );
+
+      console.log(
+        "ORDER PINCODE =>",
+        deliveryPincode
+      );
+
+      // ===========================
+      // VALIDATE PINCODE
+      // ===========================
+      if (!deliveryPincode) {
+
+        console.log(
+          "NO DELIVERY PINCODE FOUND"
+        );
+
+      } else {
+
+        // =================================================
+        // FIND ALL DELIVERY PARTNERS
+        // 
+        // IMPORTANT:
+        // DeliveryPartner schema:
+        //
+        // pincode: [String]
+        //
+        // MongoDB automatically matches:
+        //
+        // pincode: "625020"
+        //
+        // against:
+        //
+        // pincode: ["625020", "625021"]
+        // =================================================
+
+        const partners =
+          await DeliveryPartner.find({
+            pincode: deliveryPincode,
+
+            isApproved: true,
+
+            isAvailable: true,
+
+            isBlocked: false,
           });
+
+        console.log(
+          "FOUND DELIVERY PARTNERS =>",
+          partners.length
+        );
+
+        // ===========================
+        // DEBUG PARTNER LIST
+        // ===========================
+        console.log(
+          "PARTNER LIST =>",
+          partners.map((partner) => ({
+            id: partner._id,
+            name: partner.name,
+            pincode: partner.pincode,
+            approved: partner.isApproved,
+            available: partner.isAvailable,
+            blocked: partner.isBlocked,
+          }))
+        );
+
+        // =================================================
+        // SEND REQUEST + NOTIFICATION TO EVERY PARTNER
+        // =================================================
+        for (const partner of partners) {
+
+          console.log(
+            "PROCESSING PARTNER =>",
+            partner.name,
+            partner._id
+          );
+
+          // ==========================================
+          // CREATE ORDER REQUEST
+          // ==========================================
+          const existingRequest =
+            await OrderRequest.findOne({
+              order: updatedOrder._id,
+
+              deliveryPartner: partner._id,
+            });
+
+          if (!existingRequest) {
+
+            await OrderRequest.create({
+              order: updatedOrder._id,
+
+              deliveryPartner: partner._id,
+            });
+
+            console.log(
+              "ORDER REQUEST CREATED =>",
+              partner.name
+            );
+
+          } else {
+
+            console.log(
+              "ORDER REQUEST ALREADY EXISTS =>",
+              partner.name
+            );
+          }
+
+          // ==========================================
+          // CHECK EXISTING NOTIFICATION
+          // ==========================================
+          const existingNotification =
+            await Notification.findOne({
+              order: updatedOrder._id,
+
+              partner: partner._id,
+
+              hidden: false,
+            });
+
+          // ==========================================
+          // CREATE NOTIFICATION
+          // ==========================================
+          if (!existingNotification) {
+
+            await Notification.create({
+
+              partner: partner._id,
+
+              order: updatedOrder._id,
+
+              message:
+                `New delivery request for pincode ${deliveryPincode}`,
+            });
+
+            console.log(
+              "NOTIFICATION SENT =>",
+              partner.name,
+              partner._id
+            );
+
+          } else {
+
+            console.log(
+              "NOTIFICATION ALREADY EXISTS =>",
+              partner.name
+            );
+          }
         }
 
-        const existingNotification = await Notification.findOne({
-          order: updatedOrder._id,
-          partner: partner._id,
-          hidden: false,
-        });
-
-        if (!existingNotification) {
-          await Notification.create({
-            partner: partner._id,
-            order: updatedOrder._id,
-            message: `New delivery request for pincode ${updatedOrder.deliveryPincode}`,
-          });
-        }
+        console.log(
+          `✅ ${partners.length} delivery partner(s) notified for pincode ${deliveryPincode}`
+        );
       }
+
+      console.log(
+        "=========================================="
+      );
     }
 
+    // ===========================
+    // FINAL RESPONSE
+    // ===========================
     return res.json({
+
       success: true,
+
       message: "Order updated successfully",
+
       order: updatedOrder,
+
     });
+
   } catch (error) {
-    console.log("STATUS UPDATE ERROR:", error);
+
+    console.log(
+      "STATUS UPDATE ERROR:",
+      error
+    );
 
     return res.status(500).json({
+
       success: false,
+
       message: error.message,
+
     });
   }
 };
-
 
 
 // =======================
@@ -905,47 +1157,74 @@ const assignDeliveryPartner = async (req, res) => {
 
 // 🚚 DELIVERY PARTNER ACCEPT ORDER
 const acceptOrder = async (req, res) => {
-
   try {
 
     const order = await Order.findById(req.params.id);
 
     if (!order) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({
+        success: false,
+        message: "Order not found",
+      });
     }
 
-    // 🔥 FIX HERE
-const partnerId = req.partner?._id || req.partner?.id;
-
+    const partnerId = req.partner?._id || req.partner?.id;
 
     if (!partnerId) {
       return res.status(400).json({
-        message: "Partner not found in request"
+        success: false,
+        message: "Partner not found",
       });
     }
 
-    // already assigned
+    // Already accepted by another partner
     if (order.deliveryPartner) {
       return res.status(400).json({
-        message: "Order already assigned"
+        success: false,
+        message: "Order already assigned to another delivery partner",
       });
     }
 
+    // ===========================
+    // ASSIGN ORDER
+    // ===========================
     order.deliveryPartner = partnerId;
-    
     order.status = "Assigned";
 
     await order.save();
 
-    // hide notifications
-    await Notification.updateMany(
-      { order: order._id },
-      { hidden: true }
+    // ===========================
+    // HIDE ACCEPTED PARTNER NOTIFICATION
+    // ===========================
+    await Notification.updateOne(
+      {
+        order: order._id,
+        partner: partnerId,
+      },
+      {
+        hidden: true,
+      }
     );
 
+   // ===========================
+// HIDE OTHER PARTNER NOTIFICATIONS
+// ===========================
+await Notification.updateMany(
+  {
+    order: order._id,
+    partner: {
+      $ne: partnerId,
+    },
+  },
+  {
+    hidden: true,
+  }
+);
+
     res.json({
+      success: true,
       message: "Order accepted successfully",
-      order
+      order,
     });
 
   } catch (error) {
@@ -953,11 +1232,11 @@ const partnerId = req.partner?._id || req.partner?.id;
     console.log("ACCEPT ERROR 👉", error);
 
     res.status(500).json({
-      message: error.message
+      success: false,
+      message: error.message,
     });
 
   }
-
 };
 
 
@@ -1197,12 +1476,17 @@ const requestReturn = async (req, res) => {
 const getReturnOrders = async (req, res) => {
   try {
     const orders = await Order.find({
-      returnRequested: true
-    }).sort({ createdAt: -1 });
+      returnRequested: true,
+    })
+      .populate("user", "name email")
+      .populate("items.product")
+      .sort({ createdAt: -1 });
 
     res.json(orders);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({
+      message: err.message,
+    });
   }
 };
 
@@ -1523,14 +1807,23 @@ const cancelOrderByDelivery = async (req, res) => {
       });
     }
 
-    order.status = "Cancelled";
+order.status = "Cancelled";
 
-    order.deliveryCancelled = true;
-    order.deliveryCancelReason = reason;
-    order.deliveryCancelledAt = new Date();
-    order.status = "Cancelled";
+order.cancelledBy = "Delivery Partner";
 
-    await order.save();
+order.cancelReason = reason || "";
+
+order.deliveryCancelled = true;
+
+order.deliveryCancelReason = reason || "";
+
+order.adminCancelReason = "";
+
+order.deliveryCancelledAt = new Date();
+console.log("Before Save =>", order);
+
+await order.save();
+
 
     res.status(200).json({
       success: true,
@@ -1539,13 +1832,14 @@ const cancelOrderByDelivery = async (req, res) => {
     });
 
   } catch (error) {
-    console.log(error);
+  console.log("CANCEL ERROR =>", error);
+  console.log(error.stack);
 
-    res.status(500).json({
-      success: false,
-      message: "Server Error"
-    });
-  }
+  res.status(500).json({
+    success: false,
+    message: error.message,
+  });
+}
 };
 
 

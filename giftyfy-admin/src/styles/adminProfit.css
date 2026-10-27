@@ -263,12 +263,12 @@
 ========================= */
 
 .profit-table-wrapper{
-  background:#fff;
+  background:#efeded;
 
   border-radius:24px;
   padding:28px;
 
-  border:1px solid #edf2f7;
+  border:1px solid #ebf0f5;
 
   box-shadow:
     0 12px 25px rgba(0,0,0,0.05);
@@ -316,7 +316,7 @@
 
 .profit-table th{
   padding:16px;
-  color:#fff;
+  color:#ca3939;
   font-size:14px;
   font-weight:700;
   text-align:center;

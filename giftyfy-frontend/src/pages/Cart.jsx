@@ -200,6 +200,7 @@ navigate(`/product/${item.product._id || item.product}`)
                             Size: {item.size}
                           </span>
                         )}
+                        
                         {item.variant && (
                           <span className="giftfy-cart-product-meta__tag">
                             Color: {item.variant}
@@ -322,7 +323,7 @@ navigate(`/product/${item.product._id || item.product}`)
 
                 <div className="giftfy-summary-line">
                   <p>Delivery Charges</p>
-                  <h5 className="giftfy-summary-green">Free</h5>
+                  <h5 className="giftfy-summary-green">As per delivery location</h5>
                 </div>
 
                 {summary.coupon && (

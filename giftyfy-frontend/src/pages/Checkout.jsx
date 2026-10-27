@@ -44,8 +44,20 @@ const [amountDiscount,setAmountDiscount]=useState(0);  const [finalAmount, setFi
   const [method, setMethod] = useState("razorpay");
   const [loading, setLoading] = useState(false);
   const buyNowItem = state?.item || null;
-
+  const [deliveryCharge,setDeliveryCharge] = useState(0);
+const [deliverySetting,setDeliverySetting] = useState(null);
   const deliveryPincode = localStorage.getItem("deliveryPincode");
+  const [giftSetting,setGiftSetting]=useState(null);
+const [giftOption,setGiftOption]=useState(false);
+const [giftMessage,setGiftMessage]=useState("");
+const [deliveryAvailable, setDeliveryAvailable] = useState(true);
+const [codExtraCharge, setCodExtraCharge] = useState(0);
+
+
+const giftCharge = giftOption && giftSetting
+  ? Number(giftSetting.giftWrapCharge)
+  : 0;
+
 
   useEffect(() => {
   if (buyNowData?.buyNow) {
@@ -71,6 +83,8 @@ const [amountDiscount,setAmountDiscount]=useState(0);  const [finalAmount, setFi
 
   return;
 }
+
+
 
     const fetchCart = async () => {
       try {
@@ -152,7 +166,95 @@ useEffect(() => {
 
 
 
+useEffect(()=>{
 
+  const fetchDeliverySetting = async()=>{
+
+    try{
+
+      const res = await axios.get(
+        "http://localhost:4000/api/delivery-setting"
+      );
+
+      setDeliverySetting(res.data);
+
+    }
+    catch(err){
+      console.log(err);
+    }
+
+  };
+
+
+  fetchDeliverySetting();
+
+},[]);
+
+
+
+
+useEffect(() => {
+  if (selectedAddress && deliverySetting) {
+    calculateDeliveryCharge(selectedAddress);
+  }
+}, [
+  selectedAddress,
+  deliverySetting,
+  cart,
+  method
+]);
+
+useEffect(()=>{
+
+ axios.get(
+ "http://localhost:4000/api/gift-setting"
+ )
+ .then(res=>{
+   setGiftSetting(res.data);
+ })
+
+},[]);
+
+
+
+const indiaStates = [
+  "Andhra Pradesh",
+  "Arunachal Pradesh",
+  "Assam",
+  "Bihar",
+  "Chhattisgarh",
+  "Goa",
+  "Gujarat",
+  "Haryana",
+  "Himachal Pradesh",
+  "Jharkhand",
+  "Karnataka",
+  "Kerala",
+  "Madhya Pradesh",
+  "Maharashtra",
+  "Manipur",
+  "Meghalaya",
+  "Mizoram",
+  "Nagaland",
+  "Odisha",
+  "Punjab",
+  "Rajasthan",
+  "Sikkim",
+  "Tamil Nadu",
+  "Telangana",
+  "Tripura",
+  "Uttar Pradesh",
+  "Uttarakhand",
+  "West Bengal",
+  "Andaman and Nicobar Islands",
+  "Chandigarh",
+  "Dadra and Nagar Haveli and Daman and Diu",
+  "Delhi",
+  "Jammu and Kashmir",
+  "Ladakh",
+  "Lakshadweep",
+  "Puducherry"
+];
   const sendCoupon = async () => {
     try {
       const res = await axios.post(
@@ -436,167 +538,242 @@ console.log(res.data);
     });
   };
 
-  const handlePayment = async () => {
-    if (!selectedAddress) {
-      alert("Please select an address");
-      return;
-    }
+ const handlePayment = async () => {
+  console.log("Place Order clicked");
+  console.log("Selected Address:", selectedAddress);
+console.log("Delivery Available:", deliveryAvailable);
+console.log("Payment Method:", method);
+console.log("Cart Items:", cart.items);
+  if (!selectedAddress) {
+    toast.error("Please select a delivery address");
+    return;
+  }
+  
 
-    const blockedProducts = cart.items.filter((item) => {
-      const locations = item.product?.locations || [];
+  const blockedProducts = cart.items.filter((item) => {
+    const locations = item.product?.locations || [];
 
-      const allowedPincodes = locations.flatMap((loc) =>
-        loc.pincode.map((pin) => String(pin))
-      );
+    const allowedPincodes = locations.flatMap((loc) =>
+      loc.pincode.map((pin) => String(pin))
+    );
 
-      if (allowedPincodes.length === 0) return false;
+    if (allowedPincodes.length === 0) return false;
 
-      return !allowedPincodes.includes(String(selectedAddress.pincode));
-    });
+    return !allowedPincodes.includes(String(selectedAddress.pincode));
+  });
 
-    if (blockedProducts.length > 0) {
-      alert(
-        `❌ ${blockedProducts
-          .map((p) => p.product?.name)
-          .join(", ")} cannot be delivered to ${selectedAddress.pincode}`
-      );
-      return;
-    }
+  if (blockedProducts.length > 0) {
+    toast.error(
+      `${blockedProducts
+        .map((p) => p.product?.name)
+        .join(", ")} cannot be delivered to ${selectedAddress.pincode}`
+    );
+    return;
+  }
 
-    if (!cart.items || cart.items.length === 0) {
-      toast.error("Your cart is empty");
-      navigate("/");
-      return;
-    }
+  if (!cart.items || cart.items.length === 0) {
+    toast.error("Your cart is empty");
+    navigate("/");
+    return;
+  }
 
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      if (method === "razorpay") {
-        if (!window.Razorpay) {
-          alert("Razorpay SDK not loaded ❌");
-          setLoading(false);
-          return;
+    // Final amount with delivery + gift wrap charge
+
+const finalGiftCharge =
+  giftOption && giftSetting?.giftWrapEnabled
+    ? Number(giftSetting.giftWrapCharge)
+    : 0;
+
+
+const payableAmount = Math.round(
+  Number(finalAmount) +
+  Number(deliveryCharge) +
+  Number(finalGiftCharge)
+);
+
+    // ===================== ONLINE PAYMENT =====================
+    if (method === "razorpay") {
+      if (!window.Razorpay) {
+        toast.error("Razorpay SDK not loaded");
+        setLoading(false);
+        return;
+      }
+
+      const res = await axios.post(
+        "http://localhost:4000/api/payment/create-order",
+        {
+          amount: payableAmount,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
-
-        const res = await axios.post(
-          "http://localhost:4000/api/payment/create-order",
-          {
-            amount: finalAmount
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-          }
-        );
-
-        const { razorpayOrder, key } = res.data;
-
-        const options = {
-          key,
-          amount: razorpayOrder.amount,
-          currency: "INR",
-          order_id: razorpayOrder.id,
-          name: "Giftyfy",
-          description: "Secure Payment",
-          prefill: {
-            name: `${selectedAddress?.firstName || ""} ${selectedAddress?.lastName || ""}`,
-            contact: selectedAddress?.phone || ""
-          },
-          theme: {
-            color: "#e91e63"
-          },
-          handler: async function (response) {
-            try {
-              await axios.post(
-                "http://localhost:4000/api/payment/verify",
-                response,
-                {
-                  headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                  }
-                }
-              );
-
-              const orderRes = await axios.post(
-                "http://localhost:4000/api/orders",
-                {    name: selectedAddress.firstName, 
-                  address: selectedAddress.address,
-                  phone: selectedAddress.phone,
-                  pincode: selectedAddress.pincode,
-                  couponCode,
-                  paymentMethod: "Online",
-                  paymentId: response.razorpay_payment_id,
-                  buyNowItem,
-                  discount: categoryDiscount + amountDiscount,
-                  totalAmount: finalAmount,
-
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`
-                  }
-                }
-              );
-
-              alert("Payment Successful 🎉");
-              navigate(`/success/${orderRes.data.order._id}`);
-            } catch (err) {
-              console.log(err);
-              alert(
-                err.response?.data?.message ||
-                "Payment verification failed ❌"
-              );
-            }
-          },
-          modal: {
-            ondismiss: function () {
-              alert("Payment cancelled ❌");
-            }
-          }
-        };
-
-        const rzp = new window.Razorpay(options);
-        rzp.open();
-      } else {
-        const orderRes = await axios.post(
-          "http://localhost:4000/api/orders",
-          {
-            name: selectedAddress.firstName,   
-            address: selectedAddress.address,
-            phone: selectedAddress.phone,
-            pincode: selectedAddress.pincode,
-            couponCode,
-            paymentMethod: "COD",
-            buyNowItem,
-            discount: categoryDiscount + amountDiscount,
-            totalAmount: finalAmount,
-
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
-          }
-        );
-        
-
-navigate(`/success/${orderRes.data.order._id}`, {
-  state: {
-    paymentMethod: method === "razorpay" ? "Online" : "Cash on Delivery",
-  },
-});      }
-    } catch (err) {
-      console.log(err);
-      alert(
-        err.response?.data?.message ||
-        "Payment failed ❌"
       );
-    } finally {
-      setLoading(false);
+
+      const { razorpayOrder, key } = res.data;
+
+      const options = {
+        key,
+        amount: razorpayOrder.amount,
+        currency: "INR",
+        order_id: razorpayOrder.id,
+        name: "Giftyfy",
+        description: "Secure Payment",
+
+        prefill: {
+          name: `${selectedAddress.firstName || ""} ${
+            selectedAddress.lastName || ""
+          }`,
+          contact: selectedAddress.phone || "",
+        },
+
+        theme: {
+          color: "#e91e63",
+        },
+
+        handler: async function (response) {
+          try {
+            // Verify Payment
+            await axios.post(
+              "http://localhost:4000/api/payment/verify",
+              response,
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+
+            // Create Order
+            const orderRes = await axios.post(
+              "http://localhost:4000/api/orders",
+              {
+                name: selectedAddress.firstName,
+                address: selectedAddress.address,
+                phone: selectedAddress.phone,
+                pincode: selectedAddress.pincode,
+
+                couponCode,
+                paymentMethod: "Online",
+                paymentId: response.razorpay_payment_id,
+
+                buyNowItem,
+
+                discount: categoryDiscount + amountDiscount,
+                deliveryCharge,
+                giftWrap: giftOption,
+
+                giftWrapCharge: finalGiftCharge,
+
+                giftMessage,
+                totalAmount: payableAmount,
+                paymentMethod: "Online",
+              },
+              {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+              }
+            );
+            window.dispatchEvent(new Event("cartUpdated"));
+
+            toast.success("Order placed successfully! 🎉", {
+              position: "top-center",
+              autoClose: 2000,
+              theme: "colored",
+            });
+
+            setTimeout(() => {
+              console.log(orderRes.data.order);
+             navigate(`/success/${orderRes.data.order.orderId}`, {
+                state: {
+                  paymentMethod: "Online",
+                  order: orderRes.data.order,
+                },
+              });
+            }, 2000);
+          } catch (err) {
+            console.log(err);
+            toast.error(
+              err.response?.data?.message ||
+                "Payment verification failed"
+            );
+          }
+        },
+
+        modal: {
+          ondismiss: function () {
+            toast.info("Payment cancelled");
+          },
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     }
-  };
+
+    // ===================== CASH ON DELIVERY =====================
+    else {
+      const orderRes = await axios.post(
+        "http://localhost:4000/api/orders",
+        {
+          name: selectedAddress.firstName,
+          address: selectedAddress.address,
+          phone: selectedAddress.phone,
+          pincode: selectedAddress.pincode,
+
+          couponCode,
+          paymentMethod: "COD",
+
+          buyNowItem,
+
+          discount: categoryDiscount + amountDiscount,
+          deliveryCharge,
+          giftWrap: giftOption,
+
+          giftWrapCharge: finalGiftCharge,
+
+          giftMessage,
+          totalAmount: payableAmount,
+          paymentMethod: "COD",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      window.dispatchEvent(new Event("cartUpdated"));
+      toast.success("Order placed successfully! 🎉", {
+        position: "top-center",
+        autoClose: 2000,
+        theme: "colored",
+      });
+
+      setTimeout(() => {
+        console.log("Order Response:", orderRes.data.order);
+        navigate(`/success/${orderRes.data.order.orderId}`, {
+        state: {
+          paymentMethod: "Cash on Delivery",
+          order: orderRes.data.order,
+        },
+      });
+      }, 2000);
+    }
+  } catch (err) {
+    console.log(err);
+
+    toast.error(
+      err.response?.data?.message || "Payment failed ❌"
+    );
+  } finally {
+    setLoading(false);
+  }
+};
 
   const removeUnavailableProducts = async () => {
     try {
@@ -665,13 +842,83 @@ navigate(`/success/${orderRes.data.order._id}`, {
   };
 
 
+const calculateDeliveryCharge = (address) => {
+  if (!deliverySetting || !address) return;
+
+  const subtotal = cart.summary?.total || 0;
+
+  // Free Delivery
+  if (subtotal >= deliverySetting.freeDeliveryAmount) {
+    setDeliveryCharge(0);
+    return;
+  }
+
+  const state = address.state?.trim();
+
+  const zone = deliverySetting.zones.find((z) =>
+    z.states.includes(state)
+  );
+
+if (!zone) {
+  setDeliveryAvailable(false);
+  setDeliveryCharge(0);
+
+  if (!toast.isActive("delivery-not-available")) {
+    toast.error(`Delivery is not available in ${state}`, {
+      toastId: "delivery-not-available",
+    });
+  }
+
+  return;
+}
+
+setDeliveryAvailable(true);
+
+const onlineCharge = Number(zone.onlineCharge);
+const codCharge = Number(zone.codCharge);
+
+setCodExtraCharge(codCharge - onlineCharge);
+
+
+const charge =
+  method === "cod"
+    ? Number(zone.codCharge)
+    : Number(zone.onlineCharge);
+
+setDeliveryCharge(charge);
+
+
+};
+
+const calculateFinalAmount = () => {
+  const productTotal = cart.summary?.total || 0;
+
+  const discount =
+    Number(categoryDiscount) + Number(amountDiscount);
+
+  const finalGiftCharge =
+    giftOption && giftSetting?.giftWrapEnabled
+      ? Number(giftSetting.giftWrapCharge)
+      : 0;
+
+  return (
+    productTotal +
+    Number(deliveryCharge) +
+    finalGiftCharge -
+    discount
+  );
+};
+
+
 const autoApplyCategoryCoupon = async (cartData) => {
   try {
+    const cartTotal = Number(cartData.summary?.total || 0);
+
     const res = await axios.post(
       "http://localhost:4000/api/coupons/auto-category",
       {
         items: cartData.items,
-        cartTotal: cartData.summary?.total,
+        cartTotal,
       },
       {
         headers: {
@@ -680,59 +927,83 @@ const autoApplyCategoryCoupon = async (cartData) => {
       }
     );
 
-    if (res.data.success) {
-      // Category coupon available
-      setCategoryDiscount(res.data.discount);
-
-      const totalDiscount =
-        Number(res.data.discount) + Number(amountDiscount);
-
-      setFinalAmount(cartData.summary.total - totalDiscount);
-
-      setAutoCoupon(res.data.couponCode);
-
-      localStorage.setItem(
-        "categoryDiscount",
-        res.data.discount
-      );
-
-      localStorage.setItem(
-        "autoCoupon",
-        res.data.couponCode
-      );
-
-      localStorage.setItem(
-        "finalAmount",
-        cartData.summary.total - totalDiscount
-      );
-
-toast.success(
-  `${res.data.couponCode} Auto Applied 🎉`,
-  {
-    toastId: "auto-category-coupon",
-  }
-);
-    } else {
-      // ❌ No category coupon → clear old values
+    // ❌ No coupon found
+    if (!res.data.success) {
       setCategoryDiscount(0);
       setAutoCoupon(null);
 
-      const final =
-        cartData.summary.total - amountDiscount;
+      const final = cartTotal - Number(amountDiscount);
 
       setFinalAmount(final);
 
       localStorage.removeItem("categoryDiscount");
       localStorage.removeItem("autoCoupon");
       localStorage.setItem("finalAmount", final);
+
+      return;
     }
+
+    // ✅ Minimum Order validation (Frontend Safety)
+    if (
+      res.data.minOrderAmount &&
+      cartTotal < Number(res.data.minOrderAmount)
+    ) {
+      setCategoryDiscount(0);
+      setAutoCoupon(null);
+
+      const final = cartTotal - Number(amountDiscount);
+
+      setFinalAmount(final);
+
+      localStorage.removeItem("categoryDiscount");
+      localStorage.removeItem("autoCoupon");
+      localStorage.setItem("finalAmount", final);
+
+      return;
+    }
+
+    // ✅ Apply Category Coupon
+    const discount = Number(res.data.discount || 0);
+
+    setCategoryDiscount(discount);
+
+    const totalDiscount =
+      discount + Number(amountDiscount);
+
+    const finalAmount =
+      cartTotal - totalDiscount;
+
+    setFinalAmount(finalAmount);
+
+    setAutoCoupon(res.data.couponCode);
+
+    localStorage.setItem(
+      "categoryDiscount",
+      discount
+    );
+
+    localStorage.setItem(
+      "autoCoupon",
+      res.data.couponCode
+    );
+
+    localStorage.setItem(
+      "finalAmount",
+      finalAmount
+    );
+
+    toast.success(
+      `${res.data.couponCode} Auto Applied 🎉`,
+      {
+        toastId: "auto-category-coupon",
+      }
+    );
   } catch (err) {
     console.log(
       "AUTO COUPON ERROR",
       err.response?.data || err
     );
 
-    // Error-na kooda clear pannidum
     setCategoryDiscount(0);
     setAutoCoupon(null);
 
@@ -791,6 +1062,7 @@ const summary = cart.summary || {};
                             return;
                           }
                           setSelectedAddress(addr);
+                          calculateDeliveryCharge(addr);
                         }}
                       >
                         <div className="address-card-header">
@@ -989,15 +1261,28 @@ const summary = cart.summary || {};
                     </div>
 
                     <div className="form-group">
-                      <label>State *</label>
-                      <input
-                        type="text"
-                        name="state"
-                        placeholder="Your state"
-                        value={newAddress.state || ""}
-                        onChange={handleChange}
-                      />
-                    </div>
+                    <label>State *</label>
+
+                    <select
+                      name="state"
+                      value={newAddress.state || ""}
+                      onChange={handleChange}
+                    >
+                      <option value="">
+                        Select State
+                      </option>
+
+                      {indiaStates.map((state) => (
+                        <option 
+                          key={state}
+                          value={state}
+                        >
+                          {state}
+                        </option>
+                      ))}
+
+                    </select>
+                  </div>
                   </div>
 
                   <div className="form-group">
@@ -1080,7 +1365,7 @@ const summary = cart.summary || {};
                       <p className="productgf-meta">
                         Qty: {item.quantity} × ₹{item.price}
                       </p>
-                      {item.size && <p className="productgf-meta">Size: {item.size}</p>}
+                      {(item.size || item.frameSize) && <p className="productgf-meta">Size: {item.size || item.frameSize}</p>}
                       {item.variant && <p className="productgf-meta">Color: {item.variant}</p>}
                       <p className="tax-note">Inclusive of all taxes</p>
                     </div>
@@ -1122,11 +1407,21 @@ const summary = cart.summary || {};
                           className="coupon-input"
                         />
                         <button
-                          className="btn-apply-coupon"
-                          onClick={() => applyCoupon()}
-                        >
-                          Apply
-                        </button>
+                        className="btn-apply"
+                        onClick={() => {
+                          if (
+                            c.expiryDate &&
+                            new Date(c.expiryDate) < new Date()
+                          ) {
+                            toast.error("Coupon has expired ❌");
+                            return;
+                          }
+
+                          applyCoupon(c.code);
+                        }}
+                      >
+                        Apply
+                      </button>
                       </div>
 
                      <div className="coupons-grid">
@@ -1136,7 +1431,15 @@ const summary = cart.summary || {};
     coupons
       .filter((c) => !c.categories || c.categories.length === 0)
       .map((c) => (
-        <div className="coupon-item" key={c._id}>
+        <div
+  className={`coupon-item ${
+    c.expiryDate &&
+    new Date(c.expiryDate) < new Date()
+      ? "expired"
+      : ""
+  }`}
+  key={c._id}
+>
           <div className="coupon-badge">{c.code}</div>
 
           <h4 className="coupon-title">{c.description}</h4>
@@ -1211,34 +1514,205 @@ const summary = cart.summary || {};
               {/* PRICE BREAKDOWN */}
 <div className="price-breakdown">
 
+  {/* Products Total */}
   <div className="price-row">
-    <span className="label">Products Total</span>
+    <span className="label">
+      Products Total
+    </span>
+
     <span className="value">
       ₹{summary.total || 0}
     </span>
   </div>
 
-  {(categoryDiscount + amountDiscount) > 0 && (
-    <div className="price-row discount">
-      <span className="label">Coupon Discount</span>
-      <span className="value">
-        - ₹{Math.round(categoryDiscount + amountDiscount)}
-      </span>
-    </div>
-  )}
+
+  {/* Delivery Charge */}
+  <div className="price-row">
+
+    <span className="label">
+      Delivery Charge
+    </span>
+
+    <span className="value">
+    {!deliveryAvailable ? (
+      <span className="text-danger">Not Available</span>
+    ) : deliveryCharge === 0 ? (
+      "FREE"
+    ) : (
+      `₹${deliveryCharge}`
+    )}
+  </span>
+
+  </div>
+{method === "cod" &&
+  deliveryAvailable &&
+  codExtraCharge > 0 && (
+    <p className="cod-note">
+      * Additional COD handling charge: ₹{codExtraCharge}
+    </p>
+)}
+
+
+  {/* Gift Wrap Option */}
+
+  {
+    giftSetting?.giftWrapEnabled && (
+
+      <div className="gift-wrap-box">
+
+        <div className="gift-radio">
+
+          <input
+            type="checkbox"
+            checked={giftOption}
+            onChange={(e)=>
+              setGiftOption(e.target.checked)
+            }
+          />
+
+
+          <div className="gift-content">
+
+            <h4>
+              🎁 Add Gift Wrap
+            </h4>
+
+            <p>
+              Make your gift special with a message
+            </p>
+
+          </div>
+
+
+          <span>
+            ₹{giftSetting.giftWrapCharge}
+          </span>
+
+
+        </div>
+
+
+
+        {
+          giftOption && (
+
+            <textarea
+
+              className="gift-message-input"
+
+              placeholder="Write your gift message..."
+
+              maxLength={
+                giftSetting.maxMessageLength
+              }
+
+              value={giftMessage}
+
+              onChange={(e)=>
+                setGiftMessage(e.target.value)
+              }
+
+            />
+
+          )
+        }
+
+
+      </div>
+
+    )
+  }
+
+
+
+  {/* Gift Charge */}
+
+  {
+    giftCharge > 0 && (
+
+      <div className="price-row">
+
+        <span className="label">
+          Gift Wrap Charge
+        </span>
+
+
+        <span className="value">
+          ₹{giftCharge}
+        </span>
+
+      </div>
+
+    )
+  }
+
+
+
+
+  {/* Coupon Discount */}
+
+  {
+    (categoryDiscount + amountDiscount) > 0 && (
+
+      <div className="price-row discount">
+
+        <span className="label">
+          Coupon Discount
+        </span>
+
+
+        <span className="value">
+
+          - ₹{
+            Math.round(
+              categoryDiscount + amountDiscount
+            )
+          }
+
+        </span>
+
+
+      </div>
+
+    )
+  }
+
+
+
 
   <p className="tax-info">
     Inclusive of all taxes
   </p>
 
+
+
   <div className="price-divider"></div>
 
+
+
+  {/* Final Total */}
+
   <div className="price-row total">
-    <span className="label">Total Amount</span>
-    <span className="value total-value">
-      ₹{Math.round(finalAmount)}
+
+    <span className="label">
+      Total Amount
     </span>
+
+
+    <span className="value total-value">
+
+      ₹{
+        Math.round(
+          calculateFinalAmount()
+        )
+      }
+
+    </span>
+
+
   </div>
+
+
 
 </div>
               {/* SECURITY BADGE */}
@@ -1251,7 +1725,7 @@ const summary = cart.summary || {};
               <button
                 className="btn-place-order"
                 onClick={handlePayment}
-                disabled={loading}
+                 disabled={loading || !deliveryAvailable}
               >
                 {loading
                   ? "Processing..."

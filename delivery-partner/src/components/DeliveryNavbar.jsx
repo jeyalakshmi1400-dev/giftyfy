@@ -430,7 +430,7 @@ const acceptReturn = async (orderId) => {
                             <span>{n.order?.user?.name}</span>
                             <span className="dn2-req-sep">·</span>
                             <FiClock size={11} />
-                            <span>#{n.order?._id?.slice(-8)}</span>
+                            <span>#{n.order.orderId?.slice(-9)}</span>
                           </div>
                           <div className="dn2-req-actions">
                             <button className="dn2-btn-reject" onClick={() => rejectOrder(n)}>

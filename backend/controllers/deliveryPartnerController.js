@@ -88,7 +88,11 @@ const registerDeliveryPartner = async (req, res) => {
         email,
         password: hashedPassword,
         address,
-        pincode,
+        pincode: Array.isArray(pincode)
+  ? pincode.map(String)
+  : pincode
+    ? [String(pincode)]
+    : [],
         aadharNumber,
         panNumber,
         vehicleType,
@@ -293,74 +297,79 @@ const getMyProfile = async (req, res) => {
 
 
 const updateMyProfile = async (req, res) => {
-
   try {
-
-    const partner =
-      await DeliveryPartner.findById(
-        req.partner._id
-      );
+    const partner = await DeliveryPartner.findById(
+      req.partner._id
+    );
 
     if (!partner) {
-
       return res.status(404).json({
-        message: "Partner not found"
+        message: "Partner not found",
       });
-
     }
 
-    // UPDATE FIELDS
-    partner.name =
-      req.body.name || partner.name;
+    // ============================
+    // BASIC PROFILE FIELDS
+    // ============================
 
-    partner.phone =
-      req.body.phone || partner.phone;
+    if (req.body.name !== undefined) {
+      partner.name = req.body.name;
+    }
 
-    partner.email =
-      req.body.email || partner.email;
+    if (req.body.phone !== undefined) {
+      partner.phone = req.body.phone;
+    }
 
-    partner.vehicleNumber =
-      req.body.vehicleNumber ||
-      partner.vehicleNumber;
+    if (req.body.email !== undefined) {
+      partner.email = req.body.email;
+    }
 
-    partner.pincode =
-      req.body.pincode ||
-      partner.pincode;
+    if (req.body.vehicleNumber !== undefined) {
+      partner.vehicleNumber =
+        req.body.vehicleNumber;
+    }
 
-    // OPTIONAL PHOTO UPDATE
+    // ============================
+    // MULTIPLE PINCODES
+    // ============================
+
+    if (Array.isArray(req.body.pincode)) {
+      partner.pincode = [
+        ...new Set(
+          req.body.pincode
+            .map((pin) => String(pin).trim())
+            .filter((pin) => /^\d{6}$/.test(pin))
+        ),
+      ];
+    }
+
+    // ============================
+    // OPTIONAL PHOTO
+    // ============================
+
     if (req.file) {
-
-      partner.photo =
-        req.file.filename;
-
+      partner.photo = req.file.filename;
     }
 
     await partner.save();
 
     res.json({
-
       success: true,
-
-      message:
-        "Profile updated successfully",
-
-      partner
-
+      message: "Profile updated successfully",
+      partner,
     });
 
   } catch (error) {
-
     console.log(
       "UPDATE PROFILE ERROR 👉",
       error
     );
 
     res.status(500).json({
-      message: error.message
+      success: false,
+      message: error.message,
     });
-
   }
-
 };
 
 
@@ -405,7 +414,22 @@ const getDashboardData = async (req, res) => {
         order.status === "Returned"
     ).length;
 
+// ======================
+// PENDING COD AMOUNT
+// ======================
 
+const pendingCODAmount = orders
+  .filter(
+    (order) =>
+      order.paymentMethod === "COD" &&
+      order.status === "Delivered" &&
+      order.codStatus === "Collected"
+  )
+  .reduce(
+    (sum, order) =>
+      sum + Number(order.totalAmount || 0),
+    0
+  );
     // ======================
     // DELIVERED ORDERS DATA
     // ======================
@@ -505,17 +529,18 @@ orders.forEach((order) => {
     // ======================
     res.json({
 
-      success: true,
+  success: true,
 
-      totalOrders,
-      pendingOrders,
-      deliveredOrders,
-    
+  totalOrders,
+  pendingOrders,
+  deliveredOrders,
 
-      chartData,
-      orderStatus,
+  pendingCODAmount,
 
-    });
+  chartData,
+  orderStatus,
+
+});
 
   } catch (error) {
 
@@ -556,7 +581,7 @@ const orders = await Order.find({
 
 const formattedOrders = orders.map((order) => ({
   _id: order._id,
-
+  orderId: order.orderId,
   customer: order.name || "Customer",
   email: order.user?.email || "-",
   phone: order.user?.phone || "-",
@@ -831,44 +856,62 @@ async (req, res) => {
 const rejectNotification = async (req, res) => {
   try {
     const notificationId = req.params.id;
+    const partnerId = req.partner?._id;
 
-    const notification = await Notification.findById(notificationId);
+    if (!partnerId) {
+      return res.status(401).json({
+        success: false,
+        message: "Delivery partner not authenticated",
+      });
+    }
+
+    // Match notification using the actual schema field: partner
+    const notification = await Notification.findOne({
+      _id: notificationId,
+      partner: partnerId,
+    });
 
     if (!notification) {
       return res.status(404).json({
         success: false,
-        message: "Notification not found",
+        message: "Notification not found for this delivery partner",
       });
     }
 
-    console.log(req.deliveryPartner);
-console.log(req.partner);
-console.log(req.user);
+    // Save rejection history for this partner and order.
+    // Avoid duplicate records for the same partner + order.
+    await DeliveryRejectHistory.findOneAndUpdate(
+      {
+        order: notification.order,
+        deliveryPartner: partnerId,
+      },
+      {
+        $set: {
+          reason: "Rejected by Delivery Partner",
+        },
+        $setOnInsert: {
+          order: notification.order,
+          deliveryPartner: partnerId,
+          rejectedAt: new Date(),
+        },
+      },
+      {
+  upsert: true,
+  returnDocument: "after",
+}
+    );
 
-    // Save reject history
-    await DeliveryRejectHistory.create({
-      order: notification.order,
-      deliveryPartner: req.partner._id,
-      reason: "Rejected by Delivery Partner",
-    });
-
-    // Remove delivery partner from order
-    await Order.findByIdAndUpdate(notification.order, {
-      deliveryPartner: null,
-    });
-
-    // Delete notification
+    // Remove only this partner's notification
     await Notification.findByIdAndDelete(notificationId);
 
-    res.json({
+    return res.json({
       success: true,
-      message: "Request rejected successfully",
+      message: "Order rejected successfully",
     });
-
   } catch (err) {
-    console.log(err);
+    console.error("rejectNotification ERROR:", err);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server Error",
     });
@@ -877,39 +920,30 @@ console.log(req.user);
 
 
 
-const getRejectedOrders = async (req,res)=>{
+const getRejectedOrders = async (req, res) => {
+  try {
+    const partnerId = req.partner._id;
 
-try{
+    const orders = await DeliveryRejectHistory.find({
+      deliveryPartner: partnerId,
+    })
+      .populate("order")
+      .sort({ rejectedAt: -1 })
+      .lean();
 
-const partnerId = req.partner._id;
+    // Order document கிடைக்காத பழைய records-ஐ UI-க்கு அனுப்ப வேண்டாம்
+    const validOrders = orders.filter(
+      (item) => item.order && item.order._id
+    );
 
-console.log("PARTNER ID =>", partnerId);
+    return res.json(validOrders);
+  } catch (err) {
+    console.error("getRejectedOrders ERROR:", err);
 
-
-const orders = await DeliveryRejectHistory.find({
- deliveryPartner: partnerId
-})
-.populate("order")
-.sort({
- rejectedAt:-1
-});
-
-console.log("REJECTED DATA COUNT =>", orders.length);
-console.log("REJECTED DATA =>", orders);
-
-res.json(orders);
-
-
-}catch(err){
-
-console.log("ERROR:",err);
-
-res.status(500).json({
- message:err.message
-});
-
-}
-
+    return res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
 const getCancelledOrders = async (req, res) => {

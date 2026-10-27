@@ -473,3 +473,103 @@
     padding: 12px;
   }
 }
+/* =====================================================
+   MULTIPLE PINCODE
+===================================================== */
+
+.delivery-pincode-section {
+  width: 100%;
+}
+
+.delivery-pincode-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.delivery-pincode-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.delivery-pincode-remove {
+  border: none;
+  background: transparent;
+  color: #dc2626;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delivery-pincode-remove:hover {
+  color: #991b1b;
+}
+
+.delivery-pincode-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 12px;
+  border-radius: 20px;
+  background: #f1f5f9;
+  border: 1px solid #dbe3ec;
+  color: #333;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.delivery-pincode-add {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.delivery-pincode-add .delivery-profile-input {
+  flex: 1;
+  min-width: 180px;
+}
+
+.delivery-pincode-add-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 7px;
+  background: #111827;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.delivery-pincode-add-btn:hover {
+  background: #000;
+}
+
+.delivery-pincode-help {
+  display: block;
+  margin-top: 6px;
+  color: #777;
+  font-size: 12px;
+}
+
+.delivery-pincode-empty {
+  color: #999;
+  font-size: 13px;
+}
+
+.delivery-profile-save-wrapper {
+  margin-top: 20px;
+}

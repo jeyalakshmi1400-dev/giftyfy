@@ -1,0 +1,729 @@
+/* =========================================================
+   productCustomizer.css
+   Used by PersonalizeProduct.jsx
+   Design tokens -> layout -> panels -> controls -> product card
+   -> preview modal -> crop modal -> responsive
+   ========================================================= */
+
+.pc-root {
+  --pc-ink: #1b1f2a;
+  --pc-text: #3a4152;
+  --pc-muted: #6b7280;
+  --pc-line: #e6e8ee;
+  --pc-line-strong: #cfd4de;
+  --pc-bg: #f6f7fa;
+  --pc-surface: #ffffff;
+  --pc-accent: #3b5bdb;
+  --pc-accent-dark: #2f49b3;
+  --pc-accent-soft: #edf1ff;
+  --pc-success: #15803d;
+  --pc-success-dark: #116b32;
+  --pc-danger: #c0362c;
+  --pc-danger-soft: #fdeeed;
+  --pc-radius: 14px;
+  --pc-radius-sm: 10px;
+  --pc-shadow: 0 1px 2px rgba(20, 24, 40, 0.04),
+    0 8px 24px rgba(20, 24, 40, 0.06);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 28px;
+  align-items: start;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+  color: var(--pc-text);
+  font-family: "Inter", "Segoe UI", system-ui, -apple-system, Roboto,
+    "Helvetica Neue", Arial, sans-serif;
+  background: transparent;
+}
+
+.pc-root,
+.pc-root *,
+.pc-root *::before,
+.pc-root *::after {
+  box-sizing: border-box;
+}
+
+.pc-root button,
+.pc-root input {
+  font-family: inherit;
+}
+
+.pc-loading {
+  padding: 80px 16px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.pc-left {
+  min-width: 0;
+  display: grid;
+  gap: 18px;
+}
+
+/* ===== Heading ===== */
+.pc-heading h1 {
+  margin: 0 0 4px;
+  font-size: 26px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--pc-ink);
+}
+
+.pc-heading p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--pc-muted);
+}
+
+/* ===== Panels ===== */
+.pc-panel {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--pc-line);
+  border-radius: var(--pc-radius);
+  background: var(--pc-surface);
+  box-shadow: var(--pc-shadow);
+}
+
+.pc-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.pc-panel-head h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+  color: var(--pc-ink);
+}
+
+/* ===== Photo toolbar ===== */
+.pc-toolbar {
+  display: grid;
+  gap: 10px;
+}
+
+.pc-photo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px dashed var(--pc-line-strong);
+  border-radius: var(--pc-radius-sm);
+  background: var(--pc-bg);
+}
+
+.pc-photo-row.has-photo {
+  border-style: solid;
+  border-color: var(--pc-line);
+  background: #fbfbfd;
+}
+
+.pc-upload-btn,
+.pc-tool-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 40px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 550;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease, box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.pc-upload-btn {
+  border: 1px solid var(--pc-accent);
+  background: var(--pc-accent);
+  color: #fff;
+}
+
+.pc-upload-btn:hover:not(:disabled) {
+  background: var(--pc-accent-dark);
+  border-color: var(--pc-accent-dark);
+}
+
+.pc-tool-btn {
+  border: 1px solid var(--pc-line-strong);
+  background: var(--pc-surface);
+  color: var(--pc-text);
+}
+
+.pc-tool-btn:hover:not(:disabled) {
+  background: var(--pc-bg);
+  border-color: #b8bfcd;
+}
+
+.pc-tool-danger {
+  color: var(--pc-danger);
+}
+
+.pc-tool-danger:hover:not(:disabled) {
+  background: var(--pc-danger-soft);
+  border-color: #efb9b4;
+}
+
+.pc-reset-btn {
+  min-height: 34px;
+  padding: 0 12px;
+  font-size: 13px;
+}
+
+.pc-upload-btn:active:not(:disabled),
+.pc-tool-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.pc-upload-btn:focus-visible,
+.pc-tool-btn:focus-visible,
+.pc-download-btn:focus-visible,
+.pc-save-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.3);
+}
+
+.pc-upload-btn:disabled,
+.pc-tool-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ===== Name inputs ===== */
+.pc-text-fields {
+  display: grid;
+  gap: 14px;
+}
+
+.pc-text-field {
+  display: grid;
+  gap: 6px;
+}
+
+.pc-text-field-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.pc-text-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pc-ink);
+}
+
+.pc-text-field input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--pc-line-strong);
+  border-radius: var(--pc-radius-sm);
+  background: var(--pc-surface);
+  color: var(--pc-ink);
+  font-size: 15px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pc-text-field input::placeholder {
+  color: #9aa1b2;
+}
+
+.pc-text-field input:hover {
+  border-color: #b8bfcd;
+}
+
+.pc-text-field input:focus {
+  outline: none;
+  border-color: var(--pc-accent);
+  box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.18);
+}
+
+.pc-text-field small {
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  color: #7a8294;
+}
+
+/* ===== Canvas ===== */
+.pc-preview-panel {
+  background: var(--pc-surface);
+}
+
+.pc-stage-wrap {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid var(--pc-line);
+  border-radius: var(--pc-radius-sm);
+  background: #fff;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.pc-stage-wrap canvas {
+  display: block;
+  max-width: 100%;
+}
+
+.pc-hint {
+  margin: 12px 0 0;
+  font-size: 12.5px;
+  text-align: center;
+  color: var(--pc-muted);
+}
+
+/* ===== Action buttons ===== */
+.pc-actions {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 12px;
+}
+
+.pc-download-btn,
+.pc-save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 650;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease,
+    box-shadow 0.15s ease, transform 0.05s ease;
+}
+
+.pc-download-btn {
+  border: 1px solid var(--pc-line-strong);
+  background: var(--pc-surface);
+  color: var(--pc-ink);
+}
+
+.pc-download-btn:hover:not(:disabled) {
+  background: var(--pc-bg);
+  border-color: #b8bfcd;
+}
+
+.pc-save-btn {
+  border: 1px solid var(--pc-success);
+  background: var(--pc-success);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(21, 128, 61, 0.25);
+}
+
+.pc-save-btn:hover:not(:disabled) {
+  background: var(--pc-success-dark);
+  border-color: var(--pc-success-dark);
+}
+
+.pc-save-btn:active:not(:disabled),
+.pc-download-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.pc-save-btn:disabled,
+.pc-download-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== Right-side product details ===== */
+.pc-right {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+  position: sticky;
+  top: 16px;
+  align-self: start;
+}
+
+.pc-product-card,
+.pc-info-card {
+  min-width: 0;
+  border: 1px solid var(--pc-line);
+  border-radius: var(--pc-radius);
+  background: var(--pc-surface);
+  box-shadow: var(--pc-shadow);
+  overflow: hidden;
+}
+
+.pc-info-card {
+  padding: 18px;
+}
+
+.pc-product-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 340px;
+  object-fit: cover;
+  background: var(--pc-bg);
+}
+
+.pc-product-body {
+  padding: 18px;
+}
+
+.pc-product-card h2 {
+  margin: 0 0 6px;
+  font-size: 19px;
+  line-height: 1.3;
+  font-weight: 650;
+  color: var(--pc-ink);
+}
+
+.pc-product-card h3 {
+  margin: 0 0 10px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pc-ink);
+}
+
+.pc-product-card p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--pc-muted);
+}
+
+.pc-info-card h3 {
+  margin: 0 0 8px;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--pc-ink);
+}
+
+.pc-step {
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid #f0f2f6;
+}
+
+.pc-step:first-of-type {
+  border-top: 0;
+}
+
+.pc-step > b {
+  flex: 0 0 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pc-accent-soft);
+  color: var(--pc-accent);
+  font-size: 13px;
+}
+
+.pc-step strong {
+  display: block;
+  font-size: 14px;
+  color: var(--pc-ink);
+}
+
+.pc-step small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--pc-muted);
+}
+
+/* ===== Save & Preview modal (page-level) ===== */
+.pc-preview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(15, 18, 30, 0.6);
+}
+
+.pc-preview-modal {
+  width: 100%;
+  max-width: 560px;
+  max-height: 92vh;
+  overflow: auto;
+  padding: 20px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+}
+
+.pc-preview-modal h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  color: var(--pc-ink);
+}
+
+.pc-preview-modal p {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--pc-muted);
+}
+
+.pc-preview-modal img {
+  display: block;
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid var(--pc-line);
+}
+
+.pc-preview-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.pc-preview-actions > button {
+  flex: 1;
+  min-height: 46px;
+}
+
+/* =========================================================
+   CROP MODAL
+   The modal should overlay the page, not appear below it.
+   These selectors must match PhotoCropModal.jsx.
+   ========================================================= */
+
+.pcm-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 99999 !important;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+
+  background: rgba(0, 0, 0, 0.68);
+  -webkit-overflow-scrolling: touch;
+}
+
+.pcm-modal {
+  position: relative;
+  z-index: 100000;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  max-width: 560px;
+  max-height: calc(100vh - 32px);
+  max-height: calc(100dvh - 32px);
+
+  margin: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Keep crop editor elements within the modal */
+.pcm-modal img,
+.pcm-modal canvas {
+  max-width: 100%;
+}
+
+/* =========================================
+   TABLET
+   ========================================= */
+@media (max-width: 960px) {
+  .pc-root {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    padding: 20px 16px 32px;
+  }
+
+  /* Product card first on tablet/mobile would push the editor down,
+     so it stays below the workspace as a compact horizontal card. */
+  .pc-right {
+    position: static;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* =========================================
+   MOBILE
+   ========================================= */
+@media (max-width: 600px) {
+  .pc-root {
+    gap: 18px;
+    padding: 14px 12px 100px;
+  }
+
+  .pc-heading h1 {
+    font-size: 21px;
+  }
+
+  .pc-panel {
+    padding: 14px;
+    border-radius: 12px;
+  }
+
+  .pc-right {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pc-photo-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pc-upload-btn,
+  .pc-tool-btn {
+    width: 100%;
+    min-height: 44px;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .pc-reset-btn {
+    width: auto;
+    min-height: 36px;
+  }
+
+  .pc-text-field input {
+    font-size: 16px; /* prevents iOS zoom on focus */
+  }
+
+  .pc-actions {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 900;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 10px;
+
+    margin: 0;
+    padding: 10px 12px calc(10px + env(safe-area-inset-bottom, 0px));
+
+    background: #fff;
+    border-top: 1px solid var(--pc-line);
+    box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .pc-download-btn,
+  .pc-save-btn {
+    min-width: 0;
+    min-height: 48px;
+    padding: 0 10px;
+    font-size: 14px;
+  }
+
+  .pc-preview-actions {
+    flex-direction: column-reverse;
+  }
+
+  /* Mobile crop modal */
+  .pcm-backdrop {
+    align-items: center;
+    padding: 10px;
+  }
+
+  .pcm-modal {
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - 20px);
+    max-height: calc(100dvh - 20px);
+    border-radius: 12px;
+  }
+
+  .pcm-header {
+    padding: 12px 14px;
+  }
+
+  .pcm-header h3 {
+    font-size: 16px;
+  }
+
+  .pcm-body {
+    min-height: 160px;
+    padding: 12px 8px;
+  }
+
+  .pcm-controls {
+    gap: 14px;
+    padding: 14px;
+  }
+
+  .pcm-slider-group {
+    grid-template-columns: 44px minmax(0, 1fr) 42px;
+    gap: 8px;
+  }
+
+  .pcm-footer {
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .pcm-btn {
+    min-height: 40px;
+    padding: 0 11px;
+    font-size: 13px;
+  }
+}
+
+/* Small mobile screens */
+@media (max-width: 360px) {
+  .pc-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .pcm-footer {
+    flex-wrap: wrap;
+  }
+
+  .pcm-spacer {
+    display: none;
+  }
+
+  .pcm-btn-primary {
+    flex: 1 1 100%;
+  }
+
+  .pcm-slider-group {
+    grid-template-columns: 40px minmax(0, 1fr) 38px;
+    gap: 6px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-root * {
+    transition: none !important;
+  }
+}

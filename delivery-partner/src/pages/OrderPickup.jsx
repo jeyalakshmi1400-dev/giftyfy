@@ -424,6 +424,11 @@ const [bulkStatus, setBulkStatus] = useState("");
   const todaysDeliveries = orders.filter(
     (o) => o.status === "Delivered" && isToday(o.updatedAt || o.createdAt)
   ).length;
+  const pendingOrdersCount = orders.filter(
+  (o) =>
+    o.status !== "Delivered" &&
+    !o.deliveryCancelled
+).length;
 
   const updateBulkStatus = async () => {
   if (!bulkStatus) {
@@ -586,7 +591,7 @@ const [bulkStatus, setBulkStatus] = useState("");
                       <span className="op-select-order-box"><Icon.Check /></span>
                     </div>
                     <div className="op-card-meta">
-                      <span className="op-order-id">#{order._id.slice(-5).toUpperCase()}</span>
+                      <span className="op-order-id">#{order.orderId}</span>
                       <span className="op-order-date">
                         <Icon.Calendar />
                         {new Date(order.createdAt).toLocaleDateString("en-GB", {

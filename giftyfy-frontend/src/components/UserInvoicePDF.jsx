@@ -74,7 +74,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
               <tbody>
                 <tr>
                   <td className="inv-meta-label">Invoice No</td>
-                  <td>INV-{order._id.slice(-6)}</td>
+                  <td>INV-{order.orderId}</td>
                 </tr>
 
                 <tr>
@@ -84,7 +84,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
 
                 <tr>
                   <td className="inv-meta-label">Order ID</td>
-                  <td>{order._id}</td>
+                  <td>{order.orderId}</td>
                 </tr>
               </tbody>
             </table>
@@ -160,9 +160,9 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
                       <div>
                         <div className="inv-item-name">{item.name}</div>
 
-                        {item.size && (
+                        {(item.size || item.frameSize)&& (
                           <div className="inv-item-meta">
-                            <b>Size :</b> {item.size}
+                            <b>Size :</b> {item.size || item.frameSize}
                           </div>
                         )}
 

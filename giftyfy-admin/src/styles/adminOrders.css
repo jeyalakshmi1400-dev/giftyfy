@@ -950,3 +950,11 @@
   }
 
 }
+.reject-btn{
+    background:#dc3545;
+    color:#fff;
+}
+
+.reject-btn:hover{
+    background:#b02a37;
+}

@@ -174,7 +174,7 @@ const handleNotification = (n) => {
                   <div className="info-row">
                     <span>Order ID</span>
                     <strong>
-                      {n.order?._id}
+                      {n.order.orderId}
                     </strong>
                   </div>
 

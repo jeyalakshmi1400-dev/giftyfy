@@ -71,83 +71,583 @@ const approveDeliveryPartner = async (req, res) => {
 
 
 
-// ✅ GET ALL COD ORDERS
-exports.getAdminCODOrders = async (
-  req,
-  res
-) => {
-
+// =====================================================
+// GET ADMIN COD ORDERS
+// =====================================================
+exports.getAdminCODOrders = async (req, res) => {
   try {
-
+    // =================================================
+    // 1. GET DELIVERED COD ORDERS
+    // =================================================
     const orders = await Order.find({
-
       paymentMethod: "COD",
-
-      status: "Delivered"
-
+      status: "Delivered",
     })
+      .populate("user", "name email phone")
+      .populate("deliveryPartner", "name phone")
+      .sort({ createdAt: -1 });
 
-    .populate(
-      "user",
-      "name email phone"
-    )
+    // =================================================
+    // 2. TODAY DATE RANGE
+    // =================================================
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
 
-    .populate(
-      "deliveryPartner",
-      "name phone"
-    )
+    const todayEnd = new Date();
+    todayEnd.setHours(23, 59, 59, 999);
 
-    .sort({ createdAt: -1 });
+    // =================================================
+    // 3. FORMAT ORDERS
+    // =================================================
+    const formattedOrders = orders.map((order) => {
+      const submittedAt =
+        order.codSubmittedAt ||
+        order.codSettlement?.submittedAt ||
+        null;
 
-    // FORMAT
-  const formattedOrders = orders.map((order) => ({
-  _id: order._id,
-  customer: order.name,
-  phone: order.user?.phone,
-  amount: order.totalAmount,
-  adminAmount: order.adminAmount || 0,
-  deliveryPartnerName: order.deliveryPartner?.name,
-  codStatus: order.codStatus,
-  items: order.items,
+      const verifiedAt =
+        order.codSettlement?.approvedAt ||
+        null;
 
-  // ✅ ADD THESE
-  codUTR: order.codSettlement?.utr || "",
-  codCollectionMethod: order.codCollectionMethod,
+      const amount = Number(order.totalAmount || 0);
 
-  codScreenshot:
-    order.codSettlement?.screenshot || "",
+      const adminAmount = Number(
+        order.adminAmount || 0
+      );
 
-  submittedAt:
-    order.codSettlement?.submittedAt || null,
-}));
+      const deliveryEarning = Number(
+        order.deliveryEarning || 0
+      );
 
-    res.json({
+      const deliveryPartnerId =
+        order.deliveryPartner?._id ||
+        order.codCollectedBy ||
+        null;
 
-      success: true,
+      const deliveryPartnerName =
+        order.deliveryPartner?.name ||
+        "Not Assigned";
 
-      orders: formattedOrders
+      const deliveryPartnerPhone =
+        order.deliveryPartner?.phone ||
+        "";
 
+      return {
+        _id: order._id,
+        orderId: order.orderId,
+
+        // ---------------------------------------------
+        // CUSTOMER
+        // ---------------------------------------------
+        customer:
+          order.user?.name ||
+          order.name ||
+          "Customer",
+
+        phone:
+          order.user?.phone ||
+          order.phone ||
+          "",
+
+        // ---------------------------------------------
+        // AMOUNTS
+        // ---------------------------------------------
+        amount,
+
+        adminAmount,
+
+        adminRevenue: adminAmount,
+
+        deliveryEarning,
+
+        // ---------------------------------------------
+        // DELIVERY PARTNER
+        // ---------------------------------------------
+        deliveryPartnerId,
+
+        deliveryPartnerName,
+
+        deliveryPartnerPhone,
+
+        codCollectedBy:
+          order.codCollectedBy || null,
+
+        // ---------------------------------------------
+        // COD STATUS
+        // ---------------------------------------------
+        codStatus:
+          order.codStatus || "Collected",
+
+        codCollectionMethod:
+          order.codCollectionMethod || "",
+
+        // ---------------------------------------------
+        // SETTLEMENT DATES
+        // ---------------------------------------------
+        submittedAt,
+
+        verifiedAt,
+
+        codSubmittedAt:
+          order.codSubmittedAt || null,
+
+        // ---------------------------------------------
+        // COD PAYMENT DETAILS
+        // ---------------------------------------------
+        codUTR:
+          order.codSettlement?.utr || "",
+
+        codScreenshot:
+          order.codSettlement?.screenshot || "",
+
+        // ---------------------------------------------
+        // ORDER DETAILS
+        // ---------------------------------------------
+        items: order.items || [],
+
+        createdAt:
+          order.createdAt || null,
+
+        deliveredAt:
+          order.deliveredAt || null,
+      };
     });
 
-  } catch (error) {
+    // =================================================
+    // 4. BASIC TOTALS
+    // =================================================
 
-    console.log(
-      "ADMIN COD FETCH ERROR 👉",
+    const totalCODCollected =
+      formattedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    const totalAdminRevenue =
+      formattedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.adminAmount || 0),
+        0
+      );
+
+    // =================================================
+    // 5. STATUS GROUPS
+    // =================================================
+
+    const submittedOrders =
+      formattedOrders.filter(
+        (order) =>
+          order.codStatus === "Submitted"
+      );
+
+    const settledOrders =
+      formattedOrders.filter(
+        (order) =>
+          order.codStatus === "Settled"
+      );
+
+    const collectedOrders =
+      formattedOrders.filter(
+        (order) =>
+          order.codStatus === "Collected"
+      );
+
+    const rejectedOrders =
+      formattedOrders.filter(
+        (order) =>
+          order.codStatus === "Rejected"
+      );
+
+    // =================================================
+    // 6. ADMIN PENDING
+    //
+    // Collected  = partner collected cash,
+    //              but has NOT paid admin
+    //
+    // Submitted  = partner paid/submitted,
+    //              but admin has NOT verified
+    //
+    // Settled    = admin verified
+    //
+    // Therefore:
+    //
+    // Collected + Submitted = ADMIN PENDING
+    // =================================================
+
+    const pendingOrdersList =
+      formattedOrders.filter(
+        (order) =>
+          order.codStatus === "Collected" ||
+          order.codStatus === "Submitted"
+      );
+
+    const pendingAmount =
+      pendingOrdersList.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    // =================================================
+    // 7. STATUS AMOUNTS
+    // =================================================
+
+    const submittedAmount =
+      submittedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    const settledAmount =
+      settledOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    const collectedAmount =
+      collectedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    const rejectedAmount =
+      rejectedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    // =================================================
+    // 8. TODAY SUBMITTED
+    // =================================================
+
+    const todaySubmittedOrders =
+      formattedOrders.filter((order) => {
+        if (!order.submittedAt) {
+          return false;
+        }
+
+        const date =
+          new Date(order.submittedAt);
+
+        return (
+          date >= todayStart &&
+          date <= todayEnd
+        );
+      });
+
+    const todaySubmittedAmount =
+      todaySubmittedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    // =================================================
+    // 9. TODAY VERIFIED
+    // =================================================
+
+    const todayVerifiedOrders =
+      formattedOrders.filter((order) => {
+        if (!order.verifiedAt) {
+          return false;
+        }
+
+        const date =
+          new Date(order.verifiedAt);
+
+        return (
+          date >= todayStart &&
+          date <= todayEnd
+        );
+      });
+
+    const todayVerifiedAmount =
+      todayVerifiedOrders.reduce(
+        (sum, order) =>
+          sum + Number(order.amount || 0),
+        0
+      );
+
+    // =================================================
+    // 10. DELIVERY PARTNER SUMMARY
+    // =================================================
+
+    const partnerMap = {};
+
+    formattedOrders.forEach((order) => {
+      if (!order.deliveryPartnerId) {
+        return;
+      }
+
+      const partnerId =
+        String(order.deliveryPartnerId);
+
+      // -----------------------------------------------
+      // CREATE PARTNER
+      // -----------------------------------------------
+      if (!partnerMap[partnerId]) {
+        partnerMap[partnerId] = {
+          partnerId,
+
+          partnerName:
+            order.deliveryPartnerName ||
+            "Unknown Partner",
+
+          phone:
+            order.deliveryPartnerPhone ||
+            "",
+
+          // Total customer COD collected
+          totalCollected: 0,
+
+          // Partner submitted to admin
+          submittedAmount: 0,
+
+          // Admin verified
+          verifiedAmount: 0,
+
+          // Still pending with admin
+          pendingAmount: 0,
+
+          // Rejected
+          rejectedAmount: 0,
+
+          totalOrders: 0,
+
+          submittedOrders: 0,
+
+          verifiedOrders: 0,
+
+          pendingOrders: 0,
+
+          rejectedOrders: 0,
+
+          lastPaymentDate: null,
+        };
+      }
+
+      const partner =
+        partnerMap[partnerId];
+
+      const amount =
+        Number(order.amount || 0);
+
+      // -----------------------------------------------
+      // TOTAL COD COLLECTED
+      // -----------------------------------------------
+      partner.totalCollected += amount;
+
+      partner.totalOrders += 1;
+
+      // -----------------------------------------------
+      // SUBMITTED
+      // -----------------------------------------------
+      if (
+        order.codStatus === "Submitted"
+      ) {
+        partner.submittedAmount += amount;
+
+        partner.submittedOrders += 1;
+      }
+
+      // -----------------------------------------------
+      // ADMIN PENDING
+      //
+      // Collected + Submitted
+      // -----------------------------------------------
+      if (
+        order.codStatus === "Collected" ||
+        order.codStatus === "Submitted"
+      ) {
+        partner.pendingAmount += amount;
+
+        partner.pendingOrders += 1;
+      }
+
+      // -----------------------------------------------
+      // SETTLED / VERIFIED
+      // -----------------------------------------------
+      if (
+        order.codStatus === "Settled"
+      ) {
+        partner.verifiedAmount += amount;
+
+        partner.verifiedOrders += 1;
+      }
+
+      // -----------------------------------------------
+      // REJECTED
+      // -----------------------------------------------
+      if (
+        order.codStatus === "Rejected"
+      ) {
+        partner.rejectedAmount += amount;
+
+        partner.rejectedOrders += 1;
+      }
+
+      // -----------------------------------------------
+      // LAST PAYMENT DATE
+      //
+      // Latest partner submission date
+      // -----------------------------------------------
+      if (order.submittedAt) {
+        const currentDate =
+          new Date(order.submittedAt);
+
+        if (
+          !partner.lastPaymentDate ||
+          currentDate >
+            new Date(partner.lastPaymentDate)
+        ) {
+          partner.lastPaymentDate =
+            order.submittedAt;
+        }
+      }
+    });
+
+    // =================================================
+    // 11. PARTNER SUMMARY ARRAY
+    // =================================================
+
+    const partnerSummary =
+      Object.values(partnerMap).sort(
+        (a, b) =>
+          b.totalCollected -
+          a.totalCollected
+      );
+
+    // =================================================
+    // 12. TOTAL PARTNERS
+    // =================================================
+
+    const totalPartners =
+      partnerSummary.length;
+
+    // =================================================
+    // 13. RESPONSE
+    // =================================================
+
+    return res.json({
+      success: true,
+
+      orders: formattedOrders,
+
+      summary: {
+        // ---------------------------------------------
+        // TOTALS
+        // ---------------------------------------------
+        totalOrders:
+          formattedOrders.length,
+
+        totalCODCollected,
+
+        totalAdminRevenue,
+
+        // ---------------------------------------------
+        // SUBMITTED
+        // ---------------------------------------------
+        submittedAmount,
+
+        submittedOrders:
+          submittedOrders.length,
+
+        // ---------------------------------------------
+        // SETTLED
+        // ---------------------------------------------
+        settledAmount,
+
+        settledOrders:
+          settledOrders.length,
+
+        // ---------------------------------------------
+        // COLLECTED
+        // ---------------------------------------------
+        collectedAmount,
+
+        collectedOrders:
+          collectedOrders.length,
+
+        // ---------------------------------------------
+        // REJECTED
+        // ---------------------------------------------
+        rejectedAmount,
+
+        rejectedOrders:
+          rejectedOrders.length,
+
+        // ---------------------------------------------
+        // ADMIN PENDING
+        //
+        // Collected + Submitted
+        // ---------------------------------------------
+        pendingAmount,
+
+        pendingOrders:
+          pendingOrdersList.length,
+
+        // ---------------------------------------------
+        // TODAY SUBMITTED
+        // ---------------------------------------------
+        todaySubmittedAmount,
+
+        todaySubmittedOrders:
+          todaySubmittedOrders.length,
+
+        // ---------------------------------------------
+        // TODAY VERIFIED
+        // ---------------------------------------------
+        todayVerifiedAmount,
+
+        todayVerifiedOrders:
+          todayVerifiedOrders.length,
+
+        // ---------------------------------------------
+        // PARTNERS
+        // ---------------------------------------------
+        totalPartners,
+      },
+
+      // -----------------------------------------------
+      // DELIVERY PARTNER SUMMARY
+      // -----------------------------------------------
+      partnerSummary,
+    });
+  } catch (error) {
+    console.error(
+      "GET ADMIN COD ORDERS ERROR:",
       error
     );
 
-    res.status(500).json({
-      message: error.message
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch COD orders",
+      error: error.message,
     });
-
   }
-
 };
 
+
+// =====================================================
+// ADMIN - VERIFY COD SETTLEMENT
+// =====================================================
+
+// =====================================================
+// VERIFY COD SETTLEMENT
+// Admin verifies delivery partner submitted COD payment
+// =====================================================
 exports.verifyCODSettlement = async (req, res) => {
   try {
     const { orderId } = req.params;
 
+    // -------------------------------------------------
+    // 1. Find order
+    // -------------------------------------------------
     const order = await Order.findById(orderId);
 
     if (!order) {
@@ -157,49 +657,119 @@ exports.verifyCODSettlement = async (req, res) => {
       });
     }
 
+    // -------------------------------------------------
+    // 2. Only SUBMITTED payment can be verified
+    // -------------------------------------------------
     if (order.codStatus !== "Submitted") {
       return res.status(400).json({
         success: false,
-        message: "COD not submitted yet",
+        message:
+          "Only submitted COD payments can be verified.",
       });
     }
 
-    // Update Order
-    order.codStatus = "Settled";
-
+    // -------------------------------------------------
+    // 3. Make sure codSettlement object exists
+    // -------------------------------------------------
     if (!order.codSettlement) {
       order.codSettlement = {};
     }
 
-    order.codSettlement.approvedAt = new Date();
+    // -------------------------------------------------
+    // 4. Verify / Settle COD
+    // -------------------------------------------------
+    const verifiedDate = new Date();
 
+    order.codStatus = "Settled";
+
+    order.codSettlement.approvedAt = verifiedDate;
+
+    // Keep submitted date if already available
+    if (!order.codSettlement.submittedAt && order.codSubmittedAt) {
+      order.codSettlement.submittedAt = order.codSubmittedAt;
+    }
+
+    // -------------------------------------------------
+    // 5. Save order
+    // -------------------------------------------------
     await order.save();
 
-    // Update Payment Request also
+    // -------------------------------------------------
+    // 6. Approve related DeliveryPartnerPayment
+    // -------------------------------------------------
     await DeliveryPartnerPayment.updateOne(
       {
-        orders: order._id,
+        orders: { $in: [order._id] },
         status: "Pending",
       },
       {
         $set: {
           status: "Approved",
-          approvedAt: new Date(),
+          approvedAt: verifiedDate,
         },
       }
     );
 
-    res.json({
+    // -------------------------------------------------
+    // 7. Response
+    // -------------------------------------------------
+    return res.json({
       success: true,
-      message: "COD verified successfully",
+      message: "COD payment verified successfully",
+
+      order: {
+        _id: order._id,
+        orderId: order.orderId,
+
+        // Before: Submitted
+        // After: Settled
+        codStatus: order.codStatus,
+
+        amount: Number(order.totalAmount || 0),
+
+        deliveryPartner:
+          order.deliveryPartner || null,
+
+        codSubmittedAt:
+          order.codSubmittedAt ||
+          order.codSettlement?.submittedAt ||
+          null,
+
+        submittedAt:
+          order.codSettlement?.submittedAt ||
+          order.codSubmittedAt ||
+          null,
+
+        verifiedAt:
+          order.codSettlement?.approvedAt ||
+          verifiedDate,
+
+        codSettlement: {
+          utr: order.codSettlement?.utr || "",
+          screenshot:
+            order.codSettlement?.screenshot || "",
+          submittedAt:
+            order.codSettlement?.submittedAt ||
+            order.codSubmittedAt ||
+            null,
+          approvedAt:
+            order.codSettlement?.approvedAt ||
+            verifiedDate,
+          rejectReason:
+            order.codSettlement?.rejectReason || "",
+        },
+      },
     });
-
   } catch (error) {
-    console.log("VERIFY COD ERROR:", error);
+    console.error(
+      "VERIFY COD SETTLEMENT ERROR:",
+      error
+    );
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to verify COD payment",
+      error: error.message,
     });
   }
 };

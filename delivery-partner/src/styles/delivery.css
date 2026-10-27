@@ -398,3 +398,194 @@
   }
 
 }
+/* ================================
+   QUICK ACTIONS
+================================ */
+
+.delivery-dashboard-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.delivery-dashboard-action-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 22px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid #ececec;
+}
+
+.delivery-dashboard-action-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+}
+
+.delivery-dashboard-action-icon {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #fff;
+  margin-bottom: 15px;
+  padding: 14px;
+}
+
+.delivery-dashboard-action-card h4 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #222;
+}
+
+.delivery-dashboard-action-card p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #777;
+  line-height: 1.5;
+}
+
+/* Icon Colors */
+
+.delivery-dashboard-action-icon.purple {
+  background: #8e44ad;
+}
+
+.delivery-dashboard-action-icon.blue {
+  background: #3498db;
+}
+
+.delivery-dashboard-action-icon.green {
+  background: #27ae60;
+}
+
+.delivery-dashboard-action-icon.orange {
+  background: #f39c12;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+  .delivery-dashboard-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .delivery-dashboard-action-card {
+    padding: 18px;
+  }
+}
+.delivery-dashboard-cod-alert{
+
+margin:25px 0;
+padding:20px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+background:#fff7ed;
+border-left:5px solid #ea580c;
+
+border-radius:15px;
+
+}
+
+
+.delivery-dashboard-cod-left{
+
+display:flex;
+gap:15px;
+align-items:center;
+
+}
+
+
+.delivery-dashboard-cod-left svg{
+
+font-size:35px;
+color:#ea580c;
+
+}
+
+
+.delivery-dashboard-cod-left h3{
+
+margin:0;
+color:#9a3412;
+
+}
+
+
+.delivery-dashboard-cod-left p{
+
+margin:5px 0;
+color:#555;
+
+}
+
+
+.delivery-dashboard-cod-left span{
+
+font-size:13px;
+color:#777;
+
+}
+
+
+.delivery-dashboard-cod-right{
+
+text-align:right;
+
+}
+
+
+.delivery-dashboard-cod-right h2{
+
+color:#dc2626;
+
+margin:0 0 10px;
+
+}
+
+
+.delivery-dashboard-cod-right button{
+
+background:#ea580c;
+color:white;
+
+border:none;
+
+padding:10px 20px;
+
+border-radius:8px;
+
+cursor:pointer;
+
+font-weight:600;
+
+}
+
+
+
+@media(max-width:768px){
+
+.delivery-dashboard-cod-alert{
+
+flex-direction:column;
+align-items:flex-start;
+
+}
+
+.delivery-dashboard-cod-right{
+
+text-align:left;
+
+}
+
+}

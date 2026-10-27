@@ -31,6 +31,7 @@ import {
   FaWallet,
   FaRupeeSign,
   FaClock,
+  FaTruck,
 } from "react-icons/fa";
 
 /**
@@ -111,6 +112,11 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
           path: "/admin/create-coupon",
           icon: <FaGift />,
         },
+        {
+      name: "Gift Settings",
+      path: "/admin/gift-setting",
+      icon: <FaGift />,
+    },
       ],
     },
     {
@@ -135,6 +141,11 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
     {
       heading: "Delivery",
       items: [
+        {
+      name: "Delivery Charge",
+      path: "/adim/delivery-charge",
+      icon: <FaTruck />,
+    },
         {
           name: "Delivery Salary Management",
           path: "/salary-management",

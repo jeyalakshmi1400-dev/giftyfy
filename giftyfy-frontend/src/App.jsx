@@ -23,6 +23,7 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import PersonalizeProduct from "./pages/PersonalizeProduct";
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
         <Route path="/review/:id" element={<ReviewPage/>}/>
         <Route path="/about" element={<About/>}/>
         <Route path="/contact" element={<Contact/>}/>
+        <Route path="/personalize/:id" element={<PersonalizeProduct/>}/>
       </Routes>
 
 

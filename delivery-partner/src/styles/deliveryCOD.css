@@ -1114,4 +1114,291 @@
   .filter-actions {
     grid-template-columns: 1fr;
   }
+}/* =======================================================
+   TODAY PAYMENT SUMMARY
+   ======================================================= */
+
+.cod-today-payment-box {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 0;
+  margin: 0 0 24px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+/* LEFT - TODAY SENT */
+
+.cod-today-payment-box > div:first-child {
+  padding: 22px 26px;
+  background: linear-gradient(
+    135deg,
+    var(--info-soft) 0%,
+    var(--surface) 100%
+  );
+  border-right: 1px dashed var(--border);
+}
+
+.cod-today-payment-box > div:first-child span {
+  display: block;
+  color: var(--info);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 8px;
+}
+
+.cod-today-payment-box > div:first-child h2 {
+  margin: 0;
+  color: var(--info);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 30px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.02em;
+}
+
+.cod-today-payment-box > div:first-child p {
+  margin: 7px 0 0;
+  color: var(--ink-soft);
+  font-size: 13px;
+}
+
+
+/* RIGHT - LAST SUBMITTED */
+
+.cod-today-payment-box > div:last-child {
+  padding: 22px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.cod-today-payment-box > div:last-child span {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  margin-bottom: 8px;
+}
+
+.cod-today-payment-box > div:last-child strong {
+  color: var(--ink);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+
+/* =======================================================
+   TODAY PAYMENT - HOVER
+   ======================================================= */
+
+.cod-today-payment-box:hover {
+  box-shadow: var(--shadow-md);
+}
+
+
+/* =======================================================
+   RESPONSIVE
+   ======================================================= */
+
+@media (max-width: 768px) {
+
+  .cod-today-payment-box {
+    grid-template-columns: 1fr;
+  }
+
+  .cod-today-payment-box > div:first-child {
+    border-right: none;
+    border-bottom: 1px dashed var(--border);
+  }
+
+  .cod-today-payment-box > div:first-child,
+  .cod-today-payment-box > div:last-child {
+    padding: 20px;
+  }
+
+  .cod-today-payment-box > div:first-child h2 {
+    font-size: 26px;
+  }
+
+}
+
+@media (max-width: 576px) {
+
+  .cod-today-payment-box {
+    margin-bottom: 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .cod-today-payment-box > div:first-child h2 {
+    font-size: 24px;
+  }
+
+  .cod-today-payment-box > div:last-child strong {
+    font-size: 13px;
+  }
+
+}/* =======================================================
+   COD HISTORY TITLE ROW
+======================================================= */
+
+.history-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+
+  padding: 20px 22px 16px;
+}
+
+.history-title-row h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+
+  margin: 0 0 5px;
+  padding: 0;
+}
+
+.history-title-row p {
+  color: var(--ink-soft);
+
+  font-size: 13px;
+
+  margin: 0;
+  padding: 0;
+
+  line-height: 1.5;
+}
+
+
+/* =======================================================
+   TOTAL SUBMITTED
+======================================================= */
+
+.history-total {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+
+  padding: 11px 16px;
+
+  background: var(--money-soft);
+
+  border: 1px solid rgba(14, 159, 110, 0.18);
+
+  border-radius: 12px;
+
+  white-space: nowrap;
+
+  box-shadow: var(--shadow-sm);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+}
+
+.history-total:hover {
+  transform: translateY(-1px);
+
+  box-shadow: var(--shadow-md);
+
+  border-color: rgba(14, 159, 110, 0.30);
+}
+
+.history-total span {
+  color: var(--ink-soft);
+
+  font-size: 11.5px;
+
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .06em;
+}
+
+.history-total strong {
+  color: var(--money);
+
+  font-family: 'IBM Plex Mono', monospace;
+
+  font-size: 18px;
+
+  font-weight: 700;
+
+  font-variant-numeric: tabular-nums;
+
+  white-space: nowrap;
+}
+
+
+/* =======================================================
+   HISTORY TITLE RESPONSIVE
+======================================================= */
+
+@media (max-width: 768px) {
+
+  .history-title-row {
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 14px;
+
+    padding: 18px 16px 14px;
+  }
+
+  .history-total {
+    width: 100%;
+
+    justify-content: space-between;
+  }
+
+}
+
+
+/* =======================================================
+   SMALL MOBILE
+======================================================= */
+
+@media (max-width: 576px) {
+
+  .history-title-row {
+    padding: 16px 14px 12px;
+  }
+
+  .history-title-row h3 {
+    font-size: 16px;
+  }
+
+  .history-title-row p {
+    font-size: 12px;
+  }
+
+  .history-total {
+    padding: 10px 13px;
+
+    gap: 8px;
+  }
+
+  .history-total span {
+    font-size: 10.5px;
+  }
+
+  .history-total strong {
+    font-size: 16px;
+  }
+
 }

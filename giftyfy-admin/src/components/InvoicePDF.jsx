@@ -27,7 +27,8 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
   }, []);
 
   if (!order) return null;
-
+console.log("Invoice OrderID:", order.orderId);
+console.log("Invoice Total:", order.totalAmount);
   return (
     <div className="invoice-pdf-root">
       {/* ==================================================== */}
@@ -75,7 +76,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
                   <td>
                     <b>Order ID</b>
                   </td>
-                  <td>: {order._id.slice(-10)}</td>
+                  <td>: {order.orderId.slice(-10)}</td>
                 </tr>
 
                 <tr>
@@ -213,7 +214,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
 
             <div className="sl-barcode">||||||||||||||</div>
 
-            <small>{order._id}</small>
+            <small>{order.orderId}</small>
           </div>
 
           <div className="sl-qr-box">QR</div>
@@ -235,6 +236,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
       {/* ==================================================== */}
 
       <div ref={invoiceRef} className="invoice-page">
+        
         {/* ================= HEADER ================= */}
 
         <div className="inv-header">
@@ -269,7 +271,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
               <tbody>
                 <tr>
                   <td className="inv-meta-label">Invoice No</td>
-                  <td>INV-{order._id.slice(-6)}</td>
+                  <td>INV-{order.orderId}</td>
                 </tr>
 
                 <tr>
@@ -279,7 +281,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
 
                 <tr>
                   <td className="inv-meta-label">Order ID</td>
-                  <td>{order._id}</td>
+                  <td>{order.orderId}</td>
                 </tr>
               </tbody>
             </table>

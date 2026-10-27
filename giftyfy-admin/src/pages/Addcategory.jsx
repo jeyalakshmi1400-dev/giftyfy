@@ -81,6 +81,7 @@ const navigate = useNavigate();
   useEffect(() => {
     fetchCategories();
   }, []);
+  
 
   const fetchCategories = async () => {
     try {

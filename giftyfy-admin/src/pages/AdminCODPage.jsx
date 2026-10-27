@@ -1,39 +1,56 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import AdminSidebar from "../components/AdminSidebar";
-import "../styles/adminCOD.css";
 import AdminLayout from "../layout/AdminLayout";
-
+import "../styles/adminCOD.css";
 
 export default function AdminCODPage() {
+  // =====================================================
+  // STATE
+  // =====================================================
 
-  const [codOrders, setCodOrders] =
-    useState([]);
+  const [codOrders, setCodOrders] = useState([]);
+  const [partnerSummary, setPartnerSummary] = useState([]);
 
-    const [currentPage, setCurrentPage] = useState(1);
-const ordersPerPage = 10;
+  const [summary, setSummary] = useState({
+    totalOrders: 0,
+    totalCODCollected: 0,
+    totalAdminRevenue: 0,
+    submittedAmount: 0,
+    settledAmount: 0,
+    pendingAmount: 0,
+    collectedAmount: 0,
+    rejectedAmount: 0,
+    todaySubmittedAmount: 0,
+    todayVerifiedAmount: 0,
+    todaySubmittedOrders: 0,
+    todayVerifiedOrders: 0,
+    pendingOrders: 0,
+    totalPartners: 0,
+  });
 
-  const [loading, setLoading] =
-    useState(false);
-    const [verifying, setVerifying] = useState({});
-    const [selectedOrder, setSelectedOrder] = useState(null);
-const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // =========================
+  const ordersPerPage = 10;
+
+  const [loading, setLoading] = useState(false);
+
+  const [verifying, setVerifying] = useState({});
+
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [showModal, setShowModal] = useState(false);
+
+  // =====================================================
   // FETCH COD ORDERS
-  // =========================
+  // =====================================================
+
   useEffect(() => {
-
     fetchCODOrders();
-
   }, []);
 
-  
   const fetchCODOrders = async () => {
-
     try {
-
       setLoading(true);
 
       const adminToken =
@@ -43,256 +60,390 @@ const [showModal, setShowModal] = useState(false);
         "http://localhost:4000/api/admin/cod-orders",
         {
           headers: {
-            Authorization:
-              `Bearer ${adminToken}`,
+            Authorization: `Bearer ${adminToken}`,
           },
         }
       );
 
-      console.log(data.orders[0]);
+      console.log("COD API RESPONSE =>", data);
 
       setCodOrders(data.orders || []);
 
-    } catch (error) {
+      setPartnerSummary(
+        data.partnerSummary || []
+      );
 
+      setSummary(
+        data.summary || {
+          totalOrders: 0,
+          totalCODCollected: 0,
+          totalAdminRevenue: 0,
+          submittedAmount: 0,
+          settledAmount: 0,
+          pendingAmount: 0,
+          collectedAmount: 0,
+          rejectedAmount: 0,
+          todaySubmittedAmount: 0,
+          todayVerifiedAmount: 0,
+          todaySubmittedOrders: 0,
+          todayVerifiedOrders: 0,
+          pendingOrders: 0,
+          totalPartners: 0,
+        }
+      );
+    } catch (error) {
       console.log(
         "ADMIN COD ERROR 👉",
         error
       );
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-  // =========================
+  // =====================================================
   // VERIFY COD
-  // =========================
-const verifyCOD = async (orderId) => {
-  try {
-    if (verifying[orderId]) return;
+  // =====================================================
 
-    setVerifying((prev) => ({ ...prev, [orderId]: true }));
+  const handleConfirmVerify = async (orderId) => {
+    try {
+      if (verifying[orderId]) return;
 
-    const adminToken = localStorage.getItem("adminToken");
+      setVerifying((prev) => ({
+        ...prev,
+        [orderId]: true,
+      }));
 
-    await axios.put(
-      `http://localhost:4000/api/admin/verify-cod/${orderId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${adminToken}`,
-        },
-      }
-    );
+      const adminToken =
+        localStorage.getItem("adminToken");
 
-    // instant UI update
-    setCodOrders((prev) =>
-      prev.map((o) =>
-        o._id === orderId
-          ? { ...o, codStatus: "Settled" }
-          : o
-      )
-    );
+      const res = await axios.put(
+        `http://localhost:4000/api/admin/verify-cod/${orderId}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${adminToken}`,
+          },
+        }
+      );
 
-  } catch (error) {
-    console.log("VERIFY COD ERROR 👉", error);
-  } finally {
-    setVerifying((prev) => ({ ...prev, [orderId]: false }));
-  }
-};
-  // =========================
-  // STATS
-  // =========================
-  const totalOrders =
-    codOrders.length;
+      console.log(
+        "VERIFY RESPONSE =>",
+        res.data
+      );
 
-  const totalCollected =
-    codOrders.reduce(
-      (acc, item) =>
-        acc + (item.amount || 0),
-      0
-    );
+      // =================================================
+      // UPDATE ORDER
+      // =================================================
 
-  const totalAdminShare =
-    codOrders.reduce(
-      (acc, item) =>
-        acc + (item.adminAmount || 0),
-      0
-    );
+      const verifiedDate =
+        res.data?.order?.verifiedAt ||
+        new Date().toISOString();
 
-  const pendingCOD =
-    codOrders.filter(
-      (item) =>
-        item.codStatus ===
-        "Submitted"
-    ).length;
+      setCodOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId
+            ? {
+                ...order,
+                codStatus: "Settled",
+                verifiedAt: verifiedDate,
+              }
+            : order
+        )
+      );
 
+      // =================================================
+      // CLOSE MODAL
+      // =================================================
 
-    const handleConfirmVerify = async (orderId) => {
-  try {
-    const adminToken = localStorage.getItem("adminToken");
-      console.log("Verify clicked:", orderId);
+      setShowModal(false);
+      setSelectedOrder(null);
 
+      // =================================================
+      // REFRESH SUMMARY
+      // =================================================
 
-    const res = await axios.put(
-      `http://localhost:4000/api/admin/verify-cod/${orderId}`,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${adminToken}`,
-        },
-      }
-    );
+      await fetchCODOrders();
 
-    // update UI
-    setCodOrders((prev) =>
-      prev.map((o) =>
-        o._id === orderId
-          ? { ...o, codStatus: "Settled" }
-          : o
-      )
-    );
+      alert(
+        "✅ COD Verified Successfully"
+      );
+    } catch (error) {
+      console.log(
+        "VERIFY COD ERROR 👉",
+        error
+      );
 
-    setShowModal(false);
-    setSelectedOrder(null);
+      alert(
+        error?.response?.data?.message ||
+          "❌ Verification Failed"
+      );
+    } finally {
+      setVerifying((prev) => ({
+        ...prev,
+        [orderId]: false,
+      }));
+    }
+  };
 
-    alert("✅ COD Verified Successfully");
+  // =====================================================
+  // DATE FORMAT
+  // =====================================================
 
-  } catch (error) {
-    console.log(error);
-    alert("❌ Verification Failed");
-  }
-};
+  const formatDate = (date) => {
+    if (!date) return "—";
 
-// Pagination
-const totalPages = Math.ceil(
-  codOrders.length / ordersPerPage
-);
+    const d = new Date(date);
 
-const indexOfLastOrder =
-  currentPage * ordersPerPage;
+    if (isNaN(d.getTime())) {
+      return "—";
+    }
 
-const indexOfFirstOrder =
-  indexOfLastOrder - ordersPerPage;
+    return d.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
-const currentOrders =
-  codOrders.slice(
-    indexOfFirstOrder,
-    indexOfLastOrder
+  const formatShortDate = (date) => {
+    if (!date) return "—";
+
+    const d = new Date(date);
+
+    if (isNaN(d.getTime())) {
+      return "—";
+    }
+
+    return d.toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  // =====================================================
+  // PAGINATION
+  // =====================================================
+
+  const totalPages = Math.ceil(
+    codOrders.length / ordersPerPage
   );
 
+  const indexOfLastOrder =
+    currentPage * ordersPerPage;
+
+  const indexOfFirstOrder =
+    indexOfLastOrder - ordersPerPage;
+
+  const currentOrders =
+    codOrders.slice(
+      indexOfFirstOrder,
+      indexOfLastOrder
+    );
 
   useEffect(() => {
-  setCurrentPage(1);
-}, [codOrders.length]);
+    setCurrentPage(1);
+  }, [codOrders.length]);
+
+  // =====================================================
+  // RENDER
+  // =====================================================
 
   return (
-
     <AdminLayout>
-{showModal && selectedOrder && (
- <div className="admin-cod-modal-overlay">
-  <div className="admin-cod-modal">
+      {/* =================================================
+          VERIFY MODAL
+      ================================================= */}
 
-    <div className="admin-cod-modal-header">
-      <h2>COD Verification</h2>
+      {showModal && selectedOrder && (
+        <div className="admin-cod-modal-overlay">
+          <div className="admin-cod-modal">
 
-      <button
-        className="admin-cod-close-btn"
-        onClick={() => setShowModal(false)}
-      >
-        ×
-      </button>
-    </div>
+            <div className="admin-cod-modal-header">
+              <h2>
+                COD Verification
+              </h2>
 
-    <div className="admin-cod-details">
+              <button
+                className="admin-cod-close-btn"
+                onClick={() => {
+                  setShowModal(false);
+                  setSelectedOrder(null);
+                }}
+              >
+                ×
+              </button>
+            </div>
 
-      <div className="admin-cod-detail-row">
-        <span>Order ID</span>
-        <strong>#{selectedOrder._id.slice(-6)}</strong>
-      </div>
+            <div className="admin-cod-details">
 
-      <div className="admin-cod-detail-row">
-        <span>Customer</span>
-        <strong>{selectedOrder.customer}</strong>
-      </div>
+              <div className="admin-cod-detail-row">
+                <span>
+                  Order ID
+                </span>
 
-      <div className="admin-cod-detail-row">
-        <span>Phone</span>
-        <strong>{selectedOrder.phone}</strong>
-      </div>
+                <strong>
+                  #{selectedOrder.orderId}
+                </strong>
+              </div>
 
-      <div className="admin-cod-detail-row">
-        <span>Amount</span>
-        <strong>₹{selectedOrder.amount}</strong>
-      </div>
+              <div className="admin-cod-detail-row">
+                <span>
+                  Customer
+                </span>
 
-<div className="admin-cod-detail-row">
-  <span>COD Method</span>
-  <strong>{selectedOrder.codCollectionMethod || "N/A"}</strong>
-</div>
+                <strong>
+                  {selectedOrder.customer ||
+                    "N/A"}
+                </strong>
+              </div>
 
-      <div className="admin-cod-detail-row">
-        <span>Partner</span>
-        <strong>{selectedOrder.deliveryPartnerName}</strong>
-      </div>
+              <div className="admin-cod-detail-row">
+                <span>
+                  Phone
+                </span>
 
-      
+                <strong>
+                  {selectedOrder.phone ||
+                    "N/A"}
+                </strong>
+              </div>
 
-    </div>
+              <div className="admin-cod-detail-row">
+                <span>
+                  Amount
+                </span>
 
-    <div className="admin-cod-modal-actions">
+                <strong>
+                  ₹
+                  {Number(
+                    selectedOrder.amount || 0
+                  ).toLocaleString("en-IN")}
+                </strong>
+              </div>
 
-      <button 
-        className="admin-cod-cancel-btn"
-        onClick={() => setShowModal(false)}
-      >
-        Cancel
-      </button>
+              <div className="admin-cod-detail-row">
+                <span>
+                  COD Method
+                </span>
 
-      <button
-        className="admin-cod-confirm-btn"
-        onClick={() =>
-          handleConfirmVerify(selectedOrder._id)
-        }
-      >
-        Verify COD
-      </button>
+                <strong>
+                  {selectedOrder.codCollectionMethod ||
+                    "N/A"}
+                </strong>
+              </div>
 
-    </div>
+              <div className="admin-cod-detail-row">
+                <span>
+                  Partner
+                </span>
 
-  </div>
-</div>
-)}
+                <strong>
+                  {selectedOrder.deliveryPartnerName ||
+                    "N/A"}
+                </strong>
+              </div>
 
-      {/* MAIN */}
+              <div className="admin-cod-detail-row">
+                <span>
+                  Submitted Date
+                </span>
+
+                <strong>
+                  {formatDate(
+                    selectedOrder.submittedAt
+                  )}
+                </strong>
+              </div>
+
+            </div>
+
+            <div className="admin-cod-modal-actions">
+
+              <button
+                className="admin-cod-cancel-btn"
+                onClick={() => {
+                  setShowModal(false);
+                  setSelectedOrder(null);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                className="admin-cod-confirm-btn"
+                disabled={
+                  verifying[
+                    selectedOrder._id
+                  ]
+                }
+                onClick={() =>
+                  handleConfirmVerify(
+                    selectedOrder._id
+                  )
+                }
+              >
+                {verifying[
+                  selectedOrder._id
+                ]
+                  ? "Verifying..."
+                  : "Verify COD"}
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* =================================================
+          MAIN
+      ================================================= */}
+
       <div className="admin-cod-main">
 
         <div className="admin-cod-container">
 
-          {/* HEADER */}
+          {/* =================================================
+              HEADER
+          ================================================= */}
+
           <div className="admin-cod-header">
 
             <div>
-
               <h1>
                 COD Settlement
               </h1>
 
               <p>
-                Verify delivery partner
-                COD settlements
+                Delivery partner COD
+                collection & verification
               </p>
-
             </div>
+
+            <button
+              className="admin-cod-refresh-btn"
+              onClick={fetchCODOrders}
+              disabled={loading}
+            >
+              {loading
+                ? "Refreshing..."
+                : "↻ Refresh"}
+            </button>
 
           </div>
 
-          {/* STATS */}
+          {/* =================================================
+              STATS
+          ================================================= */}
+
           <div className="admin-cod-stats">
+
+            {/* TOTAL ORDERS */}
 
             <div className="admin-cod-card">
 
@@ -301,283 +452,695 @@ const currentOrders =
               </h3>
 
               <h2>
-                {totalOrders}
+                {summary.totalOrders}
               </h2>
 
             </div>
 
+            {/* TOTAL COLLECTED */}
+
             <div className="admin-cod-card">
 
               <h3>
-                Total Collected
+                Total COD Collected
               </h3>
 
-              <h2 className="green">
-                ₹{totalCollected}
-              </h2>
+<h2 className="green">
+  ₹
+  {Math.round(
+    Number(summary.totalCODCollected || 0)
+  ).toLocaleString("en-IN")}
+</h2>
 
             </div>
+
+            {/* TODAY SUBMITTED */}
 
             <div className="admin-cod-card">
 
               <h3>
-                Admin Revenue
+                Today Submitted
+              </h3>
+
+              <h2 className="orange">
+                ₹
+                {Number(
+                  summary.todaySubmittedAmount || 0
+                ).toLocaleString("en-IN")}
+              </h2>
+
+              <small>
+                {summary.todaySubmittedOrders || 0}{" "}
+                payment(s)
+              </small>
+
+            </div>
+
+            {/* TODAY VERIFIED */}
+
+            <div className="admin-cod-card">
+
+              <h3>
+                Today Verified
               </h3>
 
               <h2 className="purple">
-                ₹{totalAdminShare}
+                ₹
+                {Number(
+                  summary.todayVerifiedAmount || 0
+                ).toLocaleString("en-IN")}
               </h2>
 
+              <small>
+                {summary.todayVerifiedOrders || 0}{" "}
+                payment(s)
+              </small>
+
             </div>
+
+            {/* PENDING */}
 
             <div className="admin-cod-card">
 
               <h3>
-                Pending Verify
+                Pending Amount
               </h3>
 
               <h2 className="red">
-                {pendingCOD}
+                ₹
+                {Number(
+                  summary.pendingAmount || 0
+                ).toLocaleString("en-IN")}
               </h2>
+
+              <small>
+                {summary.pendingOrders || 0}{" "}
+                pending payment(s)
+              </small>
 
             </div>
 
           </div>
 
-          {/* TABLE */}
-          <div className="admin-cod-table-card">
+          {/* =================================================
+              PARTNER SUMMARY
+          ================================================= */}
 
-            <table className="admin-cod-table">
+          <div className="admin-cod-section">
 
-              <thead>
+            <div className="admin-cod-section-header">
+              <div>
+                <h2>
+                  Delivery Partner Summary
+                </h2>
 
-                <tr>
+                <p>
+                  Partner-wise COD payment
+                  collection details
+                </p>
+              </div>
 
-                  <th>
-                    Order
-                  </th>
+              <div className="admin-cod-partner-count">
+                {summary.totalPartners || 0}{" "}
+                Partners
+              </div>
+            </div>
 
-                  <th>
-                    Customer
-                  </th>
+            <div className="admin-cod-table-card">
 
-                  <th>
-                    Product
-                  </th>
+              <div className="admin-cod-table-scroll">
 
-                  <th>
-                    COD Amount
-                  </th>
+                <table className="admin-cod-table">
 
-                 <th>COD Method</th>
-                  <th>
-                    Partner
-                  </th>
+                  <thead>
+                    <tr>
+                      <th>
+                        Delivery Partner
+                      </th>
 
-                  <th>
-                    Status
-                  </th>
+                      <th>
+                        Total COD
+                      </th>
 
-                  <th>
-                    Action
-                  </th>
+                      <th>
+                        Submitted
+                      </th>
 
-                </tr>
+                      <th>
+                        Verified
+                      </th>
 
-              </thead>
+                      <th>
+                        Pending
+                      </th>
 
-              <tbody>
+                      <th>
+                        Rejected
+                      </th>
 
-                {currentOrders.map((order) => (
+                      <th>
+                        Last Payment
+                      </th>
+                    </tr>
+                  </thead>
 
-                  <tr key={order._id}>
+                  <tbody>
 
-                    {/* ORDER */}
-                    <td>
-                      #
-                      {order._id.slice(-6)}
-                    </td>
-
-                    {/* CUSTOMER */}
-                    <td>
-
-                      <div>
-                        <b>
-                          {order.customer}
-                        </b>
-
-                        <div>
-                          {order.phone}
-                        </div>
-                      </div>
-
-                    </td>
-
-                    {/* PRODUCT */}
-                    <td>
-
-                      {order.items?.map(
-                        (item, index) => (
-
-                        <div
-                          key={index}
-                          className="admin-product-box"
+                    {partnerSummary.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan="7"
+                          className="admin-cod-empty"
                         >
+                          No delivery partner
+                          COD records found.
+                        </td>
+                      </tr>
+                    ) : (
+                      partnerSummary.map(
+                        (partner) => (
+                          <tr
+                            key={
+                              partner.partnerId ||
+                              partner.partnerName
+                            }
+                          >
 
-                          <img
-                            src={`http://localhost:4000/uploads/${item.image}`}
-                            alt=""
-                          />
+                            <td>
+                              <div className="admin-partner-name">
+                                <b>
+                                  {
+                                    partner.partnerName
+                                  }
+                                </b>
 
-                          <div>
+                                {partner.phone && (
+                                  <small>
+                                    {
+                                      partner.phone
+                                    }
+                                  </small>
+                                )}
+                              </div>
+                            </td>
 
-                            <div>
-                              {item.name}
-                            </div>
-
-                            <small>
-                              Qty:
-                              {" "}
-                              {item.quantity}
-                            </small>
-
-                          </div>
-
-                        </div>
-
-                      ))}
-
-                    </td>
-
-                    {/* COD */}
-                    <td className="green">
-                      ₹{order.amount}
-                    </td>
-                    {/* COD Method */}
-<td>
-  <span
-    className={`cod-method ${order.codCollectionMethod?.toLowerCase()}`}
-  >
-    {order.codCollectionMethod || "N/A"}
-  </span>
+                           <td className="green">
+  ₹
+  {Math.round(
+    Number(partner.totalCollected || 0)
+  ).toLocaleString(
+    "en-IN"
+  )}
 </td>
 
+                            <td>
+                              ₹
+                              {Number(
+                                partner.submittedAmount ||
+                                  0
+                              ).toLocaleString(
+                                "en-IN"
+                              )}
+                            </td>
 
-                    {/* PARTNER */}
-                    <td>
-                      {
-                        order.deliveryPartnerName
-                      }
-                    </td>
+                          <td className="green">
+  ₹
+  {Math.round(
+    Number(partner.totalCollected || 0)
+  ).toLocaleString(
+    "en-IN"
+  )}
+</td>
 
-                    {/* STATUS */}
-                    <td>
+                            <td className="red">
+                              ₹
+                              {Number(
+                                partner.pendingAmount ||
+                                  0
+                              ).toLocaleString(
+                                "en-IN"
+                              )}
+                            </td>
 
-                      {order.codStatus ===
-                      "Settled" ? (
+                            <td>
+  ₹
+  {Math.round(
+    Number(partner.rejectedAmount || 0)
+  ).toLocaleString(
+    "en-IN"
+  )}
+</td>
 
-                        <span className="status settled">
-                          Settled
-                        </span>
+                            <td>
+                              {formatShortDate(
+                                partner.lastPaymentDate
+                              )}
+                            </td>
 
-                      ) : order.codStatus ===
-                        "Submitted" ? (
+                          </tr>
+                        )
+                      )
+                    )}
 
-                        <span className="status pending">
-                          Submitted
-                        </span>
+                  </tbody>
 
-                      ) : (
+                </table>
 
-                        <span className="status waiting">
-                          Pending
-                        </span>
+              </div>
 
-                      )}
+            </div>
 
-                    </td>
+          </div>
 
-                    {/* ACTION */}
-                    <td>
+          {/* =================================================
+              PAYMENT DETAILS
+          ================================================= */}
 
-                      {order.codStatus ===
-                      "Submitted" ? (
+          <div className="admin-cod-section">
 
-                        <button
-  className="verify-btn"
-  disabled={verifying[order._id]}
- onClick={() => {
-  setSelectedOrder(order);
-  setShowModal(true);
-}}
->
-  {verifying[order._id] ? "Verifying..." : "Verify"}
-</button>
+            <div className="admin-cod-section-header">
 
-                      ) : (
+              <div>
+                <h2>
+                  COD Payment Details
+                </h2>
 
-                        <button className="done-btn">
-                          Done
-                        </button>
+                <p>
+                  Delivery partner submitted
+                  payments
+                </p>
+              </div>
 
-                      )}
+            </div>
 
-                    </td>
+            <div className="admin-cod-table-card">
 
-                  </tr>
+              <div className="admin-cod-table-scroll">
 
-                ))}
+                <table className="admin-cod-table">
 
-              </tbody>
+                  <thead>
 
-            </table>
+                    <tr>
 
-            <div className="admin-pagination">
+                      <th>
+                        Order
+                      </th>
 
-  <button
-    disabled={currentPage === 1}
-    onClick={() =>
-      setCurrentPage((prev) => prev - 1)
-    }
-  >
-    Prev
-  </button>
+                      <th>
+                        Customer
+                      </th>
 
-  {[...Array(totalPages)].map((_, index) => (
-    <button
-      key={index}
-      className={
-        currentPage === index + 1
-          ? "active-page"
-          : ""
-      }
-      onClick={() =>
-        setCurrentPage(index + 1)
-      }
-    >
-      {index + 1}
-    </button>
-  ))}
+                      <th>
+                        Product
+                      </th>
 
-  <button
-    disabled={currentPage === totalPages}
-    onClick={() =>
-      setCurrentPage((prev) => prev + 1)
-    }
-  >
-    Next
-  </button>
+                      <th>
+                        COD Amount
+                      </th>
 
-</div>
+                      <th>
+                        COD Method
+                      </th>
+
+                      <th>
+                        Partner
+                      </th>
+
+                      <th>
+                        Submitted Date
+                      </th>
+
+                      <th>
+                        Verified Date
+                      </th>
+
+                      <th>
+                        Status
+                      </th>
+
+                      <th>
+                        Action
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+                  <tbody>
+
+                    {loading ? (
+
+                      <tr>
+                        <td
+                          colSpan="10"
+                          className="admin-cod-empty"
+                        >
+                          Loading COD payments...
+                        </td>
+                      </tr>
+
+                    ) : currentOrders.length === 0 ? (
+
+                      <tr>
+                        <td
+                          colSpan="10"
+                          className="admin-cod-empty"
+                        >
+                          No COD payments found.
+                        </td>
+                      </tr>
+
+                    ) : (
+
+                      currentOrders.map(
+                        (order) => (
+
+                          <tr
+                            key={order._id}
+                          >
+
+                            {/* ORDER */}
+
+                            <td>
+                              <b>
+                                #
+                                {order.orderId}
+                              </b>
+                            </td>
+
+                            {/* CUSTOMER */}
+
+                            <td>
+
+                              <div>
+                                <b>
+                                  {
+                                    order.customer
+                                  }
+                                </b>
+
+                                <div>
+                                  {
+                                    order.phone
+                                  }
+                                </div>
+                              </div>
+
+                            </td>
+
+                            {/* PRODUCT */}
+
+                            <td>
+
+                              {order.items?.map(
+                                (
+                                  item,
+                                  index
+                                ) => (
+
+                                  <div
+                                    key={index}
+                                    className="admin-product-box"
+                                  >
+
+                                    {item.image ? (
+                                      <img
+                                        src={`http://localhost:4000/uploads/${item.image}`}
+                                        alt=""
+                                      />
+                                    ) : (
+                                      <div className="admin-product-no-image">
+                                        —
+                                      </div>
+                                    )}
+
+                                    <div>
+
+                                      <div>
+                                        {
+                                          item.name
+                                        }
+                                      </div>
+
+                                      <small>
+                                        Qty:{" "}
+                                        {
+                                          item.quantity
+                                        }
+                                      </small>
+
+                                    </div>
+
+                                  </div>
+
+                                )
+                              )}
+
+                            </td>
+
+                            {/* AMOUNT */}
+
+                            <td className="green">
+
+                              ₹
+                              {Number(
+                                order.amount ||
+                                  0
+                              ).toLocaleString(
+                                "en-IN"
+                              )}
+
+                            </td>
+
+                            {/* METHOD */}
+
+                            <td>
+
+                              <span
+                                className={`cod-method ${
+                                  order.codCollectionMethod
+                                    ?.toLowerCase()
+                                    ?.replace(
+                                      /\s+/g,
+                                      "-"
+                                    ) || ""
+                                }`}
+                              >
+                                {
+                                  order.codCollectionMethod ||
+                                  "N/A"
+                                }
+                              </span>
+
+                            </td>
+
+                            {/* PARTNER */}
+
+                            <td>
+
+                              <b>
+                                {
+                                  order.deliveryPartnerName ||
+                                  "Not Assigned"
+                                }
+                              </b>
+
+                            </td>
+
+                            {/* SUBMITTED DATE */}
+
+                            <td>
+
+                              {formatDate(
+                                order.submittedAt
+                              )}
+
+                            </td>
+
+                            {/* VERIFIED DATE */}
+
+                            <td>
+
+                              {formatDate(
+                                order.verifiedAt
+                              )}
+
+                            </td>
+
+                            {/* STATUS */}
+
+                            <td>
+
+                              {order.codStatus ===
+                              "Settled" ? (
+
+                                <span className="status settled">
+                                  Settled
+                                </span>
+
+                              ) : order.codStatus ===
+                                "Submitted" ? (
+
+                                <span className="status pending">
+                                  Submitted
+                                </span>
+
+                              ) : order.codStatus ===
+                                "Rejected" ? (
+
+                                <span className="status rejected">
+                                  Rejected
+                                </span>
+
+                              ) : (
+
+                                <span className="status waiting">
+                                  Collected
+                                </span>
+
+                              )}
+
+                            </td>
+
+                            {/* ACTION */}
+
+                            <td>
+
+                              {order.codStatus ===
+                              "Submitted" ? (
+
+                                <button
+                                  className="verify-btn"
+                                  disabled={
+                                    verifying[
+                                      order._id
+                                    ]
+                                  }
+                                  onClick={() => {
+                                    setSelectedOrder(
+                                      order
+                                    );
+
+                                    setShowModal(
+                                      true
+                                    );
+                                  }}
+                                >
+                                  {verifying[
+                                    order._id
+                                  ]
+                                    ? "Verifying..."
+                                    : "Verify"}
+                                </button>
+
+                              ) : order.codStatus ===
+                                "Settled" ? (
+
+                                <button
+                                  className="done-btn"
+                                  disabled
+                                >
+                                  ✓ Verified
+                                </button>
+
+                              ) : (
+
+                                <button
+                                  className="done-btn"
+                                  disabled
+                                >
+                                  —
+                                </button>
+
+                              )}
+
+                            </td>
+
+                          </tr>
+
+                        )
+                      )
+
+                    )}
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+              {/* =================================================
+                  PAGINATION
+              ================================================= */}
+
+              {totalPages > 1 && (
+                <div className="admin-pagination">
+
+                  <button
+                    disabled={
+                      currentPage === 1
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        (prev) =>
+                          prev - 1
+                      )
+                    }
+                  >
+                    Prev
+                  </button>
+
+                  {[
+                    ...Array(totalPages),
+                  ].map(
+                    (_, index) => (
+
+                      <button
+                        key={index}
+                        className={
+                          currentPage ===
+                          index + 1
+                            ? "active-page"
+                            : ""
+                        }
+                        onClick={() =>
+                          setCurrentPage(
+                            index + 1
+                          )
+                        }
+                      >
+                        {index + 1}
+                      </button>
+
+                    )
+                  )}
+
+                  <button
+                    disabled={
+                      currentPage ===
+                      totalPages
+                    }
+                    onClick={() =>
+                      setCurrentPage(
+                        (prev) =>
+                          prev + 1
+                      )
+                    }
+                  >
+                    Next
+                  </button>
+
+                </div>
+              )}
+
+            </div>
 
           </div>
 
         </div>
 
       </div>
-
-   </AdminLayout>
-
+    </AdminLayout>
   );
-
 }

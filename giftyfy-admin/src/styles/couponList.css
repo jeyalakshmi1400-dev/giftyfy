@@ -332,6 +332,10 @@
     background:#4f46e5;
     color:#fff;
 }
+.coupon-table-ui thead th{
+    background:#f382d3;
+    color:#fff;
+}
 
 .coupon-table-ui th{
     padding:18px;

@@ -5,53 +5,52 @@ const Notification = require("../models/Notification");
 // GET MY NOTIFICATIONS
 // ==============================
 const getMyNotifications = async (req, res) => {
-
   try {
-
     const partnerId = req.partner?._id;
 
     if (!partnerId) {
       return res.status(400).json({
         success: false,
-        message: "Partner ID missing"
+        message: "Partner ID missing",
       });
     }
 
     const notifications = await Notification.find({
       partner: partnerId,
-      hidden: false
+      hidden: false,
     })
       .populate({
-  path: "order",
-  populate: [
-    {
-      path: "items.product",
-      model: "Product"
-    },
-    {
-      path: "user",
-      model: "User"
-    }
-  ]
-})
+        path: "order",
+        populate: [
+          {
+            path: "items.product",
+            model: "Product",
+          },
+          {
+            path: "user",
+            model: "User",
+          },
+        ],
+      })
       .sort({ createdAt: -1 });
+
+    // ✅ Remove notifications whose order is deleted/null
+    const validNotifications = notifications.filter(
+      (notification) => notification.order
+    );
 
     res.json({
       success: true,
-      notifications
+      notifications: validNotifications,
     });
-
   } catch (error) {
-
     console.log("NOTIFICATION ERROR 👉", error);
 
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message,
     });
-
   }
-
 };
 
 

@@ -206,7 +206,7 @@ const filteredOrders = orders.filter((order) => {
   const keyword = searchTerm.toLowerCase();
 
 const matchSearch =
-  order._id?.toLowerCase().includes(keyword) ||
+  order.orderId?.toLowerCase().includes(keyword) ||
 
   order.name?.toLowerCase().includes(keyword) ||      // Customer Name
 
@@ -290,7 +290,7 @@ const generateInvoice = async (order) => {
         invoiceHeight
       );
 
-      pdf.save(`Invoice_${order._id}.pdf`);
+      pdf.save(`Invoice_${order.orderId}.pdf`);
     } catch (err) {
       console.error(err);
     }
@@ -380,9 +380,9 @@ const generateInvoice = async (order) => {
     {filteredOrders.map((order) => (
   <div
     key={order._id}
-    id={`order-${order._id}`}
+    id={`order-${order.orderId}`}
     className={`order-card-new ${
-      selectedOrderId === order._id ? "selected-order" : ""
+      selectedOrderId === order.orderId ? "selected-order" : ""
     }`}
   >
 
@@ -393,7 +393,7 @@ const generateInvoice = async (order) => {
 
         <div className="order-id-box">
           <small>ORDER ID</small>
-          <h3>#{order._id.slice(-8).toUpperCase()}</h3>
+<h3>{order.orderId}</h3>
         </div>
 
         <div className="order-date-box">
@@ -413,8 +413,17 @@ const generateInvoice = async (order) => {
             .replace(/\s/g, "-")}`}
         >
           {order.status}
+          
         </div>
-
+        {/* Cancel Information */}
+{order.status === "Cancelled" && (
+  <div className="cancel-badge">
+    ❌ Cancelled by {order.cancelledBy} 
+    <span>
+      ({order.cancelReason || "No reason"})
+    </span>
+  </div>
+)}
         <h2 className="order-total-price">
           ₹{Math.round(order.totalAmount)}
         </h2>
@@ -453,10 +462,10 @@ const generateInvoice = async (order) => {
                 <b>{item.quantity}</b>
               </span>
 
-              {item.size && (
+              {(item.size || item.frameSize) && (
                 <span>
                   Size :
-                  <b>{item.size}</b>
+                  <b>{item.size || item.frameSize}</b>
                 </span>
               )}
 
@@ -561,9 +570,13 @@ const generateInvoice = async (order) => {
   </div>
 
   <div className="payment-row">
-    <span>Delivery</span>
-    <b className="free-text">FREE</b>
-  </div>
+  <span>Delivery</span>
+  <b>
+    {order.delivery > 0
+      ? `₹${order.delivery}`
+      : "FREE"}
+  </b>
+</div>
 
   {/* Discount */}
   {order.discount > 0 && (
@@ -844,28 +857,27 @@ const generateInvoice = async (order) => {
 
     <div className="order-action-buttons">
 
-      {["Pending", "Confirmed"].includes(
-        order.status
-      ) &&
-        !(
-          order.items.some(
-            (item) => item.isCustomized
-          ) &&
-          ["In Progress", "Completed"].includes(
-            order.customizationStatus
-          )
-        ) && (
+     {["Pending", "Confirmed"].includes(order.status) &&
+ !order.items.some(
+   (item) => item.isCustomized
+ ) && (
 
-          <button
-            className="cancel-btn"
-            onClick={() =>
-              cancelOrder(order._id)
-            }
-          >
-            Cancel Order
-          </button>
+  <button
+    className="cancel-btn"
+    onClick={() =>
+      cancelOrder(order._id)
+    }
+  >
+    Cancel Order
+  </button>
 
-      )}
+)}
+{order.items.some(item => item.isCustomized) &&
+ ["Pending","Confirmed"].includes(order.status) && (
+   <p className="custom-cancel-note">
+     🎨 Customized products cannot be cancelled
+   </p>
+)}
 
       {order.status === "Delivered" && (
         <>

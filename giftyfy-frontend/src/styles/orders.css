@@ -900,3 +900,27 @@ RESPONSIVE
   color: #fff;
   transform: scale(1.08);
 }
+.cancel-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: #fff1f1;
+  color: #d32f2f;
+  border: 1px solid #ffcdd2;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.cancel-badge span {
+  font-weight: 400;
+  color: #555;
+}
+.custom-cancel-note{
+  color:#d97706;
+  font-size:14px;
+  margin-top:10px;
+  font-weight:600;
+}

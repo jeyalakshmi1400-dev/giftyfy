@@ -21,8 +21,10 @@ const deliveryPartnerSchema = new mongoose.Schema(
 
     drivingLicenseNo: String,
     drivingLicenseImage: String,
-
-    pincode: String,
+pincode: {
+  type: [String],
+  default: [],
+},
 
     accountHolderName: String,
     accountNumber: String,

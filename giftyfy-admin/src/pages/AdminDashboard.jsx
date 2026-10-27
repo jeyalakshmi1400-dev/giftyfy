@@ -109,12 +109,12 @@ const AdminDashboard = () => {
   const statCards = [
     {
       key: "todayOrders",
-      title: "Today Orders",
+      title: "ToTAL Orders",
       value: stats.todayOrders,
       icon: "bi-bag-check-fill",
       accent: "blue",
       trendIcon: "bi-calendar3",
-      trendLabel: "Today",
+      trendLabel: "Orders",
     },
     {
       key: "revenue",

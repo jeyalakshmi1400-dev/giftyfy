@@ -369,7 +369,7 @@ const stats = useMemo(() => {
                   {/* CENTER — Order + customer details */}
                   <div className="card-body">
                     <div className="body-top">
-                      <span className="order-id">#{order._id.slice(-6)}</span>
+                      <span className="order-id">#{order.orderId}</span>
                       <span className="order-date">
                         {new Date(order.deliveryCancelledAt).toLocaleDateString(
                           "en-IN",

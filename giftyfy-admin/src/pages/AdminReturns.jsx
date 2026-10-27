@@ -523,7 +523,11 @@ function AdminReturns() {
                           rowIdx % 2 === 0 ? "row-even" : "row-odd"
                         }`}
                       >
-                        <td className="cell-id">#{order._id.slice(-6)}</td>
+                        <td>
+  <span className="admin-order-id-badge">
+    {order.orderId}
+  </span>
+</td>
 
                         <td>
                           {order.items.map((item, i) => (
@@ -546,14 +550,14 @@ function AdminReturns() {
                         <td>
                           <div className="customer-cell">
                             <div className="avatar">
-                              {initials(order.address?.firstName)}
+                              {initials(order.name || order.user?.name || "-")}
                             </div>
                             <div className="customer-info">
-                              <p className="customer-name">
-                                {order.address?.firstName}
-                              </p>
+                              <p className="admin-user-name">
+  {order.name || order.user?.name || "-"}
+</p>
                               <span className="customer-meta">
-                                <IconMail /> {order.email}
+                                <IconMail /> {order.user?.email || "-"}
                               </span>
                               <span className="customer-meta">
                                 <IconPhone /> {order.phone}
@@ -647,8 +651,8 @@ function AdminReturns() {
                               <div>
                                 <span className="detail-label">Customer</span>
                                 <span className="detail-value">
-                                  {order.address?.firstName} —{" "}
-                                  {order.email}
+                                  {order.name || order.user?.name || "-"} —{" "}
+                                  {order.user?.email || "-"}
                                 </span>
                               </div>
                               <div>

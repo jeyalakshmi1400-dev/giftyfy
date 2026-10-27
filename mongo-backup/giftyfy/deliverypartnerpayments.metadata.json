@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"14c2c2f4c474433fbe1b5cf4f356564a","collectionName":"deliverypartnerpayments","type":"collection"}

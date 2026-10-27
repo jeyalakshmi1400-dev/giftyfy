@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"}],"uuid":"fe56a014452746228b53572a416f07cf","collectionName":"deliveryrejecthistories","type":"collection"}

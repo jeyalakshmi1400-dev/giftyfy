@@ -48,6 +48,7 @@ const addToCart = async (req, res) => {
       discountValue,
       gst,
       size,
+      frameSize,
       variant,
       message,
         customName, // ✅ ADD THIS
@@ -68,7 +69,7 @@ const addToCart = async (req, res) => {
 const itemCheck = (item) => {
   const isMatch =
     item.product.toString() === productId &&
-    (item.size || "") === (size || "") &&
+    (item.size || "") === (size || frameSize || "") &&
     (item.variant || "") === (variant || "") &&
     (item.message || "") === (message || "") &&
     (item.customName || "") === (customName || "");
@@ -96,7 +97,7 @@ const itemCheck = (item) => {
             discountValue,
             gst,
 
-            size,
+            size: size || frameSize,
             variant,
 
             // ✅ customization
@@ -136,7 +137,7 @@ const itemCheck = (item) => {
   discountValue,
   gst,
 
-  size,
+  size: size || frameSize,
   variant,
 
   // ✅ customization

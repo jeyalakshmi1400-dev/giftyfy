@@ -22,13 +22,19 @@ import AdminSiteContent from "./pages/AdminSiteContent";
 import AdminProfit from "./pages/AdminProfit";
 import AdminCODPage from "./pages/AdminCODPage";
 import SalaryManagement from "./pages/SalaryManagement";
+import AdminDeliveryCharge from "./pages/AdminDeliveryCharge";
+import AdminGiftSetting from "./pages/AdminGiftSetting";
 
 // 🔥 NEW IMPORT
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 function App() {
   return (
+    <>
     <Routes>
+       
 
       {/* default redirect */}
       <Route path="/" element={<Navigate to="/admin-login" />} />
@@ -117,7 +123,20 @@ function App() {
         <Route path="/admin/profit" element={<ProtectedRoute><AdminProfit/></ProtectedRoute>}/>
         <Route path="/admin/cod" element={<ProtectedRoute><AdminCODPage/></ProtectedRoute>}/>
         <Route path="/salary-management" element={<SalaryManagement/>}/>
+        <Route path="/adim/delivery-charge" element={<ProtectedRoute><AdminDeliveryCharge/></ProtectedRoute>}/>
+        <Route path="/admin/gift-setting" element={<ProtectedRoute><AdminGiftSetting/></ProtectedRoute>}/>
+        
     </Routes>
+    {/* Toast Container */}
+    <ToastContainer
+      position="top-center"
+      autoClose={2000}
+      theme="colored"
+      newestOnTop
+      closeOnClick
+      pauseOnHover
+    />
+    </>
   );
 }
 

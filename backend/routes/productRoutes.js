@@ -42,7 +42,10 @@ router.post(
   "/",
   upload.fields([
     { name: "images", maxCount: 5 },
-    { name: "variantImages", maxCount: 20 }
+    { name: "variantImages", maxCount: 20 },
+    { name: "templateImage", maxCount: 1 },
+    { name: "maskImage", maxCount: 1 },
+
   ]),
   createProduct
 );

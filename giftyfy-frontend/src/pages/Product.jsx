@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef} from "react";
 import axios from "axios";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate,useLocation } from "react-router-dom";
 import "../styles/product.css";
 import {
   FaTruck,
@@ -17,7 +17,6 @@ import Footer from "../components/Footer";
 import ReCAPTCHA from "react-google-recaptcha";
 import CustomEditor from "../components/CustomEditor";
 import DOMPurify from "dompurify";
-
 const REVIEWS_PER_PAGE = 4;
 
 export default function Product() {
@@ -25,6 +24,12 @@ export default function Product() {
   console.log("ID =", id);
   console.log("TYPE =", typeof id);
   const navigate = useNavigate();
+  const location = useLocation();
+
+const [customizedPreview, setCustomizedPreview] = useState("");
+const [showCustomizedPreview, setShowCustomizedPreview] = useState(false);
+const [savedCustomization, setSavedCustomization] = useState(null);
+const [isCustomizationSaved, setIsCustomizationSaved] = useState(false);
 
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState("");
@@ -35,7 +40,7 @@ export default function Product() {
 
   const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedSize, setSelectedSize] = useState(null);
-
+const [selectedFrameSize, setSelectedFrameSize] = useState(null);
   const [liked, setLiked] = useState(false);
   const [openInfo, setOpenInfo] = useState(null);
 
@@ -140,6 +145,18 @@ export default function Product() {
       .catch(console.error);
 
   }, [id]);
+  useEffect(() => {
+  setProduct(null);
+  setMainImage("");
+  setCustomizedPreview(null);
+  setShowCustomizedPreview(false);
+  setSavedCustomization(null);
+  setIsCustomizationSaved(false);
+
+  setSelectedFrameSize(null);
+  setSelectedVariant(null);
+  setSelectedSize(null);
+}, [id]);
 
   // FETCH PRODUCT
   useEffect(() => {
@@ -147,6 +164,10 @@ export default function Product() {
       const data = res.data;
 
       setProduct(data);
+      // Photo Frame default size
+      if (data?.frameSizes?.length > 0) {
+        setSelectedFrameSize(data.frameSizes[0]);
+      }
 
       // ✅ VARIANT + SIZE AUTO SELECT (FIXED)
       if (data?.variants?.length > 0) {
@@ -269,11 +290,42 @@ export default function Product() {
     setReviewPage(1);
   }, [reviewSort, reviews.length]);
 
+useEffect(() => {
+  const state = location.state;
+
+  if (!state) return;
+
+  if (state.customizedPreview) {
+    setCustomizedPreview(state.customizedPreview);
+    setShowCustomizedPreview(true);
+    setIsCustomizationSaved(true);
+  }
+
+  if (state.savedCustomization) {
+    setSavedCustomization(state.savedCustomization);
+    setIsCustomizationSaved(true);
+  }
+}, [location.state]);
 
 
   if (!product) return <h2 className="gp-loading">Loading...</h2>;
+  const goPersonalize = (isEdit = false) => {
+  navigate(`/personalize/${product._id}`, {
+    state: {
+      frameSize: selectedFrameSize,
+      quantity: qty,
+      variant: selectedVariant,
+      size: selectedSize,
+      editMode: isEdit,
+      savedCustomization: isEdit ? savedCustomization : null,
+    },
+  });
+};
 
+
+  
   const price =
+    selectedFrameSize?.price ||
     selectedSize?.price ||
     selectedVariant?.sizes?.[0]?.price ||
     product?.price ||
@@ -281,6 +333,7 @@ export default function Product() {
 
 
   let basePrice =
+    selectedFrameSize?.price ||
     selectedSize?.price ||
     selectedVariant?.sizes?.[0]?.price ||
     product?.price ||
@@ -313,32 +366,104 @@ export default function Product() {
   finalPrice = Math.max(0, Math.round(finalPrice));
 
   if (finalPrice < 0) finalPrice = 0;
+const checkPincode = async () => {
 
-  // DELIVERY DATE LOGIC
-  const checkPincode = () => {
-    if (!pincode || pincode.length !== 6) {
-      setDeliveryMsg("❌ Invalid Pincode");
+  if (!pincode || pincode.length !== 6) {
+    setDeliveryMsg("❌ Invalid Pincode");
+    setIsDeliverable(false);
+    return;
+  }
+
+
+  try {
+
+    // India pincode verify
+    const pinRes = await axios.get(
+      `http://localhost:4000/api/pincode/${pincode}`
+    );
+
+
+    if(!pinRes.data.available){
+
+      setDeliveryMsg(
+        "❌ Delivery available only in India"
+      );
+
       setIsDeliverable(false);
       return;
     }
 
-    // 🔥 flatten all pincodes from locations
-    const allPincodes =
-      product?.locations?.flatMap(loc => loc.pincode) || [];
 
-    const isValid = allPincodes.includes(Number(pincode));
 
-    if (isValid) {
-      const today = new Date();
-      const deliveryDate = new Date(today.setDate(today.getDate() + 3));
+    // All India product
+    if(product.deliveryType==="all"){
 
-      setDeliveryMsg(`✅ Delivery by ${deliveryDate.toDateString()}`);
+      const today=new Date();
+      const deliveryDate=new Date();
+
+      deliveryDate.setDate(today.getDate()+3);
+
+
+      setDeliveryMsg(
+        `✅ Delivery by ${deliveryDate.toDateString()}`
+      );
+
       setIsDeliverable(true);
-    } else {
-      setDeliveryMsg("❌ Not deliverable to this pincode");
+      return;
+    }
+
+
+
+    // Selected pincode product
+
+    const allPincodes =
+      product?.locations?.flatMap(
+        loc=>loc.pincode
+      ) || [];
+
+
+    const isValid =
+      allPincodes.includes(Number(pincode));
+
+
+    if(isValid){
+
+      const today=new Date();
+      const deliveryDate=new Date();
+
+      deliveryDate.setDate(today.getDate()+3);
+
+
+      setDeliveryMsg(
+        `✅ Delivery by ${deliveryDate.toDateString()}`
+      );
+
+      setIsDeliverable(true);
+
+    }
+    else{
+
+      setDeliveryMsg(
+        "❌ Not deliverable to this pincode"
+      );
+
       setIsDeliverable(false);
     }
-  };
+
+
+  }
+  catch(err){
+
+    console.log(err);
+
+    setDeliveryMsg(
+      "❌ Pincode verification failed"
+    );
+
+    setIsDeliverable(false);
+  }
+
+};
 
   let allImages = [];
 
@@ -366,7 +491,11 @@ export default function Product() {
       toast.error("Out of Stock ❌");
       return;
     }
-
+// Open personalization only if customization has not been saved yet
+if (product?.customization?.enabled && !isCustomizationSaved) {
+  goPersonalize(false);
+  return;
+}
     if (product?.isCustomized) {
       if (
         product.customizationFields?.includes("image") &&
@@ -422,6 +551,9 @@ export default function Product() {
       if (selectedSize?.size) {
         formData.append("size", selectedSize.size);
       }
+      if (selectedFrameSize?.size) {
+        formData.append("frameSize", selectedFrameSize.size);
+    }
 
       if (selectedVariant?.color) {
         formData.append("variant", selectedVariant.color);
@@ -467,7 +599,10 @@ export default function Product() {
       toast.error("Out of Stock ❌");
       return;
     }
-
+   if (product?.customization?.enabled && !isCustomizationSaved) {
+  goPersonalize(false);
+  return;
+}   
     // ✅ Validation
     if (product?.isCustomized) {
       if (
@@ -537,6 +672,7 @@ export default function Product() {
       originalPrice: price,
 
       size: selectedSize?.size || "",
+      frameSize: selectedFrameSize?.size || "",
       variant: selectedVariant?.color || "",
 
       locations: product.locations || [],
@@ -729,6 +865,9 @@ export default function Product() {
     if (product?.category === "Dress") {
       return selectedSize?.quantity ?? 0;
     }
+    if (product?.category === "Photo Frame") {
+      return selectedFrameSize?.quantity ?? 0;
+    }
     return product?.quantity ?? 0;
   };
 
@@ -860,6 +999,18 @@ export default function Product() {
     touchStartXRef.current = null;
   };
 
+
+  const openProduct = (p) => {
+  if (!p?._id) {
+    console.error("Product ID missing:", p);
+    return;
+  }
+
+  navigate(`/product/${p._id}`);
+};
+
+
+
   return (
     <div>
       <div className="product-details">
@@ -878,105 +1029,154 @@ export default function Product() {
           <div className="gp-top-layout">
 
             {/* THUMBNAILS */}
-            <div className="gp-thumb-wrapper">
-              <div className="gp-thumb-list">
-                {allImages.length > 0 ? (
-                  allImages.map((img, i) => (
-                    <button
-                      key={i}
-                      type="button"
-                      className={`gp-thumb-btn ${mainImage === img ? "gp-thumb-active" : ""
-                        }`}
-                      onClick={() => setMainImage(img)}
-                    >
-                      <img
-                        src={`http://localhost:4000/uploads/${img}`}
-                        className="gpr-thumb-img"
-                        alt={`${product.name} view ${i + 1}`}
-                      />
-                    </button>
-                  ))
-                ) : (
-                  <p className="gp-no-images">No Images</p>
-                )}
-              </div>
-            </div>
+           
+<div className="gp-thumb-list">
+
+  {/* Customized preview thumbnail */}
+  {customizedPreview && (
+    <button
+      type="button"
+      className={`gp-thumb-btn ${
+        showCustomizedPreview ? "gp-thumb-active" : ""
+      }`}
+      onClick={() => setShowCustomizedPreview(true)}
+      aria-label="View customized product"
+    >
+      <img
+        src={customizedPreview}
+        className="gpr-thumb-img"
+        alt="Customized product preview"
+      />
+    </button>
+  )}
+
+  {/* Original product thumbnails */}
+  {allImages.length > 0 ? (
+    allImages.map((img, i) => (
+      <button
+        key={i}
+        type="button"
+        className={`gp-thumb-btn ${
+          !showCustomizedPreview && mainImage === img
+            ? "gp-thumb-active"
+            : ""
+        }`}
+        onClick={() => {
+          setShowCustomizedPreview(false);
+          setMainImage(img);
+        }}
+      >
+        <img
+          src={`http://localhost:4000/uploads/${img}`}
+          className="gpr-thumb-img"
+          alt={`${product.name} view ${i + 1}`}
+        />
+      </button>
+    ))
+  ) : (
+    <p className="gp-no-images">No Images</p>
+  )}
+
+</div>
+
 
             {/* IMAGE SECTION */}
-            <div className="gp-image-section">
+           
+<div className="gp-image-section">
+  <div
+    className="gp-image-box"
+    onMouseMove={handleMouseMove}
+    onMouseLeave={handleMouseLeave}
+    onTouchStart={handleImageTouchStart}
+    onTouchEnd={handleImageTouchEnd}
+    ref={imageRef}
+  >
+    {product.discountValue > 0 && (
+      <span className="gp-image-offer">
+        {product.discountType?.toLowerCase().trim() === "percentage"
+          ? `${product.discountValue}% OFF`
+          : `₹${product.discountValue} OFF`}
+      </span>
+    )}
 
-              <div
-                className="gp-image-box"
-                onMouseMove={handleMouseMove}
-                onMouseLeave={handleMouseLeave}
-                onTouchStart={handleImageTouchStart}
-                onTouchEnd={handleImageTouchEnd}
-                ref={imageRef}
-              >
+    {/* Main product image / customized preview */}
+    <img
+      src={
+        showCustomizedPreview && customizedPreview
+          ? customizedPreview
+          : mainImage
+            ? `http://localhost:4000/uploads/${mainImage}`
+            : "https://dummyimage.com/400x400/eee/aaa"
+      }
+      className="gp-main-image"
+      alt={
+        showCustomizedPreview
+          ? "Customized product preview"
+          : product.name
+      }
+      onClick={() => {
+        if (window.innerWidth < 768) {
+          setZoomOpen(true);
+        }
+      }}
+    />
 
-                {product.discountValue > 0 && (
-                  <span className="gp-image-offer">
-                    {product.discountType?.toLowerCase().trim() === "percentage"
-                      ? `${product.discountValue}% OFF`
-                      : `₹${product.discountValue} OFF`}
-                  </span>
-                )}
+    {/* Desktop fullscreen viewer trigger */}
+    <button
+      type="button"
+      className="gp-expand-btn"
+      onClick={() => setZoomOpen(true)}
+      aria-label="View fullscreen"
+    >
+      <FaExpand />
+    </button>
 
-                <img
-                  src={
-                    mainImage
-                      ? `http://localhost:4000/uploads/${mainImage}`
-                      : "https://dummyimage.com/400x400/eee/aaa"
-                  }
-                  className="gp-main-image"
-                  alt={product.name}
-                  onClick={() => {
-                    if (window.innerWidth < 768) {
-                      setZoomOpen(true);
-                    }
-                  }}
-                />
+    {/* Fullscreen / zoom modal */}
+    {zoomOpen && (
+      <div
+        className="zoom-modal"
+        onClick={() => setZoomOpen(false)}
+      >
+        <img
+          src={
+            showCustomizedPreview && customizedPreview
+              ? customizedPreview
+              : mainImage
+                ? `http://localhost:4000/uploads/${mainImage}`
+                : "https://dummyimage.com/400x400/eee/aaa"
+          }
+          alt={
+            showCustomizedPreview
+              ? "Customized product preview"
+              : product.name
+          }
+          onClick={(e) => e.stopPropagation()}
+        />
+      </div>
+    )}
 
-                {/* Desktop fullscreen viewer trigger (new, additive — reuses zoomOpen) */}
-                <button
-                  type="button"
-                  className="gp-expand-btn"
-                  onClick={() => setZoomOpen(true)}
-                  aria-label="View fullscreen"
-                >
-                  <FaExpand />
-                </button>
+    <div className="gp-lens" ref={lensRef}></div>
+  </div>
 
-                {zoomOpen && (
-                  <div
-                    className="zoom-modal"
-                    onClick={() => setZoomOpen(false)}
-                  >
-                    <img
-                      src={`http://localhost:4000/uploads/${mainImage}`}
-                      alt={product.name}
-                    />
-                  </div>
-                )}
+  {/* Swipe position dots */}
+  {allImages.length > 1 && (
+    <div className="gp-swipe-dots">
+      {allImages.map((img, i) => (
+        <span
+          key={i}
+          className={`gp-swipe-dot ${
+            !showCustomizedPreview && mainImage === img
+              ? "active"
+              : ""
+          }`}
+        ></span>
+      ))}
+    </div>
+  )}
 
-                <div className="gp-lens" ref={lensRef}></div>
-              </div>
+  <div className="gp-zoom-preview" ref={zoomRef}></div>
+</div>
 
-              {/* Swipe position dots (mobile only, purely visual) */}
-              {allImages.length > 1 && (
-                <div className="gp-swipe-dots">
-                  {allImages.map((img, i) => (
-                    <span
-                      key={i}
-                      className={`gp-swipe-dot ${mainImage === img ? "active" : ""}`}
-                    ></span>
-                  ))}
-                </div>
-              )}
-
-              <div className="gp-zoom-preview" ref={zoomRef}></div>
-
-            </div>
             {/* RIGHT PANEL */}
             <div className="gp-right-panel">
 
@@ -1013,7 +1213,7 @@ export default function Product() {
                   <span className="gp-final-price">₹{finalPrice}</span>
 
                   <span className="gp-old-price">
-                    ₹{selectedSize?.price || selectedVariant?.sizes?.[0]?.price || product?.price}
+                    ₹{selectedFrameSize?.price ||selectedSize?.price || selectedVariant?.sizes?.[0]?.price || product?.price}
                   </span>
                   <span className="gp-discount-badge">
                     {product.discountType?.toLowerCase().trim() === "percentage"
@@ -1138,6 +1338,35 @@ export default function Product() {
                       </button>
                     ))}
                   </div>
+                </div>
+              )}
+              {product?.frameSizes?.length > 0 && (
+                <div className="gp-size-section">
+
+                  <h4 className="gp-section-title">
+                    Select Frame Size
+                  </h4>
+
+                  <div className="gp-size-list">
+
+                    {product.frameSizes.map((frame, index) => (
+
+                      <button
+                        key={index}
+                        className={`gp-size-btn ${
+                          selectedFrameSize?.size === frame.size
+                            ? "active"
+                            : ""
+                        }`}
+                        onClick={() => setSelectedFrameSize(frame)}
+                      >
+                        {frame.size}
+                      </button>
+
+                    ))}
+
+                  </div>
+
                 </div>
               )}
               {product?.isCustomized && (
@@ -1336,14 +1565,39 @@ export default function Product() {
                 >
                   {liked ? "❤️" : "♡"}
                 </button>
+{product?.customization?.enabled && isCustomizationSaved ? (
+  <div className="gp-customization-actions">
+   <button
+  type="button"
+  className="gp-edit-personalization-btn"
+  onClick={() => goPersonalize(true)}
+>
+  Edit Personalization
+</button>
 
-                <button
-                  className="gp-cart-btn"
-                  onClick={handleAddToCart}
-                  disabled={isOutOfStock}
-                >
-                  Add To Cart
-                </button>
+    <button
+      type="button"
+      className="gp-buy-btn"
+      onClick={handleAddToCart}
+      disabled={isOutOfStock}
+    >
+      Add to Cart
+    </button>
+  </div>
+) : (
+  <button
+    type="button"
+    className="gp-cart-btn"
+    onClick={handleAddToCart}
+    disabled={isOutOfStock}
+  >
+    {product?.customization?.enabled
+      ? "Personalize Now"
+      : product?.isCustomized
+      ? "Customize Now"
+      : "Add To Cart"}
+  </button>
+)}
 
               </div>
               <br />
@@ -1677,9 +1931,7 @@ export default function Product() {
                 <div
                   className="gp-recommend-card"
                   key={p._id}
-                  onClick={() => {
-                    navigate(`/product/${p._id}`);
-                  }}
+                 onClick={() => openProduct(p)}
                 >
                   {/* IMAGE */}
                   <div className="gp-card-image-box">
@@ -1715,8 +1967,15 @@ export default function Product() {
 
                     <div className="gp-card-price-row">
                       <span className="gp-card-price">
-                        ₹{getFinalPrice(p)}
-                      </span>
+  ₹
+  {getFinalPrice(
+    p,
+    p?.category === "Dress"
+      ? p?.variants?.[0]?.sizes?.[0]
+      : p?.frameSizes?.[0],
+    p?.variants?.[0] || null
+  )}
+</span>
 
                       {p.discountValue > 0 && (
                         <span className="gp-card-old-price">
@@ -2006,3 +2265,4 @@ export default function Product() {
     </div>
   );
 }
+

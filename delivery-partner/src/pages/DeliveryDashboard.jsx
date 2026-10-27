@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useMemo } from "react";
 import axios from "axios";
-
+import { useNavigate,useLocation } from "react-router-dom";
 import {
   FaWallet,
   FaClipboardList,
@@ -29,7 +29,8 @@ export default function DeliveryDashboard() {
 
   const [dashboard, setDashboard] =
     useState(null);
-
+const location = useLocation();
+    const navigate = useNavigate();
   // COLORS
   const COLORS = [
     "#8e44ad",
@@ -81,6 +82,7 @@ export default function DeliveryDashboard() {
     }
 
   };
+  
 
   return (
 
@@ -220,6 +222,105 @@ export default function DeliveryDashboard() {
           </div>
 
         </div>
+        {
+ Number(dashboard?.pendingCODAmount || 0) > 0 && (
+
+<div className="delivery-dashboard-cod-alert">
+
+  <div className="delivery-dashboard-cod-left">
+
+    <FaWallet />
+
+    <div>
+
+      <h3>
+        COD Payment Pending
+      </h3>
+
+      <p>
+        You have collected COD amount from delivered orders.
+      </p>
+
+      <span>
+        Please submit payment to admin.
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div className="delivery-dashboard-cod-right">
+
+    <h2>
+      ₹ {Number(
+        dashboard.pendingCODAmount
+      ).toLocaleString("en-IN")}
+    </h2>
+
+
+    <button
+  type="button"
+  onClick={() =>
+    navigate("/cod", {
+      state: {
+        openSubmitModal: true
+      }
+    })
+  }
+>
+  Pay / Submit COD
+</button>
+
+  </div>
+
+
+</div>
+
+)
+}
+
+        {/* QUICK ACTIONS */}
+<div className="delivery-dashboard-actions">
+
+  <div
+    className="delivery-dashboard-action-card"
+    onClick={() => window.location.href = "/order-pickup"}
+  >
+    <FaClipboardList className="delivery-dashboard-action-icon blue" />
+    <h4>View Orders</h4>
+    <p>Manage all assigned orders</p>
+  </div>
+
+  <div
+    className="delivery-dashboard-action-card"
+    onClick={() => window.location.href = "/cod"}
+  >
+    <FaWallet className="delivery-dashboard-action-icon purple" />
+    <h4>COD Settlement</h4>
+    <p>Submit & view COD payments</p>
+  </div>
+
+  <div
+    className="delivery-dashboard-action-card"
+    onClick={() => window.location.href = "/profile"}
+  >
+    <FaUserCircle className="delivery-dashboard-action-icon green" />
+    <h4>My Profile</h4>
+    <p>View and edit profile</p>
+  </div>
+
+  <div
+    className="delivery-dashboard-action-card"
+    onClick={() => window.location.href = "/reports"}
+  >
+    <FaChartLine className="delivery-dashboard-action-icon orange" />
+    <h4>Delivery History</h4>
+    <p>View completed deliveries</p>
+  </div>
+
+</div>
+
 
         {/* CHART SECTION */}
         <div className="delivery-dashboard-chart-grid">
