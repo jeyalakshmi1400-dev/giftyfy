@@ -1,29 +1,28 @@
+
 const nodemailer = require("nodemailer");
 const Coupon = require("../models/Coupon");
 
-const sendWhatsAppMessage =
-  process.env.ENABLE_WHATSAPP === "true"
-    ? require("./whatsapp")
-    : async () => {
-        console.log("WhatsApp disabled; skipping coupon message");
-      };
-// 🔥 GENERATE CODE
+// WhatsApp is loaded only when explicitly enabled
+let sendWhatsAppMessage = null;
+
+if (process.env.ENABLE_WHATSAPP === "true") {
+  sendWhatsAppMessage = require("./whatsapp");
+}
+
+// GENERATE COUPON CODE
 const generateCouponCode = () => {
   return "NEW" + Math.floor(1000 + Math.random() * 9000);
 };
 
-// 🔥 MAIN FUNCTION
+// MAIN FUNCTION
 const sendCouponNotification = async (user, coupon) => {
   try {
-
-    console.log("👉 Sending WhatsApp to:", user.phone);
-
     if (!coupon) {
-      console.log("❌ Coupon missing");
+      console.log("Coupon missing");
       return;
     }
 
-const message = `Hi ${user.name} 👋
+    const message = `Hi ${user.name} 👋
 
 ✅ Your coupon has been applied successfully!
 
@@ -32,10 +31,10 @@ const message = `Hi ${user.name} 👋
 Coupon Code : ${coupon.code}
 
 Discount : ${
-  coupon.discountType === "percentage"
-    ? `${coupon.discountValue}% OFF`
-    : `₹${coupon.discountValue} OFF`
-}
+      coupon.discountType === "percentage"
+        ? `${coupon.discountValue}% OFF`
+        : `₹${coupon.discountValue} OFF`
+    }
 
 🎉 This coupon has been applied to your checkout.
 
@@ -43,16 +42,14 @@ Discount : ${
 
 Thank you for shopping with Giftyfy ❤️`;
 
-    // ✅ EMAIL
-    const transporter =
-      nodemailer.createTransport({
-        service: "gmail",
-
-        auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
-        },
-      });
+    // EMAIL
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
@@ -61,21 +58,19 @@ Thank you for shopping with Giftyfy ❤️`;
       text: message,
     });
 
-    // ✅ WHATSAPP
-    await sendWhatsAppMessage(
-      user.phone,
-      message
-    );
+    console.log("Coupon email sent successfully");
+
+    // WHATSAPP - OPTIONAL
+    if (sendWhatsAppMessage && user.phone) {
+      await sendWhatsAppMessage(user.phone, message);
+    } else {
+      console.log("WhatsApp disabled; skipping coupon message");
+    }
 
     return coupon;
 
   } catch (error) {
-
-    console.log(
-      "UTIL ERROR:",
-      error.message
-    );
-
+    console.log("UTIL ERROR:", error.message);
     throw error;
   }
 };
