@@ -158,6 +158,12 @@ const partnerSettlementRoutes = require("./routes/partnerSettlementRoutes");
 app.use("/api/admin", partnerSettlementRoutes);
 
 // ✅ PORT from .env
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "Giftyfy Backend is running successfully 🚀",
+  });
+});
 
 const PORT = process.env.PORT || 4000;
 
