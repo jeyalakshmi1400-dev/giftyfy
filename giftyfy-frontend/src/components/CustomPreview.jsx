@@ -24,7 +24,7 @@ export default function CustomPreview({ mainImage, customImage }) {
 
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.src = `http://localhost:4000/uploads/${mainImage}`;
+    img.src = `https://giftyfy-backend.onrender.com/uploads/${mainImage}`;
 
    img.onload = () => {
   const bg = new fabric.Image(img);

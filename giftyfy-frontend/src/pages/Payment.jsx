@@ -42,7 +42,7 @@ export default function Payment() {
 
         // ✅ CREATE RAZORPAY ORDER
         const res = await axios.post(
-          "http://localhost:4000/api/payment/create-order",
+          "https://giftyfy-backend.onrender.com/api/payment/create-order",
           {
             amount: finalAmount
           },
@@ -90,7 +90,7 @@ export default function Payment() {
 
               // ✅ VERIFY PAYMENT
               await axios.post(
-                "http://localhost:4000/api/payment/verify",
+                "https://giftyfy-backend.onrender.com/api/payment/verify",
                 response,
                 {
                   headers: {
@@ -101,7 +101,7 @@ export default function Payment() {
 
               // ✅ CREATE ORDER AFTER PAYMENT SUCCESS
               const orderRes = await axios.post(
-                "http://localhost:4000/api/orders",
+                "https://giftyfy-backend.onrender.com/api/orders",
                 {
                   address: selectedAddress.address,
                   phone: selectedAddress.phone,
@@ -159,7 +159,7 @@ export default function Payment() {
 
         // ✅ CREATE ORDER DIRECTLY
         const orderRes = await axios.post(
-          "http://localhost:4000/api/orders",
+          "https://giftyfy-backend.onrender.com/api/orders",
           {
             address: selectedAddress.address,
             phone: selectedAddress.phone,
@@ -287,7 +287,7 @@ export default function Payment() {
             >
 
               <img
-                src={`http://localhost:4000/uploads/${item.image}`}
+                src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
                 alt={item.name}
               />
 

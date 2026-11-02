@@ -186,7 +186,7 @@ const order = location.state?.order;
     {order.items.map((item, index) => (
       <div className="sc-product-item" key={index}>
         <img
-  src={`http://localhost:4000/uploads/${item.image}`}
+  src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
   alt={item.name}
   className="sc-product-img"
 />

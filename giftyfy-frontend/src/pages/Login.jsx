@@ -15,7 +15,7 @@ const submitHandler = async (e) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:4000/api/users/login",
+      "https://giftyfy-backend.onrender.com/api/users/login",
       { email, password }
     );
 

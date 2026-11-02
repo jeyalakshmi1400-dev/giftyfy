@@ -26,7 +26,7 @@ const [showSearch, setShowSearch] = useState(false);
   const fetchLogo = async () => {
 
     const res = await axios.get(
-      "http://localhost:4000/api/logo"
+      "https://giftyfy-backend.onrender.com/api/logo"
     );
 
 
@@ -55,7 +55,7 @@ useEffect(() => {
   // ===== SEARCH SUGGESTIONS =====
   useEffect(() => {
     if (search.length > 1) {
-      axios.get("http://localhost:4000/api/product")
+      axios.get("https://giftyfy-backend.onrender.com/api/product")
         .then((res) => {
           const searchText = search.toLowerCase().trim();
 
@@ -99,7 +99,7 @@ useEffect(() => {
       if (!token) return;
 
       const res = await axios.get(
-        "http://localhost:4000/api/cart",
+        "https://giftyfy-backend.onrender.com/api/cart",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -193,9 +193,9 @@ const closeMobileMenu = () => {
       <img
         src={
           logo?.image
-            ? `http://localhost:4000/uploads/${encodeURIComponent(
-                logo.image
-              )}`
+            ? `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(
+  logo.image
+)}`
             : "/no-logo.png"
         }
         alt="Logo"
@@ -350,7 +350,7 @@ setSuggestions([]);
         }}
       >
         <img
-  src={`http://localhost:4000/uploads/${
+ src={`https://giftyfy-backend.onrender.com/uploads/${
     item.image?.[0] ||
     item.images?.[0] ||
     item.variants?.[0]?.images?.[0] ||

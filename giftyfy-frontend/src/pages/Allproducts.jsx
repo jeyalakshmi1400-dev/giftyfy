@@ -251,7 +251,7 @@ const ProductCard = React.memo(function ProductCard({
           className="gp-card-image"
           src={
             image
-              ? `http://localhost:4000/uploads/${image}`
+              ? `https://giftyfy-backend.onrender.com/uploads/${image}`
               : "/no-image.png"
           }
           alt={product.name || "Gift product"}
@@ -660,7 +660,7 @@ function AllProducts() {
     setLoading(true);
 
     axios
-      .get("http://localhost:4000/api/product")
+      .get("https://giftyfy-backend.onrender.com/api/product")
       .then((res) => {
         if (!isMounted) return;
 
@@ -780,7 +780,7 @@ function AllProducts() {
     let isMounted = true;
 
     axios
-      .get(`http://localhost:4000/api/wishlist/${userId}`)
+      .get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)
       .then((res) => {
         if (isMounted) {
           setWishlist(Array.isArray(res.data) ? res.data : []);
@@ -892,7 +892,7 @@ function AllProducts() {
 
         if (existing) {
           await axios.delete(
-            `http://localhost:4000/api/wishlist/remove/${existing._id}`
+            `https://giftyfy-backend.onrender.com/api/wishlist/remove/${existing._id}`
           );
 
           setWishlist((previous) =>
@@ -904,7 +904,7 @@ function AllProducts() {
         }
 
         const response = await axios.post(
-          "http://localhost:4000/api/wishlist",
+          "https://giftyfy-backend.onrender.com/api/wishlist",
           {
             userId,
             productId: product._id,
@@ -1143,7 +1143,7 @@ function AllProducts() {
               <img
                 src={
                   getImage(quickViewProduct)
-                    ? `http://localhost:4000/uploads/${getImage(quickViewProduct)}`
+                    ? `https://giftyfy-backend.onrender.com/uploads/${getImage(quickViewProduct)}`
                     : "/no-image.png"
                 }
                 alt={quickViewProduct.name || "Gift product"}

@@ -19,7 +19,7 @@ import "../styles/productCustomizer.css";
 // outline helper (for empty slots) and the modal itself.
 import PhotoCropModal, { drawShapePath } from "../components/Photocropmodal";
 
-const API = "http://localhost:4000";
+const API = "https://giftyfy-backend.onrender.com";
 const BASE_URL = `${API}/uploads/`;
 const DESIGN_WIDTH = 800;
 const MAX_STAGE_WIDTH = 800;

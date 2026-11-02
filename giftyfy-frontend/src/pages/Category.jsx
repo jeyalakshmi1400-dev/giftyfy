@@ -23,7 +23,7 @@ useEffect(() => {
   if (!userId) return;
 
   axios
-    .get(`http://localhost:4000/api/wishlist/${userId}`)
+    .get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)
     .then((res) => {
       setWishlist(res.data);
     })
@@ -40,8 +40,7 @@ useEffect(() => {
   if (!userId) return;
 
   axios
-    .get(`http://localhost:4000/api/wishlist/${userId}`)
-    .then((res) => {
+.get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)    .then((res) => {
       setWishlist(res.data);
     })
     .catch(console.error);
@@ -53,7 +52,7 @@ useEffect(() => {
   const fetchProducts = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/category/${decodedName}`
+        `https://giftyfy-backend.onrender.com/api/product/category/${decodedName}`
       );
 
       setProducts(res.data);
@@ -162,7 +161,7 @@ const handleWishlist = async (e, product) => {
     // REMOVE
     if (existing) {
       await axios.delete(
-        `http://localhost:4000/api/wishlist/remove/${existing._id}`
+        `https://giftyfy-backend.onrender.com/api/wishlist/remove/${existing._id}`
       );
 
       setWishlist((prev) =>
@@ -179,7 +178,7 @@ const handleWishlist = async (e, product) => {
 
     // ADD
     const res = await axios.post(
-      "http://localhost:4000/api/wishlist",
+      "https://giftyfy-backend.onrender.com/api/wishlist",
       {
         userId,
         productId: product._id,
@@ -319,7 +318,7 @@ const handleWishlist = async (e, product) => {
               <div className="gfc-image-box">
 
                 <img
-                  src={`http://localhost:4000/uploads/${getImage(
+                  src={`https://giftyfy-backend.onrender.com/uploads/${getImage(
                     product
                   )}`}
                   alt={product.name}

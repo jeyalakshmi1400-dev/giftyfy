@@ -10,7 +10,7 @@ export default function VerifyOTP() {
   const verifyHandler = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/verify-otp",
+        "https://giftyfy-backend.onrender.com/api/users/verify-otp",
         { phone, otp }
       );
 

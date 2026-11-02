@@ -17,7 +17,7 @@ export default function Cart() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/cart", {
+      .get("https://giftyfy-backend.onrender.com/api/cart", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -44,7 +44,7 @@ export default function Cart() {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/cart/add",
+        "https://giftyfy-backend.onrender.com/api/cart/add",
         {
           productId: item.product._id || item.product,
           quantity: diff, // ✅ ONLY CHANGE
@@ -77,7 +77,7 @@ console.log("UPDATE RESPONSE", res.data);
   const removeItem = async (id) => {
     try {
       const res = await axios.delete(
-        `http://localhost:4000/api/cart/remove/${id}`,
+        `https://giftyfy-backend.onrender.com/api/cart/remove/${id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -179,7 +179,7 @@ navigate(`/product/${item.product._id || item.product}`)
 }                  >
                     <div className="giftfy-cart-product-card__image-wrap">
                       <img
-                        src={`http://localhost:4000/uploads/${item.image}`}
+                        src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
                         alt={item.name}
                         className="giftfy-cart-product-image"
                       />

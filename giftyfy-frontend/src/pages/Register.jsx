@@ -26,7 +26,7 @@ const Register = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/register",
+        "https://giftyfy-backend.onrender.com/api/users/register",
         formData
       );
 
@@ -46,7 +46,7 @@ const Register = () => {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/users/verify-otp",
+        "https://giftyfy-backend.onrender.com/api/users/verify-otp",
         {
           email: formData.email,
           otp,

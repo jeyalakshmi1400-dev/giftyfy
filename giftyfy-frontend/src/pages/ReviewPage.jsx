@@ -54,7 +54,7 @@ export default function ReviewPage() {
 
       await axios.post(
 
-        `http://localhost:4000/api/orders/review/${id}`,
+        `https://giftyfy-backend.onrender.com/api/orders/review/${id}`,
 
         {
           rating,

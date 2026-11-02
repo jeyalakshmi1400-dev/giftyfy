@@ -30,7 +30,7 @@ import {
      fall back if not, so nothing breaks against your current API.
    ===================================================================== */
 
-const API_BASE = "http://localhost:4000";
+const API_BASE = "https://giftyfy-backend.onrender.com";
 
 /* ---------------------------------------------------------------------
    Reusable: Star rating display

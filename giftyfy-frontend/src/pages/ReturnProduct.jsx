@@ -55,7 +55,7 @@ export default function ReturnProduct() {
       setLoading(true);
 
       const res = await axios.put(
-        `http://localhost:4000/api/orders/return/${id}`,
+        `https://giftyfy-backend.onrender.com/api/orders/return/${id}`,
         { reason },
         {
           headers: {

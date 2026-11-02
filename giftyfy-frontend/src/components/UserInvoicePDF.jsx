@@ -12,7 +12,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/site-content")
+      .get("https://giftyfy-backend.onrender.com/api/site-content")
       .then((res) => {
         setSite(res.data);
       })
@@ -22,7 +22,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/logo").then((res) => {
+    axios.get("https://giftyfy-backend.onrender.com/api/logo").then((res) => {
       setLogo(res.data);
     });
   }, []);
@@ -49,7 +49,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
             <img
               src={
                 logo?.image
-                  ? `http://localhost:4000/uploads/${logo.image}`
+                  ? `https://giftyfy-backend.onrender.com/uploads/${logo.image}`
                   : logoDefault
               }
               alt="logo"
@@ -152,7 +152,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
                     <div className="inv-item-flex">
                       {/* PRODUCT IMAGE */}
                       <img
-                        src={`http://localhost:4000/uploads/${item.image}`}
+                        src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
                         alt=""
                         className="inv-item-image"
                       />
@@ -190,7 +190,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
                             {item.extraImages.map((img, i) => (
                               <img
                                 key={i}
-                                src={`http://localhost:4000/uploads/${img}`}
+                                src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
                                 alt=""
                                 className="inv-extra-image"
                               />

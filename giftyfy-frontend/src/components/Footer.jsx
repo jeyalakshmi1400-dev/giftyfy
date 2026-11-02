@@ -35,7 +35,7 @@ const location = useLocation();
     try {
 
       const res = await axios.get(
-        "http://localhost:4000/api/site-content"
+        "https://giftyfy-backend.onrender.com/api/site-content"
       );
 
       setSiteContent(res.data);

@@ -89,7 +89,7 @@ const giftCharge = giftOption && giftSetting
     const fetchCart = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:4000/api/cart",
+          "https://giftyfy-backend.onrender.com/api/cart",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -110,7 +110,7 @@ setCart(res.data);
 
   useEffect(() => {
     const fetchAddresses = async () => {
-      const res = await axios.get("http://localhost:4000/api/address", {
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/address", {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -133,7 +133,7 @@ setCart(res.data);
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/coupons");
+        const res = await axios.get("https://giftyfy-backend.onrender.com/api/coupons");
         setCoupons(res.data.coupons || []);
       } catch (err) {
         console.log(err);
@@ -173,7 +173,7 @@ useEffect(()=>{
     try{
 
       const res = await axios.get(
-        "http://localhost:4000/api/delivery-setting"
+        "https://giftyfy-backend.onrender.com/api/delivery-setting"
       );
 
       setDeliverySetting(res.data);
@@ -207,7 +207,7 @@ useEffect(() => {
 useEffect(()=>{
 
  axios.get(
- "http://localhost:4000/api/gift-setting"
+ "https://giftyfy-backend.onrender.com/api/gift-setting"
  )
  .then(res=>{
    setGiftSetting(res.data);
@@ -258,7 +258,7 @@ const indiaStates = [
   const sendCoupon = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/coupons/send-first",
+        "https://giftyfy-backend.onrender.com/api/coupons/send-first",
         {},
         {
           headers: {
@@ -281,7 +281,7 @@ const indiaStates = [
 const sendSelectedCoupon = async (couponCode) => {
   try {
     const res = await axios.post(
-      "http://localhost:4000/api/coupons/send",
+      "https://giftyfy-backend.onrender.com/api/coupons/send",
       {
         code: couponCode,
       },
@@ -307,7 +307,7 @@ const applyCoupon = async (codeFromBtn) => {
 
   try {
     const res = await axios.post(
-      "http://localhost:4000/api/coupons/apply",
+      "https://giftyfy-backend.onrender.com/api/coupons/apply",
       {
         code,
         userId: localStorage.getItem("userId"),
@@ -459,7 +459,7 @@ console.log(res.data);
 
       if (editingId) {
         res = await axios.put(
-          `http://localhost:4000/api/address/${editingId}`,
+          `https://giftyfy-backend.onrender.com/api/address/${editingId}`,
           newAddress,
           {
             headers: {
@@ -477,7 +477,7 @@ console.log(res.data);
         alert("Address updated successfully ✅");
       } else {
         res = await axios.post(
-          "http://localhost:4000/api/address",
+          "https://giftyfy-backend.onrender.com/api/address",
           newAddress,
           {
             headers: {
@@ -501,7 +501,7 @@ console.log(res.data);
 
   const deleteAddress = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/address/${id}`, {
+      await axios.delete(`https://giftyfy-backend.onrender.com/api/address/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -603,7 +603,7 @@ const payableAmount = Math.round(
       }
 
       const res = await axios.post(
-        "http://localhost:4000/api/payment/create-order",
+        "https://giftyfy-backend.onrender.com/api/payment/create-order",
         {
           amount: payableAmount,
         },
@@ -639,7 +639,7 @@ const payableAmount = Math.round(
           try {
             // Verify Payment
             await axios.post(
-              "http://localhost:4000/api/payment/verify",
+              "https://giftyfy-backend.onrender.com/api/payment/verify",
               response,
               {
                 headers: {
@@ -650,7 +650,7 @@ const payableAmount = Math.round(
 
             // Create Order
             const orderRes = await axios.post(
-              "http://localhost:4000/api/orders",
+              "https://giftyfy-backend.onrender.com/api/orders",
               {
                 name: selectedAddress.firstName,
                 address: selectedAddress.address,
@@ -719,7 +719,7 @@ const payableAmount = Math.round(
     // ===================== CASH ON DELIVERY =====================
     else {
       const orderRes = await axios.post(
-        "http://localhost:4000/api/orders",
+        "https://giftyfy-backend.onrender.com/api/orders",
         {
           name: selectedAddress.firstName,
           address: selectedAddress.address,
@@ -779,7 +779,7 @@ const payableAmount = Math.round(
     try {
       for (const item of blockedProducts) {
         await axios.delete(
-          `http://localhost:4000/api/cart/remove/${item._id}`,
+          `https://giftyfy-backend.onrender.com/api/cart/remove/${item._id}`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -789,7 +789,7 @@ const payableAmount = Math.round(
       }
 
       const res = await axios.get(
-        "http://localhost:4000/api/cart",
+        "https://giftyfy-backend.onrender.com/api/cart",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`
@@ -809,7 +809,7 @@ const payableAmount = Math.round(
   const moveToWishlistAndRemove = async () => {
     try {
       await axios.post(
-        "http://localhost:4000/api/cart/move-undeliverable",
+        "https://giftyfy-backend.onrender.com/api/cart/move-undeliverable",
         {
           productIds: blockedProducts.map(item => item.product._id),
         },
@@ -821,7 +821,7 @@ const payableAmount = Math.round(
       );
 
       const cartRes = await axios.get(
-        "http://localhost:4000/api/cart",
+        "https://giftyfy-backend.onrender.com/api/cart",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -915,7 +915,7 @@ const autoApplyCategoryCoupon = async (cartData) => {
     const cartTotal = Number(cartData.summary?.total || 0);
 
     const res = await axios.post(
-      "http://localhost:4000/api/coupons/auto-category",
+      "https://giftyfy-backend.onrender.com/api/coupons/auto-category",
       {
         items: cartData.items,
         cartTotal,
@@ -1356,7 +1356,7 @@ const summary = cart.summary || {};
                 {cart.items.map((item) => (
                   <div key={item._id} className="product-item">
                     <img
-                      src={`http://localhost:4000/uploads/${item.image}`}
+                      src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
                       alt={item.name}
                       className="product-image"
                     />

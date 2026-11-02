@@ -109,7 +109,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
   }, []);
 
   useEffect(() => {
-    axios.get(`http://localhost:4000/api/product/recommended/${id}`)
+    axios.get(`https://giftyfy-backend.onrender.com/api/product/recommended/${id}`)
       .then(res => {
         console.log("RECOMMENDED API 👉", res.data);
         setRelatedProducts(
@@ -136,7 +136,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
 
     axios
       .post(
-        "http://localhost:4000/api/product/recent",
+        "https://giftyfy-backend.onrender.com/api/product/recent",
         { ids }
       )
       .then((res) => {
@@ -160,7 +160,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
 
   // FETCH PRODUCT
   useEffect(() => {
-    axios.get(`http://localhost:4000/api/product/${id}`).then((res) => {
+    axios.get(`https://giftyfy-backend.onrender.com/api/product/${id}`).then((res) => {
       const data = res.data;
 
       setProduct(data);
@@ -205,7 +205,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
     if (!userId || !id) return;
 
     axios
-      .get(`http://localhost:4000/api/wishlist/${userId}`)
+      .get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)
       .then((res) => {
         const exists = res.data.find(
           (item) => item.productId === id
@@ -223,7 +223,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
     if (!userId) return;
 
     axios
-      .get(`http://localhost:4000/api/wishlist/${userId}`)
+      .get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)
       .then((res) => {
         setWishlist(res.data);
       })
@@ -264,7 +264,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
 
   useEffect(() => {
     axios
-      .get(`http://localhost:4000/api/reviews/product/${id}`)
+      .get(`https://giftyfy-backend.onrender.com/api/reviews/product/${id}`)
       .then((res) => {
         setReviews(res.data || []);
       })
@@ -277,7 +277,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
     if (!product?.category) return;
 
     axios
-      .get(`http://localhost:4000/api/coupons/category/${product.category}`)
+      .get(`https://giftyfy-backend.onrender.com/api/coupons/category/${product.category}`)
       .then((res) => {
         setBestOffer(res.data);
       })
@@ -379,7 +379,7 @@ const checkPincode = async () => {
 
     // India pincode verify
     const pinRes = await axios.get(
-      `http://localhost:4000/api/pincode/${pincode}`
+      `https://giftyfy-backend.onrender.com/api/pincode/${pincode}`
     );
 
 
@@ -572,7 +572,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
       }
 
       await axios.post(
-        "http://localhost:4000/api/cart/add",
+        "https://giftyfy-backend.onrender.com/api/cart/add",
         formData,
         {
           headers: {
@@ -646,7 +646,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
       });
 
       const uploadRes = await axios.post(
-        "http://localhost:4000/api/upload/custom-images",
+        "https://giftyfy-backend.onrender.com/api/upload/custom-images",
         formData,
         {
           headers: {
@@ -714,7 +714,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
       // REMOVE
       if (existing) {
         await axios.delete(
-          `http://localhost:4000/api/wishlist/remove/${existing._id}`
+          `https://giftyfy-backend.onrender.com/api/wishlist/remove/${existing._id}`
         );
 
         setWishlist((prev) =>
@@ -728,7 +728,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
 
       // ADD
       const res = await axios.post(
-        "http://localhost:4000/api/wishlist",
+        "https://giftyfy-backend.onrender.com/api/wishlist",
         {
           userId,
           productId: product._id,
@@ -1067,7 +1067,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
         }}
       >
         <img
-          src={`http://localhost:4000/uploads/${img}`}
+          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
           className="gpr-thumb-img"
           alt={`${product.name} view ${i + 1}`}
         />
@@ -1105,7 +1105,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
         showCustomizedPreview && customizedPreview
           ? customizedPreview
           : mainImage
-            ? `http://localhost:4000/uploads/${mainImage}`
+            ? `https://giftyfy-backend.onrender.com/uploads/${mainImage}`
             : "https://dummyimage.com/400x400/eee/aaa"
       }
       className="gp-main-image"
@@ -1142,7 +1142,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
             showCustomizedPreview && customizedPreview
               ? customizedPreview
               : mainImage
-                ? `http://localhost:4000/uploads/${mainImage}`
+                ? `https://giftyfy-backend.onrender.com/uploads/${mainImage}`
                 : "https://dummyimage.com/400x400/eee/aaa"
           }
           alt={
@@ -1938,7 +1938,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                     <img
                       src={
                         getImage(p)
-                          ? `http://localhost:4000/uploads/${getImage(p)}`
+                          ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
                           : "https://dummyimage.com/300x300/eee/aaa"
                       }
                       alt={p.name}
@@ -2026,7 +2026,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                       <img
                         src={
                           getImage(p)
-                            ? `http://localhost:4000/uploads/${getImage(p)}`
+                            ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
                             : "https://dummyimage.com/300x300/eee/aaa"
                         }
                         alt={p.name}
@@ -2092,7 +2092,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                     <img
                       src={
                         getImage(p)
-                          ? `http://localhost:4000/uploads/${getImage(p)}`
+                          ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
                           : "https://dummyimage.com/300x300/eee/aaa"
                       }
                       alt={p.name}
@@ -2139,7 +2139,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
           {/* Product Info */}
           <div className="desktop-product">
             <img
-              src={`http://localhost:4000/uploads/${mainImage}`}
+              src={`https://giftyfy-backend.onrender.com/uploads/${mainImage}`}
               alt={product.name}
             />
 

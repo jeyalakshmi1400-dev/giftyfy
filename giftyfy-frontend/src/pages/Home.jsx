@@ -115,12 +115,12 @@ const getProductImage = (product) => {
     );
 
     return variantWithImage
-      ? `http://localhost:4000/uploads/${variantWithImage.images[0]}`
+      ? `https://giftyfy-backend.onrender.com/uploads/${variantWithImage.images[0]}`
       : "/no-image.png";
   }
 
   return product.image?.length
-    ? `http://localhost:4000/uploads/${product.image[0]}`
+    ? `https://giftyfy-backend.onrender.com/uploads/${product.image[0]}`
     : "/no-image.png";
 };
 
@@ -333,10 +333,10 @@ function Home() {
     const fetchData = async () => {
       try {
         const [bannerRes, catRes, productRes,reviewRes] = await Promise.all([
-          axios.get("http://localhost:4000/api/banner/active"),
-          axios.get("http://localhost:4000/api/categories"),
-          axios.get("http://localhost:4000/api/product"),
-          axios.get("http://localhost:4000/api/reviews/product-home"),
+          axios.get("https://giftyfy-backend.onrender.com/api/banner/active"),
+          axios.get("https://giftyfy-backend.onrender.com/api/categories"),
+          axios.get("https://giftyfy-backend.onrender.com/api/product"),
+          axios.get("https://giftyfy-backend.onrender.com/api/reviews/product-home"),
         ]);
         
 
@@ -372,7 +372,7 @@ function Home() {
     if (!userId) return;
 
     axios
-      .get(`http://localhost:4000/api/wishlist/${userId}`)
+      .get(`https://giftyfy-backend.onrender.com/api/wishlist/${userId}`)
       .then((res) => {
         setWishlist(res.data);
       })
@@ -432,7 +432,7 @@ function Home() {
       // Remove from wishlist
       if (existing) {
         await axios.delete(
-          `http://localhost:4000/api/wishlist/remove/${existing._id}`
+          `https://giftyfy-backend.onrender.com/api/wishlist/remove/${existing._id}`
         );
 
         setWishlist((prev) => prev.filter((item) => item._id !== existing._id));
@@ -442,7 +442,7 @@ function Home() {
       }
 
       // Add to wishlist
-      const res = await axios.post("http://localhost:4000/api/wishlist", {
+      const res = await axios.post("https://giftyfy-backend.onrender.com/api/wishlist", {
         userId,
         productId: product._id,
       });
@@ -461,7 +461,7 @@ function Home() {
   const openQuickView = async (productId) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/${productId}`
+        `https://giftyfy-backend.onrender.com/api/product/${productId}`
       );
 
       const product = res.data;
@@ -545,7 +545,7 @@ function Home() {
         payload.size = selectedSize.size;
       }
 
-      await axios.post("http://localhost:4000/api/cart/add", payload);
+      await axios.post("https://giftyfy-backend.onrender.com/api/cart/add", payload);
 
       toast.success("Added To Cart 🛒");
 
@@ -595,7 +595,7 @@ function Home() {
         <div className="giftyfy-banner-wrapper">
 
           <img
-            src={`http://localhost:4000/uploads/${banner.image}`}
+            src={`https://giftyfy-backend.onrender.com/uploads/${banner.image}`}
             className="giftyfy-banner-img"
             alt="banner"
           />
@@ -652,7 +652,7 @@ function Home() {
               >
                 <div className="gfy-category-ring">
                   <img
-                    src={`http://localhost:4000/uploads/${cat.image}`}
+                    src={`https://giftyfy-backend.onrender.com/uploads/${cat.image}`}
                     alt={cat.category}
                   />
                 </div>
@@ -931,10 +931,10 @@ function Home() {
                   className="quickview-main-image"
                   src={
                     selectedImage
-                      ? `http://localhost:4000/uploads/${selectedImage}`
+                      ? `https://giftyfy-backend.onrender.com/uploads/${selectedImage}`
                       : quickView.category === "Dress"
-                      ? `http://localhost:4000/uploads/${selectedColor?.images?.[0]}`
-                      : `http://localhost:4000/uploads/${quickView.image?.[0]}`
+                      ? `https://giftyfy-backend.onrender.com/uploads/${selectedColor?.images?.[0]}`
+                      : `https://giftyfy-backend.onrender.com/uploads/${quickView.image?.[0]}`
                   }
                   alt={quickView.name}
                 />
@@ -944,7 +944,7 @@ function Home() {
                     ? selectedColor?.images?.map((img, i) => (
                         <img
                           key={i}
-                          src={`http://localhost:4000/uploads/${img}`}
+                          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
                           className={selectedImage === img ? "active-thumb" : ""}
                           onClick={() => setSelectedImage(img)}
                         />
@@ -952,7 +952,7 @@ function Home() {
                     : quickView.image?.map((img, i) => (
                         <img
                           key={i}
-                          src={`http://localhost:4000/uploads/${img}`}
+                          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
                           className={selectedImage === img ? "active-thumb" : ""}
                           onClick={() => setSelectedImage(img)}
                         />

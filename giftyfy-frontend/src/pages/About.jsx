@@ -15,7 +15,7 @@ export default function About() {
     try {
 
       const res = await axios.get(
-        "http://localhost:4000/api/site-content"
+        "https://giftyfy-backend.onrender.com/api/site-content"
       );
 
       setContent(res.data || {});

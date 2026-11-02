@@ -29,7 +29,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
   const fetchProfile = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/users/profile",
+        "https://giftyfy-backend.onrender.com/api/users/profile",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -44,7 +44,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
   const fetchOrders = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/orders/user-orders",
+        "https://giftyfy-backend.onrender.com/api/orders/user-orders",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -59,7 +59,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
   const fetchAddresses = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/address",
+        "https://giftyfy-backend.onrender.com/api/address",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -74,7 +74,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
   const handleUpdate = async () => {
     try {
       await axios.put(
-        "http://localhost:4000/api/user/update",
+        "https://giftyfy-backend.onrender.com/api/user/update",
         user,
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -96,7 +96,7 @@ const [showProfileModal, setShowProfileModal] = useState(false);
     formData.append("profileImage", profileFile);
 
     const res = await axios.put(
-      "http://localhost:4000/api/users/upload-profile",
+      "https://giftyfy-backend.onrender.com/api/users/upload-profile",
       formData,
       {
         headers: {
@@ -130,7 +130,7 @@ const handleDeleteAddress = async (id) => {
   try {
 
     await axios.delete(
-      `http://localhost:4000/api/address/${id}`,
+      `https://giftyfy-backend.onrender.com/api/address/${id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -151,7 +151,7 @@ const handleUpdateAddress = async () => {
   try {
 
     await axios.put(
-      `http://localhost:4000/api/address/${editAddress._id}`,
+      `https://giftyfy-backend.onrender.com/api/address/${editAddress._id}`,
       editAddress,
       {
         headers: {
@@ -212,7 +212,7 @@ const handleUpdateAddress = async () => {
     <img
       src={
         user.profileImage
-          ? `http://localhost:4000/uploads/${user.profileImage}`
+          ? `https://giftyfy-backend.onrender.com/uploads/${user.profileImage}`
           : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
       }
       alt="profile"
@@ -309,7 +309,7 @@ const handleUpdateAddress = async () => {
                 {/* ITEMS */}
                 {order.items.map((item, i) => (
                   <div key={i} className="gfp-order-item">
-                    <img src={`http://localhost:4000/uploads/${item.image}`} />
+                    <img src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`} />
                     <div>
                       <p>{item.name}</p>
                       <small>Qty: {item.quantity}</small>

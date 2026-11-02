@@ -67,7 +67,7 @@ useEffect(() => {
   const fetchOrders = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/orders/user-orders",
+        "https://giftyfy-backend.onrender.com/api/orders/user-orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -91,7 +91,7 @@ useEffect(() => {
     const token = localStorage.getItem("token");
 
     const res = await axios.post(
-      `http://localhost:4000/api/orders/return/${orderId}`,
+      `https://giftyfy-backend.onrender.com/api/orders/return/${orderId}`,
       { reason },
       {
         headers: {
@@ -115,7 +115,7 @@ const fetchReviews = async () => {
   const token = localStorage.getItem("token");
 
   const res = await axios.get(
-    "http://localhost:4000/api/reviews/my",
+    "https://giftyfy-backend.onrender.com/api/reviews/my",
     {
       headers: {
         Authorization: `Bearer ${token}`
@@ -176,7 +176,7 @@ const cancelOrder = async (orderId) => {
   try {
 
     await axios.put(
-      `http://localhost:4000/api/orders/cancel/${orderId}`,
+      `https://giftyfy-backend.onrender.com/api/orders/cancel/${orderId}`,
       {},
       {
         headers: {
@@ -446,7 +446,7 @@ const generateInvoice = async (order) => {
         >
 
           <img
-            src={`http://localhost:4000/uploads/${item.image}`}
+            src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
             alt={item.name}
             className="order-product-image"
           />

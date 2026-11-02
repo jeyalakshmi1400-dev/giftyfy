@@ -37,8 +37,7 @@ export default function CustomEditor({
     if (image) {
       try {
         const img = await FabricImage.fromURL(
-          `http://localhost:4000/uploads/${image}`
-        );
+`https://giftyfy-backend.onrender.com/uploads/${image}`        );
 
         img.set({
           left: 0,
