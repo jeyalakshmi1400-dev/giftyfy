@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 
-import "../styles/PhotoCropModal.css"
+import "../styles/Photocropmodal.css";
 const PAD = 14;
 const MIN_ZOOM = 1;
 const MAX_ZOOM = 5;
