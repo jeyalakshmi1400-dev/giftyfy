@@ -3,7 +3,7 @@ const  Banner = require("../models/Banner");
 exports.addBanner=async(req,res)=>{
     try{
         const banner =new Banner({
-            image:req.file.filename,
+            image: req.file.path,
         });
         await banner.save();
 

@@ -1,7 +1,7 @@
 const express =require("express");
 const router =express.Router();
 
-const upload =require("../middleware/upload");
+const upload = require("../middleware/bannerUpload");
 const{ addBanner,getBanners,deleteBanner,activebanner,getActiveBanners} =require("../controllers/bannerController");
 
 
