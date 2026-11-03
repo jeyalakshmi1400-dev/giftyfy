@@ -595,10 +595,12 @@ function Home() {
         <div className="giftyfy-banner-wrapper">
 
           <img
-            src={`https://giftyfy-backend.onrender.com/uploads/${banner.image}`}
-            className="giftyfy-banner-img"
-            alt="banner"
-          />
+  src={banner.image?.startsWith("http")
+    ? banner.image
+    : `https://giftyfy-backend.onrender.com/uploads/${banner.image}`}
+  className="giftyfy-banner-img"
+  alt="banner"
+/>
 
           <div className="giftyfy-banner-overlay">
 
