@@ -1,15 +1,22 @@
+
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
+const cloudinary = require("../config/cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
+// =========================
+// EXISTING LOCAL STORAGE
+// =========================
+
 const uploadPath = path.join(__dirname, "../uploads");
 
-// create folder if not exists
 if (!fs.existsSync(uploadPath)) {
   fs.mkdirSync(uploadPath, { recursive: true });
 }
 
-const storage = multer.diskStorage({
+const localStorage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, uploadPath);
   },
@@ -22,6 +29,30 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage });
+// Existing modules continue using local storage
+const upload = multer({
+  storage: localStorage,
+});
+
+// =========================
+// CLOUDINARY PRODUCT STORAGE
+// =========================
+
+const productStorage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+
+  params: async (req, file) => {
+    return {
+      folder: "giftyfy/products",
+      resource_type: "image",
+      allowed_formats: ["jpg", "jpeg", "png", "webp", "avif"],
+    };
+  },
+});
+
+// Product images use Cloudinary
+upload.cloudinary = multer({
+  storage: productStorage,
+});
 
 module.exports = upload;

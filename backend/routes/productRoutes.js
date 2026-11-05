@@ -1,6 +1,9 @@
+
 const express = require("express");
 const router = express.Router();
+
 const upload = require("../middleware/upload");
+const productUpload = upload.cloudinary;
 
 const {
   getProducts,
@@ -15,50 +18,58 @@ const {
   getPincodesByCity,
   getRecommendedProducts,
   recentproduct,
-
 } = require("../controllers/productController");
 
-// ✅ Pincode → City
+// Pincode → City
 router.get("/pincode/:pin", getCityByPincode);
 
-// ✅ Get all cities
+// Get all cities
 router.get("/cities", getAllCities);
 
-// ✅ Get products by city
+// Get products by city
 router.get("/city/:cityName", getProductsByCity);
 
-// ✅ Get pincodes by city
+// Get pincodes by city
 router.get("/pincodes/:city", getPincodesByCity);
+
 router.get("/category/:name", getcategories);
 router.get("/recommended/:id", getRecommendedProducts);
 router.get("/recommend/:id", getRecommendedProducts);
-router.post("/recent",recentproduct);
+
+router.post("/recent", recentproduct);
+
 router.get("/recent", (req, res) => {
   return res.status(405).json({
     message: "Use POST /api/product/recent with product IDs in the request body",
   });
 });
 
-// existing routes
+// Get all products
 router.get("/", getProducts);
+
+// Create Product - Cloudinary
 router.post(
   "/",
-  upload.fields([
+  productUpload.fields([
     { name: "images", maxCount: 5 },
     { name: "variantImages", maxCount: 20 },
     { name: "templateImage", maxCount: 1 },
     { name: "maskImage", maxCount: 1 },
-
   ]),
   createProduct
 );
 
+// Update Product - Cloudinary
 router.put(
   "/:id",
-  upload.any(),
+  productUpload.any(),
   updateProduct
 );
+
+// Delete Product
 router.delete("/:id", deleteProduct);
+
+// Get Product by ID
 router.get("/:id", getProductById);
 
 module.exports = router;

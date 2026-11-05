@@ -32,19 +32,28 @@ const getProductById = async(req,res)=>{
 
 const createProduct = async (req, res) => {
   try {
-    console.log("Body:", req.body);
-
+console.log("========== PRODUCT UPLOAD DEBUG ==========");
+console.log("Body:", req.body);
+console.log("Files:", req.files);
+console.log("Main Images:", req.files?.images?.map(file => ({
+  path: file.path,
+  filename: file.filename
+})));
+console.log("Variant Images:", req.files?.variantImages?.map(file => ({
+  path: file.path,
+  filename: file.filename
+})));
     // ✅ NORMAL IMAGES
     let images = [];
     let variantImages = [];
 
     if (req.files) {
       if (req.files.images) {
-        images = req.files.images.map(file => file.filename);
+        images = req.files.images.map(file => file.path);
       }
 
       if (req.files.variantImages) {
-        variantImages = req.files.variantImages.map(file => file.filename);
+        variantImages = req.files.variantImages.map(file => file.path);
       }
     }
 
@@ -136,9 +145,10 @@ try {
 }
 
 if (req.files?.templateImage?.[0])
-  customization.templateImage = req.files.templateImage[0].filename;
+  customization.templateImage = req.files.templateImage[0].path;
+
 if (req.files?.maskImage?.[0])
-  customization.maskImage = req.files.maskImage[0].filename;
+  customization.maskImage = req.files.maskImage[0].path;
 
     // ✅ CREATE PRODUCT
   const product = await Product.create({
@@ -170,10 +180,15 @@ if (req.files?.maskImage?.[0])
 
     res.status(201).json(product);
 
-  } catch (error) {
-    console.log("ERROR:", error);
-    res.status(500).json({ message: error.message });
-  }
+ } catch (error) {
+  console.error("PRODUCT CREATE ERROR:", error);
+  console.error("ERROR MESSAGE:", error.message);
+  console.error("ERROR STACK:", error.stack);
+
+  res.status(500).json({
+    message: error.message,
+  });
+}
 };
 
 
@@ -372,7 +387,7 @@ const updateProduct = async (req, res) => {
               )
             )
             .map(file =>
-              file.filename
+              file.path
             );
 
 
@@ -477,10 +492,9 @@ const updateProduct = async (req, res) => {
 
     }
 const tpl = allFiles.find((f) => f.fieldname === "templateImage");
-if (tpl) customization.templateImage = tpl.filename;
+if (tpl) customization.templateImage = tpl.path;
 const msk = allFiles.find((f) => f.fieldname === "maskImage");
-if (msk) customization.maskImage = msk.filename;
-
+if (msk) customization.maskImage = msk.path;
 
 
     // =========================

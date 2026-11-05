@@ -104,6 +104,18 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
   };
   const cleanHTML = DOMPurify.sanitize(product?.description || "");
 
+  const getProductImageUrl = (image) => {
+  if (!image) return "";
+
+  if (image.startsWith("http://") || image.startsWith("https://")) {
+    return image;
+  }
+
+  return `https://giftyfy-backend.onrender.com/uploads/${image}`;
+};
+
+
+
   useEffect(() => {
     setCaptcha(generateCaptcha());
   }, []);
@@ -1067,7 +1079,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
         }}
       >
         <img
-          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
+          src={getProductImageUrl(img)}
           className="gpr-thumb-img"
           alt={`${product.name} view ${i + 1}`}
         />
@@ -1105,7 +1117,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
         showCustomizedPreview && customizedPreview
           ? customizedPreview
           : mainImage
-            ? `https://giftyfy-backend.onrender.com/uploads/${mainImage}`
+            ? getProductImageUrl(mainImage)
             : "https://dummyimage.com/400x400/eee/aaa"
       }
       className="gp-main-image"
@@ -1142,7 +1154,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
             showCustomizedPreview && customizedPreview
               ? customizedPreview
               : mainImage
-                ? `https://giftyfy-backend.onrender.com/uploads/${mainImage}`
+                ? getProductImageUrl(mainImage)
                 : "https://dummyimage.com/400x400/eee/aaa"
           }
           alt={
@@ -1937,9 +1949,9 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                   <div className="gp-card-image-box">
                     <img
                       src={
-                        getImage(p)
-                          ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
-                          : "https://dummyimage.com/300x300/eee/aaa"
+                       getImage(p)
+  ? getProductImageUrl(getImage(p))
+  : "https://dummyimage.com/300x300/eee/aaa"
                       }
                       alt={p.name}
                       className="gp-card-image"
@@ -2026,8 +2038,8 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                       <img
                         src={
                           getImage(p)
-                            ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
-                            : "https://dummyimage.com/300x300/eee/aaa"
+  ? getProductImageUrl(getImage(p))
+  : "https://dummyimage.com/300x300/eee/aaa"
                         }
                         alt={p.name}
                         className="gp-card-image"
@@ -2092,8 +2104,8 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
                     <img
                       src={
                         getImage(p)
-                          ? `https://giftyfy-backend.onrender.com/uploads/${getImage(p)}`
-                          : "https://dummyimage.com/300x300/eee/aaa"
+  ? getProductImageUrl(getImage(p))
+  : "https://dummyimage.com/300x300/eee/aaa"
                       }
                       alt={p.name}
                       className="gp-card-image"
@@ -2139,7 +2151,7 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
           {/* Product Info */}
           <div className="desktop-product">
             <img
-              src={`https://giftyfy-backend.onrender.com/uploads/${mainImage}`}
+              src={getProductImageUrl(mainImage)}
               alt={product.name}
             />
 
