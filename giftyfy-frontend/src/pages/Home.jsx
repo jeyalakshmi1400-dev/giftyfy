@@ -654,7 +654,11 @@ function Home() {
               >
                 <div className="gfy-category-ring">
                   <img
-                    src={`https://giftyfy-backend.onrender.com/uploads/${cat.image}`}
+                    src={
+  cat.image?.startsWith("http")
+    ? cat.image
+    : `https://giftyfy-backend.onrender.com/uploads/${cat.image}`
+}
                     alt={cat.category}
                   />
                 </div>

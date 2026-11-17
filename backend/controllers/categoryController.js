@@ -25,7 +25,7 @@ const createCategory = async (req, res) => {
       image = existingCategory.image;
     } else {
       // New category -> uploaded image
-      image = req.file ? req.file.filename : "";
+      image = req.file ? req.file.path : "";
     }
 
     const newCategory = new Category({
@@ -97,11 +97,11 @@ const updateCategory = async (req, res) => {
         image = existingCategory.image;
       } else if (req.file) {
         // New category + uploaded image
-        image = req.file.filename;
+        image = req.file.path;
       }
     } else if (req.file) {
       // Same category -> admin wants to change image
-      image = req.file.filename;
+      image = req.file.path;
     }
 
     const updated = await Category.findByIdAndUpdate(

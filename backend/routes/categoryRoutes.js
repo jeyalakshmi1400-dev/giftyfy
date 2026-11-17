@@ -17,11 +17,11 @@ const { protectDeliveryPartner } = require("../middleware/deliveryAuthMiddleware
 router.get("/", getCategories);
 
 // ADMIN ONLY
-router.post("/", protect, adminOnly,upload.single("image"), createCategory);
+router.post("/", protect, adminOnly, upload.category.single("image"), createCategory);
 
 router.put("/block/:id",protect,adminOnly,toggleCategoryStatus);
 
-router.put("/:id",protect,adminOnly,upload.single("image"),updateCategory);
+router.put("/:id", protect, adminOnly, upload.category.single("image"), updateCategory);
 
 router.delete("/:id",protect,adminOnly,deleteCategory)
 
