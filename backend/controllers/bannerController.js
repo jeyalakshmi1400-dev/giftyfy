@@ -11,20 +11,26 @@ exports.addBanner = async (req, res) => {
       });
     }
 
+    console.log("Saving banner to MongoDB...");
+
     const banner = new Banner({
       image: req.file.path,
+      isActive: true,
     });
 
-    await banner.save();
+    const savedBanner = await banner.save();
 
-    res.status(201).json({
+    console.log("Banner saved successfully:", savedBanner);
+
+    return res.status(201).json({
       message: "Banner Uploaded Successfully",
-      banner,
+      banner: savedBanner,
     });
+
   } catch (error) {
     console.error("Banner Upload Error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       message: error.message || "Banner upload failed",
     });
   }
