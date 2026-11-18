@@ -109,19 +109,39 @@ const INSTAGRAM_POSTS = [
 ========================================================================= */
 
 const getProductImage = (product) => {
+  const resolveImageUrl = (image) => {
+    if (!image) return "/no-image.png";
+
+    if (/^(https?:|blob:|data:)/i.test(image)) {
+      return image;
+    }
+
+    return `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
+  };
+
   if (product.category === "Dress") {
     const variantWithImage = product.variants?.find(
       (v) => v.images?.length > 0
     );
 
     return variantWithImage
-      ? `https://giftyfy-backend.onrender.com/uploads/${variantWithImage.images[0]}`
+      ? resolveImageUrl(variantWithImage.images[0])
       : "/no-image.png";
   }
 
   return product.image?.length
-    ? `https://giftyfy-backend.onrender.com/uploads/${product.image[0]}`
+    ? resolveImageUrl(product.image[0])
     : "/no-image.png";
+};
+
+const getImageUrl = (image) => {
+  if (!image) return "/no-image.png";
+
+  if (/^(https?:|blob:|data:)/i.test(image)) {
+    return image;
+  }
+
+  return `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
 };
 
 // BASE PRICE (Dress + Normal fix)
@@ -935,13 +955,12 @@ function Home() {
               <div className="quickview-gallery">
                 <img
                   className="quickview-main-image"
-                  src={
-                    selectedImage
-                      ? `https://giftyfy-backend.onrender.com/uploads/${selectedImage}`
-                      : quickView.category === "Dress"
-                      ? `https://giftyfy-backend.onrender.com/uploads/${selectedColor?.images?.[0]}`
-                      : `https://giftyfy-backend.onrender.com/uploads/${quickView.image?.[0]}`
-                  }
+                  src={getImageUrl(
+  selectedImage ||
+    (quickView.category === "Dress"
+      ? selectedColor?.images?.[0]
+      : quickView.image?.[0])
+)}
                   alt={quickView.name}
                 />
 
@@ -950,7 +969,7 @@ function Home() {
                     ? selectedColor?.images?.map((img, i) => (
                         <img
                           key={i}
-                          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
+                          src={getImageUrl(img)}
                           className={selectedImage === img ? "active-thumb" : ""}
                           onClick={() => setSelectedImage(img)}
                         />
@@ -958,7 +977,7 @@ function Home() {
                     : quickView.image?.map((img, i) => (
                         <img
                           key={i}
-                          src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
+                          src={getImageUrl(img)}
                           className={selectedImage === img ? "active-thumb" : ""}
                           onClick={() => setSelectedImage(img)}
                         />
