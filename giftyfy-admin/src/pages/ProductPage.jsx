@@ -239,15 +239,19 @@ useEffect(() => {
                 <div className="d-flex align-items-center gap-3">
 
                   <img
-                    src={
-                      p.category === "Dress"
-                        ? p.variants?.[0]?.images?.[0]
-                          ? `http://localhost:4000/uploads/${p.variants[0].images[0]}`
-                          : "/no-image.png"
-                        : p.image?.[0]
-                        ? `http://localhost:4000/uploads/${p.image[0]}`
-                        : "/no-image.png"
-                    }
+                   src={
+  p.category === "Dress"
+    ? p.variants?.[0]?.images?.[0]
+      ? p.variants[0].images[0].startsWith("http")
+        ? p.variants[0].images[0]
+        : `http://localhost:4000/uploads/${encodeURIComponent(p.variants[0].images[0])}`
+      : "/no-image.png"
+    : p.image?.[0]
+      ? p.image[0].startsWith("http")
+        ? p.image[0]
+        : `http://localhost:4000/uploads/${encodeURIComponent(p.image[0])}`
+      : "/no-image.png"
+}
                     className="giftyfy-product-image"
                     style={{
                       width: "55px",

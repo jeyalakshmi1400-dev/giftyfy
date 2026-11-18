@@ -409,10 +409,14 @@ useEffect(() => {
                     <tr key={item._id}>
                       <td>
                         <img
-                          src={`http://localhost:4000/uploads/${item.image}`}
-                          alt="category"
-                          className="cp-thumb"
-                        />
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  alt="category"
+  className="cp-thumb"
+/>
                       </td>
 
                       <td className="cp-cat-name">{item.category}</td>

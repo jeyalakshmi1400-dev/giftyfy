@@ -44,10 +44,12 @@ console.log("Invoice Total:", order.totalAmount);
           <div className="sl-seller">
             <img
               src={
-                logo?.image
-                  ? `http://localhost:4000/uploads/${logo.image}`
-                  : logoDefault
-              }
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+    : logoDefault
+}
               className="sl-logo"
               alt="logo"
             />
@@ -244,11 +246,13 @@ console.log("Invoice Total:", order.totalAmount);
 
           <div className="inv-left">
             <img
-              src={
-                logo?.image
-                  ? `http://localhost:4000/uploads/${logo.image}`
-                  : logoDefault
-              }
+             src={
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+    : logoDefault
+}
               alt="logo"
               className="inv-logo"
             />
@@ -348,11 +352,15 @@ console.log("Invoice Total:", order.totalAmount);
                   <td className="inv-item-cell">
                     <div className="inv-item-flex">
                       {/* PRODUCT IMAGE */}
-                      <img
-                        src={`http://localhost:4000/uploads/${item.image}`}
-                        alt=""
-                        className="inv-item-image"
-                      />
+                     <img
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  alt=""
+  className="inv-item-image"
+/>
 
                       <div>
                         <div className="inv-item-name">{item.name}</div>
@@ -385,12 +393,16 @@ console.log("Invoice Total:", order.totalAmount);
                         {item.extraImages?.length > 0 && (
                           <div className="inv-extra-images">
                             {item.extraImages.map((img, i) => (
-                              <img
-                                key={i}
-                                src={`http://localhost:4000/uploads/${img}`}
-                                alt=""
-                                className="inv-extra-image"
-                              />
+                             <img
+  key={i}
+  src={
+    img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+  }
+  alt=""
+  className="inv-extra-image"
+/>
                             ))}
                           </div>
                         )}

@@ -396,9 +396,11 @@ export default function AdminUsers() {
                       </div>
 
                       {order.items.map((item, j) => {
-                        const imgSrc = item.image?.startsWith("uploads")
-                          ? `http://localhost:4000/${item.image}`
-                          : `http://localhost:4000/uploads/${item.image}`;
+const imgSrc = item.image?.startsWith("http")
+  ? item.image
+  : item.image?.startsWith("uploads")
+    ? `http://localhost:4000/${item.image}`
+    : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`;
 
                         return (
                           <div key={j} className="usrm-order-item">

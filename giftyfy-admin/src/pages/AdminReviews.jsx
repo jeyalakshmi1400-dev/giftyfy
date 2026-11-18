@@ -69,56 +69,43 @@ fetchReviews(); // safe & simple
 };
 
 const getProductImage = (product) => {
-
   if (!product) {
     return "https://via.placeholder.com/80";
   }
 
-  // ✅ NORMAL IMAGE ARRAY
-  if (
-    Array.isArray(product.image) &&
-    product.image.length > 0
-  ) {
+  // NORMAL IMAGE ARRAY
+  if (Array.isArray(product.image) && product.image.length > 0) {
+    const img = product.image[0];
 
-    return `http://localhost:4000/uploads/${product.image[0]}`;
-
+    return img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`;
   }
 
-  // ✅ SINGLE IMAGE STRING
-  if (
-    typeof product.image === "string" &&
-    product.image
-  ) {
-
-    return `http://localhost:4000/uploads/${product.image}`;
-
+  // SINGLE IMAGE STRING
+  if (typeof product.image === "string" && product.image) {
+    return product.image.startsWith("http")
+      ? product.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(product.image)}`;
   }
 
-  // ✅ VARIANT PRODUCT IMAGE
-  if (
-    Array.isArray(product.variants) &&
-    product.variants.length > 0
-  ) {
-
-    // 🔥 FIND FIRST VARIANT WITH IMAGE
-    const variantWithImage =
-      product.variants.find(
-        (variant) =>
-          Array.isArray(variant.images) &&
-          variant.images.length > 0
-      );
+  // VARIANT PRODUCT IMAGE
+  if (Array.isArray(product.variants) && product.variants.length > 0) {
+    const variantWithImage = product.variants.find(
+      (variant) =>
+        Array.isArray(variant.images) && variant.images.length > 0
+    );
 
     if (variantWithImage) {
+      const img = variantWithImage.images[0];
 
-      return `http://localhost:4000/uploads/${variantWithImage.images[0]}`;
-
+      return img?.startsWith("http")
+        ? img
+        : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`;
     }
-
   }
 
-  // ✅ FALLBACK
   return "https://via.placeholder.com/80";
-
 };
 
 

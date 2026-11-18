@@ -259,7 +259,11 @@ const [logo, setLogo] = useState(null);
             >
 
               <img
-                src={`http://localhost:4000/uploads/${banner.image}`}
+                src={
+  banner.image?.startsWith("http")
+    ? banner.image
+    : `http://localhost:4000/uploads/${encodeURIComponent(banner.image || "")}`
+}
                 alt="banner"
                 style={{
                   width: "100%",
@@ -423,7 +427,11 @@ const [logo, setLogo] = useState(null);
   >
 
     <img
-      src={`http://localhost:4000/uploads/${logo.image}`}
+src={
+  logo.image?.startsWith("http")
+    ? logo.image
+    : `http://localhost:4000/uploads/${logo.image}`
+}
       alt="logo"
       style={{
         width: "100%",

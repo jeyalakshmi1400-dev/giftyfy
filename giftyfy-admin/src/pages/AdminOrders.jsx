@@ -338,14 +338,15 @@ switch (nextStatus) {
 
   }, []);
 
-  const downloadImage = async (imageName) => {
+ const downloadImage = async (imageName) => {
   try {
-    const response = await axios.get(
-      `http://localhost:4000/uploads/${imageName}`,
-      {
-        responseType: "blob",
-      }
-    );
+    const imageUrl = imageName?.startsWith("http")
+      ? imageName
+      : `http://localhost:4000/uploads/${encodeURIComponent(imageName || "")}`;
+
+    const response = await axios.get(imageUrl, {
+      responseType: "blob",
+    });
 
     const url = window.URL.createObjectURL(
       new Blob([response.data])
@@ -353,7 +354,12 @@ switch (nextStatus) {
 
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", imageName);
+
+    const fileName = imageName?.startsWith("http")
+      ? imageName.split("/").pop().split("?")[0]
+      : imageName;
+
+    link.setAttribute("download", fileName || "custom-image");
 
     document.body.appendChild(link);
     link.click();
@@ -484,9 +490,9 @@ const loadLogoDataURL = async () => {
 
       return null;
     }
-
-    const logoUrl =
-      `http://localhost:4000/uploads/${logo.image}`;
+const logoUrl = logo.image.startsWith("http")
+  ? logo.image
+  : `http://localhost:4000/uploads/${logo.image}`;
 
     console.log(
       "LOGO FILE:",
@@ -4409,11 +4415,15 @@ const cancelOrder = async () => {
               className="admin-modal-item"
             >
 
-              <img
-                src={`http://localhost:4000/uploads/${item.image}`}
-                alt=""
-                className="admin-modal-img"
-              />
+             <img
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  alt=""
+  className="admin-modal-img"
+/>
 
               <div className="admin-modal-item-info">
 
@@ -4467,10 +4477,14 @@ const cancelOrder = async () => {
   className="admin-custom-image-box"
 >
   <img
-    src={`http://localhost:4000/uploads/${img}`}
-    alt="Customized"
-    className="admin-custom-preview"
-  />
+  src={
+    img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+  }
+  alt="Customized"
+  className="admin-custom-preview"
+/>
 
   <button
   className="admin-download-btn"
@@ -4840,10 +4854,14 @@ const cancelOrder = async () => {
                           >
 
                             <img
-                              src={`http://localhost:4000/uploads/${item.image}`}
-                              alt=""
-                              className="admin-orders-product-img"
-                            />
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  alt=""
+  className="admin-orders-product-img"
+/>
 
                             <div className="admin-orders-product-info">
 

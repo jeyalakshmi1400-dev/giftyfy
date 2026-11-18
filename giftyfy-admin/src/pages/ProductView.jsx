@@ -46,7 +46,13 @@ export default function ProductView() {
   {product.category !== "Dress" && (
     <div className="product-top">
 <img
-src={`http://localhost:4000/uploads/${product.image ?.[0]}`}
+src={
+  product.image?.[0]
+    ? product.image[0].startsWith("http")
+      ? product.image[0]
+      : `http://localhost:4000/uploads/${encodeURIComponent(product.image[0])}`
+    : "/no-image.png"
+}
 alt=""
 className="product-image"
 />
@@ -126,7 +132,11 @@ className="product-image"
               {variant.images?.map((img, index) => (
                 <img
                   key={index}
-                  src={`http://localhost:4000/uploads/${img}`}
+                 src={
+  img?.startsWith("http")
+    ? img
+    : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+}
                   alt=""
                 />
               ))}

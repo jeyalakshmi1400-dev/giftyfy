@@ -79,11 +79,13 @@ console.log("Total:", order?.totalAmount);
           <div className="ship-company">
 
             <img
-              src={
-                logo?.image
-                  ? `http://localhost:4000/uploads/${logo.image}`
-                  : logoDefault
-              }
+             src={
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+    : logoDefault
+}
               alt="logo"
               className="ship-logo"
             />
@@ -384,10 +386,12 @@ console.log("Total:", order?.totalAmount);
 
           <img
             src={
-              logo?.image
-                ? `http://localhost:4000/uploads/${logo.image}`
-                : logoDefault
-            }
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+    : logoDefault
+}
             alt="logo"
             className="invoice-logo-new"
           />

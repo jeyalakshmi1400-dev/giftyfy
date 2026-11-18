@@ -533,10 +533,14 @@ function AdminReturns() {
                           {order.items.map((item, i) => (
                             <div key={i} className="product-box">
                               <img
-                                src={`http://localhost:4000/uploads/${item.image}`}
-                                width="40"
-                                alt={item.name}
-                              />
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  width="40"
+  alt={item.name}
+/>
                               <div className="product-info">
                                 <p>{item.name}</p>
                                 <span className="qty-badge">

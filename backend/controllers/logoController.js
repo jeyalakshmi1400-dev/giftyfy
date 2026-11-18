@@ -9,7 +9,7 @@ const uploadLogo = async (req, res) => {
     if (existingLogo) {
 
       // ✅ UPDATE OLD LOGO
-      existingLogo.image = req.file.filename;
+      existingLogo.image = req.file.path;
 
       await existingLogo.save();
 
@@ -21,7 +21,7 @@ const uploadLogo = async (req, res) => {
 
     // ✅ CREATE NEW LOGO
     const logo = await Logo.create({
-      image: req.file.filename,
+      image: req.file.path,
     });
 
     res.json({

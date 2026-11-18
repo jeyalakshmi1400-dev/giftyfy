@@ -2058,9 +2058,12 @@ export default function AddProduct() {
       col.images = col.images.filter((_, i) => i !== newIndex);
     }
     // 🔥 rebuild FULL preview (IMPORTANT)
-    const existingPreview = (col.existingImages || []).map(
-      img => `http://localhost:4000/uploads/${img}`
-    );
+   const existingPreview = (col.existingImages || []).map(
+  img =>
+    img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+);
     const newPreview = (col.images || []).map(
       file => URL.createObjectURL(file)
     );
@@ -2131,7 +2134,13 @@ export default function AddProduct() {
       if (data.image && data.image.length > 0) {
         const uniqueImages = [...new Set(data.image)]; // remove duplicates
         setExistingImages(uniqueImages); // backend files
-        setPreview(uniqueImages.map(img => `http://localhost:4000/uploads/${img}`)); // frontend preview
+setPreview(
+  uniqueImages.map(img =>
+    img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+  )
+);
       } else {
         setExistingImages([]);
         setPreview([]);
@@ -2158,9 +2167,13 @@ export default function AddProduct() {
           ...col,
           images: [], // new uploads by user
           existingImages: col.images || [], // backend images
-          preview: col.images
-            ? col.images.map(img => `http://localhost:4000/uploads/${img}`)
-            : [],
+         preview: col.images
+  ? col.images.map(img =>
+      img?.startsWith("http")
+        ? img
+        : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+    )
+  : [],
           showImages: true,
           sizes: col.sizes.map((sz) => ({
             size: sz.size || "",
@@ -2178,15 +2191,19 @@ export default function AddProduct() {
         setFrameSizes(data.frameSizes || []);
       }
       if (data.customization?.templateImage) {
-        setTemplatePreview(
-          `http://localhost:4000/uploads/${data.customization.templateImage}`
-        );
-      }
-      if (data.customization?.maskImage) {
-        setMaskPreview(
-          `http://localhost:4000/uploads/${data.customization.maskImage}`
-        );
-      }
+  setTemplatePreview(
+    data.customization.templateImage.startsWith("http")
+      ? data.customization.templateImage
+      : `http://localhost:4000/uploads/${encodeURIComponent(data.customization.templateImage)}`
+  );
+}
+if (data.customization?.maskImage) {
+  setMaskPreview(
+    data.customization.maskImage.startsWith("http")
+      ? data.customization.maskImage
+      : `http://localhost:4000/uploads/${encodeURIComponent(data.customization.maskImage)}`
+  );
+}
     } catch (err) {
       console.log("Fetch Product Error:", err);
     }

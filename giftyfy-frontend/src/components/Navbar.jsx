@@ -192,12 +192,14 @@ const closeMobileMenu = () => {
     <Link className="navbar-brand" to="/">
       <img
         src={
-          logo?.image
-            ? `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(
-  logo.image
-)}`
-            : "/no-logo.png"
-        }
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(
+          logo.image
+        )}`
+    : "/no-logo.png"
+}
         alt="Logo"
         className="navbar-logo"
       />

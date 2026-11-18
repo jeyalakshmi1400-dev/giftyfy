@@ -199,6 +199,14 @@ export default function DeliveryPartnerList() {
     });
   }, [partners, searchTerm, statusFilter, vehicleFilter]);
 
+  const getImageUrl = (image) => {
+  if (!image) return "";
+
+  return image.startsWith("http")
+    ? image
+    : `http://localhost:4000/uploads/${encodeURIComponent(image)}`;
+};
+
   const openView = (p) => {
     setSelectedPartner(p);
     setShowModal(true);
@@ -348,7 +356,11 @@ export default function DeliveryPartnerList() {
                   <div className="dpl-row-main" onClick={() => openView(p)}>
                     <img
                       className="dpl-avatar"
-                      src={`http://localhost:4000/uploads/${p.photo}`}
+                      src={
+  p.photo?.startsWith("http")
+    ? p.photo
+    : `http://localhost:4000/uploads/${encodeURIComponent(p.photo || "")}`
+}
                       alt={p.name}
                       onError={(e) => (e.currentTarget.style.visibility = "hidden")}
                     />
@@ -457,13 +469,9 @@ export default function DeliveryPartnerList() {
             <div className="dpl-modal-hero">
               <img
                 className="dpl-modal-photo"
-                src={`http://localhost:4000/uploads/${selectedPartner.photo}`}
+                src={getImageUrl(selectedPartner.photo)}
                 alt={selectedPartner.name}
-                onClick={() =>
-                  setPreviewImage(
-                    `http://localhost:4000/uploads/${selectedPartner.photo}`
-                  )
-                }
+                onClick={() => setPreviewImage(getImageUrl(selectedPartner.photo))}
               />
               <div>
                 <h2 className="dpl-modal-name">{selectedPartner.name}</h2>
@@ -516,27 +524,19 @@ export default function DeliveryPartnerList() {
                 <div className="dpl-doc-card">
                   <span className="dpl-info-label">Aadhar — {selectedPartner.aadharNumber}</span>
                   <img
-                    src={`http://localhost:4000/uploads/${selectedPartner.aadharImage}`}
+                    src={getImageUrl(selectedPartner.aadharImage)}
                     alt="Aadhar"
                     className="dpl-doc-img"
-                    onClick={() =>
-                      setPreviewImage(
-                        `http://localhost:4000/uploads/${selectedPartner.aadharImage}`
-                      )
-                    }
+                    onClick={() => setPreviewImage(getImageUrl(selectedPartner.aadharImage))}
                   />
                 </div>
                 <div className="dpl-doc-card">
                   <span className="dpl-info-label">PAN — {selectedPartner.panNumber}</span>
                   <img
-                    src={`http://localhost:4000/uploads/${selectedPartner.panImage}`}
+                    src={getImageUrl(selectedPartner.panImage)}
                     alt="PAN"
                     className="dpl-doc-img"
-                    onClick={() =>
-                      setPreviewImage(
-                        `http://localhost:4000/uploads/${selectedPartner.panImage}`
-                      )
-                    }
+                    onClick={() => setPreviewImage(getImageUrl(selectedPartner.panImage))}
                   />
                 </div>
                 <div className="dpl-doc-card">
@@ -544,14 +544,10 @@ export default function DeliveryPartnerList() {
                     Driving License — {selectedPartner.drivingLicenseNo}
                   </span>
                   <img
-                    src={`http://localhost:4000/uploads/${selectedPartner.drivingLicenseImage}`}
+                    src={getImageUrl(selectedPartner.drivingLicenseImage)}
                     alt="Driving License"
                     className="dpl-doc-img"
-                    onClick={() =>
-                      setPreviewImage(
-                        `http://localhost:4000/uploads/${selectedPartner.drivingLicenseImage}`
-                      )
-                    }
+                    onClick={() => setPreviewImage(getImageUrl(selectedPartner.drivingLicenseImage))}
                   />
                 </div>
               </div>

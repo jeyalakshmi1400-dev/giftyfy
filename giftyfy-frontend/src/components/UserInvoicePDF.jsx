@@ -47,11 +47,13 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
 
           <div className="inv-left">
             <img
-              src={
-                logo?.image
-                  ? `https://giftyfy-backend.onrender.com/uploads/${logo.image}`
-                  : logoDefault
-              }
+             src={
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `https://giftyfy-backend.onrender.com/uploads/${logo.image}`
+    : logoDefault
+}
               alt="logo"
               className="inv-logo"
             />

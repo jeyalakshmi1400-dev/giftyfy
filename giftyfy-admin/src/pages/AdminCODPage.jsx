@@ -866,9 +866,13 @@ export default function AdminCODPage() {
 
                                     {item.image ? (
                                       <img
-                                        src={`http://localhost:4000/uploads/${item.image}`}
-                                        alt=""
-                                      />
+  src={
+    item.image?.startsWith("http")
+      ? item.image
+      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+  }
+  alt=""
+/>
                                     ) : (
                                       <div className="admin-product-no-image">
                                         —

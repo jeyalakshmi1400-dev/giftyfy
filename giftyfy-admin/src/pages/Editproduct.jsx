@@ -80,10 +80,12 @@ if (data.category === "Dress" && data.variants) {
       if (data.image) {
         setExistingImages(data.image);
         setPreview(
-          data.image.map(
-            (img) => `http://localhost:4000/uploads/${img}`
-          )
-        );
+  data.image.map((img) =>
+    img?.startsWith("http")
+      ? img
+      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+  )
+);
       }
 
       // LOCATIONS FIX
@@ -310,7 +312,11 @@ if (data.category === "Dress" && data.variants) {
           {variant.images.map((img, i) => (
             <img
               key={i}
-              src={`http://localhost:4000/uploads/${img}`}
+              src={
+  img?.startsWith("http")
+    ? img
+    : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+}
               width="80"
             />
           ))}

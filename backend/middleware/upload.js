@@ -69,4 +69,23 @@ upload.category = multer({
   storage: categoryStorage,
 });
 
+
+// =========================
+// CLOUDINARY LOGO STORAGE
+// =========================
+
+const logoStorage = new CloudinaryStorage({
+  cloudinary,
+
+  params: async () => ({
+    folder: "giftyfy/logo",
+    resource_type: "image",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "avif"],
+  }),
+});
+
+upload.logo = multer({
+  storage: logoStorage,
+});
+
 module.exports = upload;
