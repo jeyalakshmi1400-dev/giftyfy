@@ -185,8 +185,12 @@ const order = location.state?.order;
 
     {order.items.map((item, index) => (
       <div className="sc-product-item" key={index}>
-        <img
-  src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
+       <img
+  src={
+    typeof item.image === "string" && item.image.startsWith("http")
+      ? item.image
+      : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
+  }
   alt={item.name}
   className="sc-product-img"
 />

@@ -445,11 +445,15 @@ const generateInvoice = async (order) => {
           className="order-product-card"
         >
 
-          <img
-            src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
-            alt={item.name}
-            className="order-product-image"
-          />
+         <img
+  src={
+    typeof item.image === "string" && item.image.startsWith("http")
+      ? item.image
+      : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
+  }
+  alt={item.name}
+  className="order-product-image"
+/>
 
           <div className="order-product-details">
 

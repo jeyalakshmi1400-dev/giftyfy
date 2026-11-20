@@ -287,9 +287,13 @@ export default function Payment() {
             >
 
               <img
-                src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
-                alt={item.name}
-              />
+  src={
+    typeof item.image === "string" && item.image.startsWith("http")
+      ? item.image
+      : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
+  }
+  alt={item.name}
+/>
 
               <div>
 

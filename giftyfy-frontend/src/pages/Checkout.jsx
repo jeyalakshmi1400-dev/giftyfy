@@ -1356,10 +1356,14 @@ const summary = cart.summary || {};
                 {cart.items.map((item) => (
                   <div key={item._id} className="product-item">
                     <img
-                      src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
-                      alt={item.name}
-                      className="product-image"
-                    />
+  src={
+    typeof item.image === "string" && item.image.startsWith("http")
+      ? item.image
+      : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
+  }
+  alt={item.name}
+  className="product-image"
+/>
                     <div className="product-details">
                       <p className="product-name">{item.name}</p>
                       <p className="productgf-meta">
