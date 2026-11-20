@@ -178,11 +178,15 @@ onClick={() =>
 navigate(`/product/${item.product._id || item.product}`)
 }                  >
                     <div className="giftfy-cart-product-card__image-wrap">
-                      <img
-                        src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
-                        alt={item.name}
-                        className="giftfy-cart-product-image"
-                      />
+                     <img
+  src={
+    typeof item.image === "string" && item.image.startsWith("http")
+      ? item.image
+      : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
+  }
+  alt={item.name}
+  className="giftfy-cart-product-image"
+/>
                     </div>
 
                     <div className="giftfy-cart-product-info">
