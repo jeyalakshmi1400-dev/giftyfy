@@ -728,14 +728,18 @@ const [bulkStatus, setBulkStatus] = useState("");
                     {order.items.map((item, i) => (
                       <div className="op-item" key={i}>
                         <img
-                          className="op-item-img"
-                          src={
-                            item.image?.startsWith("uploads")
-                              ? `http://localhost:4000/${item.image}`
-                              : `http://localhost:4000/uploads/${item.image}`
-                          }
-                          alt={item.name}
-                        />
+  className="op-item-img"
+  src={
+    item.image
+      ? item.image.startsWith("http")
+        ? item.image
+        : item.image.startsWith("uploads/")
+          ? `https://giftyfy-backend.onrender.com/${item.image}`
+          : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image)}`
+      : "/no-image.png"
+  }
+  alt={item.name}
+/>
                         <div className="op-item-info">
                           <span className="op-item-name">{item.name}</span>
                           <span className="op-item-qty">Qty {item.quantity}</span>

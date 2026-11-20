@@ -410,15 +410,17 @@ return (
                           >
 
                             <img
-                              src={
-                                item.image?.startsWith(
-                                  "uploads"
-                                )
-                                ? `http://localhost:4000/${item.image}`
-                                : `http://localhost:4000/uploads/${item.image}`
-                              }
-                              alt=""
-                            />
+  src={
+    item.image
+      ? item.image.startsWith("http")
+        ? item.image
+        : item.image.startsWith("uploads/")
+          ? `https://giftyfy-backend.onrender.com/${item.image}`
+          : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image)}`
+      : "/no-image.png"
+  }
+  alt=""
+/>
 
                             <div>
 

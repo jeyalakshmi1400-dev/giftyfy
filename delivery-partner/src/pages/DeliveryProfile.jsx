@@ -261,10 +261,11 @@ const DeliveryProfile = () => {
   // PROFILE IMAGE
   // =====================================================
 
-  const profileImage = partner?.photo
-    ? `http://localhost:4000/uploads/${partner.photo}`
-    : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-
+ const profileImage = partner?.photo
+  ? partner.photo.startsWith("http")
+    ? partner.photo
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(partner.photo)}`
+  : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
   // =====================================================
   // DISPLAY PINCODES
   // =====================================================

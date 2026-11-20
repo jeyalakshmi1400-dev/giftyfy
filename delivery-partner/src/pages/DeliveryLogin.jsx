@@ -125,12 +125,12 @@ if (partner.isBlocked) {
       <div className="delivery-login-card">
   <img
   src={
-    logo?.image
-      ? `http://localhost:4000/uploads/${encodeURIComponent(
-          logo.image
-        )}`
-      : "/no-logo.png"
-  }
+  logo?.image
+    ? logo.image.startsWith("http")
+      ? logo.image
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(logo.image)}`
+    : "/no-logo.png"
+}
   alt="Logo"
   className="login-logo"
 />

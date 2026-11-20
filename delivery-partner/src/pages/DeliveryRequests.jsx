@@ -142,14 +142,16 @@ const handleNotification = (n) => {
                         className="product-row"
                       >
                         <img
-                          src={
-                            item.image
-                              ? `http://localhost:4000/uploads/${item.image}`
-                              : "/no-image.png"
-                          }
-                          alt=""
-                          className="product-thumb"
-                        />
+  src={
+    item.image
+      ? item.image.startsWith("http")
+        ? item.image
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image)}`
+      : "/no-image.png"
+  }
+  alt=""
+  className="product-thumb"
+/>
 
                         <div className="product-details">
                           <h4>

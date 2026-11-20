@@ -532,11 +532,16 @@ function ReturnPickup() {
                             key={i}
                           >
 
-                            <img
-                              src={`http://localhost:4000/uploads/${item.image}`}
-                              alt=""
-                            />
-
+                           <img
+  src={
+    item.image
+      ? item.image.startsWith("http")
+        ? item.image
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image)}`
+      : "/no-image.png"
+  }
+  alt=""
+/>
                             <div className="gf-product-meta">
 
                               <h4>

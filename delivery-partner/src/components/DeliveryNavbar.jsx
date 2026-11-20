@@ -206,14 +206,20 @@ const acceptReturn = async (orderId) => {
     { to: "/returns", label: "UserReturn Orders", icon: FaUndo, match: "/delivery/returns" },
   ];
 
+    const getImageUrl = (image) => {
+    if (!image || typeof image !== "string") return "";
+    return image.startsWith("http")
+      ? image
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
+  };
+
   const logoSrc = logo?.image
-    ? `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+    ? getImageUrl(logo.image)
     : "/no-logo.png";
 
   const avatarSrc = partner?.photo
-    ? `http://localhost:4000/uploads/${partner.photo}`
+    ? getImageUrl(partner.photo)
     : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-
   // ================= SHARED SIDEBAR CONTENT (desktop + mobile drawer) =================
   // isMobile=true means this render is inside the mobile drawer, so nav clicks
   // and logout should also close the drawer (setShowSidebar(false)).
@@ -402,15 +408,15 @@ const acceptReturn = async (orderId) => {
                   ) : (
                     notifications.map((n) => (
                       <div className="dn2-req-card" key={n._id}>
-                        <img
-                          src={
-                            n.order?.items?.[0]?.image
-                              ? `http://localhost:4000/uploads/${n.order.items[0].image}`
-                              : "/no-image.png"
-                          }
-                          alt="product"
-                          className="dn2-req-img"
-                        />
+                       <img
+  src={
+    n.order?.items?.[0]?.image
+      ? getImageUrl(n.order.items[0].image)
+      : "/no-image.png"
+  }
+  alt="product"
+  className="dn2-req-img"
+/>  
                         <div className="dn2-req-body">
                           <div className="dn2-req-top">
                             <span className="dn2-req-name">

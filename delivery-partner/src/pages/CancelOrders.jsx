@@ -2,6 +2,12 @@ import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import "../styles/cancelOrders.css";
 
+const getImageUrl = (image) => {
+  if (!image || typeof image !== "string") return "";
+  return image.startsWith("http")
+    ? image
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
+};
 /* ----------------------------------------------------------
    Inline icon set (premium look, no emoji)
 ---------------------------------------------------------- */
@@ -352,10 +358,10 @@ const stats = useMemo(() => {
                   <div className="card-thumb">
                     {firstItem ? (
                       <img
-                        src={`http://localhost:4000/uploads/${firstItem.image}`}
-                        alt={firstItem.name}
-                        className="thumb-image"
-                      />
+  src={getImageUrl(firstItem.image)}
+  alt={firstItem.name}
+  className="thumb-image"
+/>
                     ) : (
                       <div className="thumb-fallback">
                         <Icon.Box width={26} height={26} />

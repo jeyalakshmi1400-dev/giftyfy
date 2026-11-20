@@ -9,6 +9,13 @@ import { useLocation
 
  } from "react-router-dom";
 
+ 
+const getImageUrl = (image) => {
+  if (!image || typeof image !== "string") return "";
+  return image.startsWith("http")
+    ? image
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
+};
 export default function DeliveryCODPage() {
   // =====================================================
   // STATES
@@ -1523,7 +1530,7 @@ useEffect(() => {
                         ?.image ? (
 
                         <img
-                          src={`http://localhost:4000/uploads/${order.items[0].image}`}
+                          src={getImageUrl(order.items[0].image)}
                           alt={
                             order.items?.[0]
                               ?.name ||
