@@ -18,9 +18,9 @@ const sendEmailOTP = async (email, otp) => {
       throw new Error("EMAIL_USER is missing");
     }
 
-    const brevo = new BrevoClient({
-      apiKey: process.env.BREVO_API_KEY,
-    });
+   const brevo = new BrevoClient({
+  "api-key": process.env.BREVO_API_KEY,
+});
 
     await brevo.transactionalEmails.sendTransacEmail({
       sender: {
