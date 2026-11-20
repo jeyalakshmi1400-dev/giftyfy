@@ -19,7 +19,7 @@ const sendEmailOTP = async (email, otp) => {
     }
 
    const brevo = new BrevoClient({
-  "api-key": process.env.BREVO_API_KEY,
+  apiKey: process.env.BREVO_API_KEY,
 });
 
     await brevo.transactionalEmails.sendTransacEmail({
