@@ -56,9 +56,9 @@ const addToCart = async (req, res) => {
     } = req.body;
 
     // ✅ uploaded extra images
-    const uploadedImages =
-      req.files?.map((file) => file.filename) || [];
-
+const uploadedImages =
+  req.files?.map((file) => file.path) || [];
+  
     console.log("REQ BODY:", req.body);
 
     let cart = await Cart.findOne({

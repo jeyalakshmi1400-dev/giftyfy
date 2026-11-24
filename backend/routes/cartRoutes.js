@@ -1,7 +1,10 @@
+
 const express = require("express");
 const router = express.Router();
 
 const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
 const {
   addToCart,
@@ -10,29 +13,25 @@ const {
   moveUndeliverableProducts,
 } = require("../controllers/cartController");
 
-const {
-  protect,
-} = require("../middleware/authMiddleware");
+const { protect } = require("../middleware/authMiddleware");
 
-// ✅ MULTER STORAGE
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-
-  filename: (req, file, cb) => {
-    cb(
-      null,
-      Date.now() +
-        "-" +
-        file.originalname
-    );
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "giftyfy/custom-images",
+    resource_type: "image",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "avif"],
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: {
+    files: 5,
+    fileSize: 10 * 1024 * 1024,
+  },
+});
 
-// ✅ ROUTES
 router.post(
   "/add",
   protect,
@@ -42,11 +41,8 @@ router.post(
 
 router.get("/", protect, getCart);
 
-router.delete(
-  "/remove/:id",
-  protect,
-  removeFromCart
-);
+router.delete("/remove/:id", protect, removeFromCart);
+
 router.post(
   "/move-undeliverable",
   protect,
