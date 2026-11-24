@@ -61,7 +61,7 @@ router.put(
 router.put(
   "/profile",
   deliveryAuthMiddleware,
-  upload.single("photo"),
+  upload.deliveryProfile.single("photo"),
   updateMyProfile
 );
 

@@ -348,7 +348,7 @@ const updateMyProfile = async (req, res) => {
     // ============================
 
     if (req.file) {
-      partner.photo = req.file.filename;
+     partner.photo = req.file.path;
     }
 
     await partner.save();

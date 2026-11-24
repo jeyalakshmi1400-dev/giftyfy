@@ -88,4 +88,25 @@ upload.logo = multer({
   storage: logoStorage,
 });
 
+
+// =========================
+// CLOUDINARY DELIVERY PROFILE PHOTO
+// =========================
+
+const deliveryProfileStorage = new CloudinaryStorage({
+  cloudinary,
+
+  params: async () => ({
+    folder: "giftyfy/delivery-partners/profile",
+    resource_type: "image",
+    allowed_formats: ["jpg", "jpeg", "png", "webp", "avif"],
+  }),
+});
+
+upload.deliveryProfile = multer({
+  storage: deliveryProfileStorage,
+});
+
+
+
 module.exports = upload;
