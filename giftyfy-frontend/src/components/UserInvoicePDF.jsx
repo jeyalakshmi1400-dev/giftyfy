@@ -4,6 +4,17 @@ import signature from "../assets/signature.jpg";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./UserInvoicePDF.css";
+const getInvoiceImageUrl = (image) => {
+  if (!image) return "";
+
+  // Cloudinary URL or any absolute URL
+  if (/^https?:\/\//i.test(image)) {
+    return image;
+  }
+
+  // Old local uploaded images
+  return `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
+};
 
 const UserInvoicePDF = ({ order, invoiceRef }) => {
   const [site, setSite] = useState(null);
@@ -153,11 +164,12 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
                   <td className="inv-item-cell">
                     <div className="inv-item-flex">
                       {/* PRODUCT IMAGE */}
-                      <img
-                        src={`https://giftyfy-backend.onrender.com/uploads/${item.image}`}
-                        alt=""
-                        className="inv-item-image"
-                      />
+                     <img
+  src={getInvoiceImageUrl(item.image)}
+  alt={item.name || "Product"}
+  className="inv-item-image"
+  crossOrigin="anonymous"
+/>
 
                       <div>
                         <div className="inv-item-name">{item.name}</div>
@@ -192,7 +204,7 @@ const UserInvoicePDF = ({ order, invoiceRef }) => {
                             {item.extraImages.map((img, i) => (
                               <img
                                 key={i}
-                                src={`https://giftyfy-backend.onrender.com/uploads/${img}`}
+src={getInvoiceImageUrl(img)}
                                 alt=""
                                 className="inv-extra-image"
                               />
