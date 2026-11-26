@@ -47,6 +47,7 @@ const [selectedFrameSize, setSelectedFrameSize] = useState(null);
   const imageRef = useRef();
   const lensRef = useRef();
   const zoomRef = useRef();
+  const resumedActionRef = useRef(null);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [customName, setCustomName] = useState("");
@@ -319,6 +320,37 @@ useEffect(() => {
   }
 }, [location.state]);
 
+// RESUME ADD TO CART / BUY NOW AFTER LOGIN
+useEffect(() => {
+  const action = location.state?.resumeAction;
+
+  if (!product || !action) return;
+
+  if (!["addToCart", "buyNow"].includes(action)) return;
+
+  const actionKey = `${id}:${action}`;
+
+  // Prevent duplicate execution
+  if (resumedActionRef.current === actionKey) return;
+
+  resumedActionRef.current = actionKey;
+
+  // Clear pending action to prevent repeated execution
+  navigate(location.pathname, {
+    replace: true,
+    state: {
+      ...location.state,
+      resumeAction: null,
+    },
+  });
+
+  if (action === "addToCart") {
+    handleAddToCart();
+  } else if (action === "buyNow") {
+    handleBuyNow();
+  }
+}, [product, location.state, id, navigate, location.pathname]);
+
 
   if (!product) return <h2 className="gp-loading">Loading...</h2>;
   const goPersonalize = (isEdit = false) => {
@@ -503,6 +535,21 @@ const checkPincode = async () => {
       toast.error("Out of Stock ❌");
       return;
     }
+    // LOGIN CHECK
+const token = localStorage.getItem("token");
+
+if (!token) {
+  toast.info("Please login to continue");
+
+  navigate("/login", {
+    state: {
+      from: location.pathname,
+      resumeAction: "addToCart",
+    },
+  });
+
+  return;
+}
 // Open personalization only if customization has not been saved yet
 if (product?.customization?.enabled && !isCustomizationSaved) {
   goPersonalize(false);
@@ -540,7 +587,6 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
     }
 
     try {
-      const token = localStorage.getItem("token");
 
       const formData = new FormData();
 
@@ -611,6 +657,22 @@ if (product?.customization?.enabled && !isCustomizationSaved) {
       toast.error("Out of Stock ❌");
       return;
     }
+    // LOGIN CHECK FOR BUY NOW
+const token = localStorage.getItem("token");
+
+if (!token) {
+  toast.info("Please login to continue");
+
+  navigate("/login", {
+    state: {
+      from: location.pathname,
+      resumeAction: "buyNow",
+    },
+  });
+
+  return;
+}
+
    if (product?.customization?.enabled && !isCustomizationSaved) {
   goPersonalize(false);
   return;
