@@ -87,7 +87,7 @@ export default function CancelOrders() {
       const token = localStorage.getItem("deliveryToken");
 
       const res = await axios.get(
-        "http://localhost:4000/api/delivery/cancel-orders",
+        "https://giftyfy-backend.onrender.com/api/delivery/cancel-orders",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ const fetchRejectedOrders = async () => {
     const token = localStorage.getItem("deliveryToken");
 
     const res = await axios.get(
-      "http://localhost:4000/api/delivery/rejected-orders",
+      "https://giftyfy-backend.onrender.com/api/delivery/rejected-orders",
       {
         headers:{
           Authorization:`Bearer ${token}`

@@ -60,7 +60,7 @@ export default function DeliveryRegister() {
       data.append("drivingLicenseImage", licenseFile);
 
       await axios.post(
-        "http://localhost:4000/api/delivery/register",
+        "https://giftyfy-backend.onrender.com/api/delivery/register",
         data,
         {
           headers: {

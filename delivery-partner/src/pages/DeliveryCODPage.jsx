@@ -86,7 +86,7 @@ export default function DeliveryCODPage() {
   const fetchPartner = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/delivery/profile",
+        "https://giftyfy-backend.onrender.com/api/delivery/profile",
         getAuthConfig()
       );
 
@@ -106,7 +106,7 @@ export default function DeliveryCODPage() {
   const fetchPayments = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/delivery-payment/my",
+        "https://giftyfy-backend.onrender.com/api/delivery-payment/my",
         getAuthConfig()
       );
 
@@ -130,7 +130,7 @@ export default function DeliveryCODPage() {
   const fetchCODOrders = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/delivery/cod-orders",
+        "https://giftyfy-backend.onrender.com/api/delivery/cod-orders",
         getAuthConfig()
       );
 
@@ -172,7 +172,7 @@ export default function DeliveryCODPage() {
   const fetchPendingOrders = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:4000/api/delivery/cod-orders",
+        "https://giftyfy-backend.onrender.com/api/delivery/cod-orders",
         getAuthConfig()
       );
 
@@ -544,7 +544,7 @@ useEffect(() => {
 
       const { data } =
         await axios.post(
-          "http://localhost:4000/api/delivery-payment/request",
+          "https://giftyfy-backend.onrender.com/api/delivery-payment/request",
           {
             selectedOrders: orderIds,
             notes: notes.trim(),

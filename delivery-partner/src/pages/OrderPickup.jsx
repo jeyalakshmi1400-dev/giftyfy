@@ -117,7 +117,7 @@ function OtpModal({ order, onClose, onVerified }) {
     try {
       const token = localStorage.getItem("deliveryToken");
       await axios.post(
-        `http://localhost:4000/api/orders/${order._id}/verify-otp`,
+        `https://giftyfy-backend.onrender.com/api/orders/${order._id}/verify-otp`,
         { otp: code },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -183,7 +183,7 @@ function CompleteDeliveryModal({ order, onClose, onComplete }) {
     try {
       const token = localStorage.getItem("deliveryToken");
 await axios.put(
-  `http://localhost:4000/api/orders/${order._id}/complete-delivery`,
+  `https://giftyfy-backend.onrender.com/api/orders/${order._id}/complete-delivery`,
   {
     deliveryMethod,
     codCollectionMethod: codMethod,
@@ -344,7 +344,7 @@ const [bulkStatus, setBulkStatus] = useState("");
   const fetchOrders = async () => {
     try {
       const token = localStorage.getItem("deliveryToken");
-      const res = await axios.get("http://localhost:4000/api/delivery/my-orders", {
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/delivery/my-orders", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -362,7 +362,7 @@ const [bulkStatus, setBulkStatus] = useState("");
   const updateStatus = async (id, status) => {
     const token = localStorage.getItem("deliveryToken");
     await axios.put(
-      `http://localhost:4000/api/orders/${id}/delivery-status`,
+      `https://giftyfy-backend.onrender.com/api/orders/${id}/delivery-status`,
       { status },
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -373,7 +373,7 @@ const [bulkStatus, setBulkStatus] = useState("");
     try {
       const token = localStorage.getItem("deliveryToken");
       await axios.put(
-        `http://localhost:4000/api/orders/${selectedOrder._id}/delay`,
+        `https://giftyfy-backend.onrender.com/api/orders/${selectedOrder._id}/delay`,
         { reason: delayReason, note, rescheduleDate, rescheduleTime },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -390,7 +390,7 @@ const [bulkStatus, setBulkStatus] = useState("");
     try {
       const token = localStorage.getItem("deliveryToken");
       await axios.put(
-        `http://localhost:4000/api/orders/${selectedOrder._id}/cancel`,
+        `https://giftyfy-backend.onrender.com/api/orders/${selectedOrder._id}/cancel`,
         { reason: cancelReason },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -445,7 +445,7 @@ const [bulkStatus, setBulkStatus] = useState("");
     const token = localStorage.getItem("deliveryToken");
 
     await axios.put(
-      "http://localhost:4000/api/orders/bulk-status",
+      "https://giftyfy-backend.onrender.com/api/orders/bulk-status",
       {
         orderIds: selectedOrders,
         status: bulkStatus,

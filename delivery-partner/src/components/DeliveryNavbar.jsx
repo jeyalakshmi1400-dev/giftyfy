@@ -46,7 +46,7 @@ function DeliveryNavbar() {
   useEffect(() => {
     const fetchLogo = async () => {
       try {
-        const res = await axios.get("http://localhost:4000/api/logo");
+        const res = await axios.get("https://giftyfy-backend.onrender.com/api/logo");
         setLogo(res.data);
       } catch (err) {
         console.log(err);
@@ -60,7 +60,7 @@ function DeliveryNavbar() {
     const fetchPartner = async () => {
       if (!deliveryId) return;
       try {
-        const res = await axios.get(`http://localhost:4000/api/delivery/${deliveryId}`);
+        const res = await axios.get(`https://giftyfy-backend.onrender.com/api/delivery/${deliveryId}`);
         setPartner(res.data);
       } catch (err) {
         console.log(err);
@@ -76,7 +76,7 @@ function DeliveryNavbar() {
 
   const fetchNotifications = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/notifications/my", {
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/notifications/my", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setNotifications(res.data?.notifications || []);
@@ -125,7 +125,7 @@ function DeliveryNavbar() {
   const acceptOrder = async (orderId) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/orders/${orderId}/accept`,
+        `https://giftyfy-backend.onrender.com/api/orders/${orderId}/accept`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -157,7 +157,7 @@ const handleNotification = async (notification) => {
 const acceptReturn = async (orderId) => {
   try {
     const res = await axios.put(
-      `http://localhost:4000/api/orders/${orderId}/accept-return`,
+      `https://giftyfy-backend.onrender.com/api/orders/${orderId}/accept-return`,
       {},
       { headers: { Authorization: `Bearer ${token}` } }
     );
@@ -177,7 +177,7 @@ const acceptReturn = async (orderId) => {
   const rejectOrder = async (notification) => {
     try {
       await axios.delete(
-        `http://localhost:4000/api/delivery/notifications/${notification._id}/reject`,
+        `https://giftyfy-backend.onrender.com/api/delivery/notifications/${notification._id}/reject`,
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setNotifications((prev) => prev.filter((item) => item._id !== notification._id));

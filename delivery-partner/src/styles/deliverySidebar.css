@@ -241,3 +241,78 @@
     border-radius:10px;
   }
 }
+
+/* =========================
+   DELIVERY PARTNER PROFILE
+========================= */
+
+.delivery-sidebar {
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+.sidebar-profile-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 16px 15px;
+  padding: 12px;
+  background: #f5f0ff;
+  border-radius: 14px;
+  text-decoration: none;
+  color: #333;
+  transition: 0.3s;
+}
+
+.sidebar-profile-card:hover {
+  background: #eee3ff;
+}
+
+.sidebar-profile-avatar {
+  width: 54px;
+  height: 54px;
+  min-width: 54px;
+  border-radius: 50%;
+  background: #e4d4ff;
+  color: #7b2cbf;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  font-size: 24px;
+}
+
+.sidebar-profile-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.sidebar-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.sidebar-profile-info strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sidebar-profile-info span {
+  font-size: 12px;
+  color: #7b2cbf;
+}
+
+.delivery-sidebar .sidebar-menu {
+  margin-top: 5px;
+}

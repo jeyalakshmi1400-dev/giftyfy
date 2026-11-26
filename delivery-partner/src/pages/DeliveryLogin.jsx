@@ -34,7 +34,7 @@ export default function DeliveryLogin() {
       try {
 
         const res = await axios.get(
-          "http://localhost:4000/api/logo"
+          "https://giftyfy-backend.onrender.com/api/logo"
         );
 
         setLogo(res.data);
@@ -61,7 +61,7 @@ export default function DeliveryLogin() {
       setLoading(true);
 
       const res = await axios.post(
-        "http://localhost:4000/api/delivery/login",
+        "https://giftyfy-backend.onrender.com/api/delivery/login",
         form
       );
 

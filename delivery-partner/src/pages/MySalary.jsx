@@ -20,7 +20,7 @@ export default function MySalary() {
     try {
 
       const res = await axios.get(
-        `http://localhost:4000/api/salary/partner/${partnerId}`
+        `https://giftyfy-backend.onrender.com/api/salary/partner/${partnerId}`
       );
 
       setSalary(res.data.salaries);

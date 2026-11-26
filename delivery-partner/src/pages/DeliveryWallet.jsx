@@ -104,7 +104,7 @@ export default function DeliveryWallet() {
   const fetchSalary = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/salary/my",
+        "https://giftyfy-backend.onrender.com/api/salary/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,

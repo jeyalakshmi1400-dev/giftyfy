@@ -19,7 +19,7 @@ export default function DeliveryRequests() {
   const fetchNotifications = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/notifications/my",
+        "https://giftyfy-backend.onrender.com/api/notifications/my",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -38,7 +38,7 @@ export default function DeliveryRequests() {
   const acceptOrder = async (orderId) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/orders/${orderId}/accept`,
+        `https://giftyfy-backend.onrender.com/api/orders/${orderId}/accept`,
         {},
         {
           headers: {
@@ -58,7 +58,7 @@ export default function DeliveryRequests() {
 const acceptReturn = async (orderId) => {
   try {
     const res = await axios.put(
-      `http://localhost:4000/api/orders/${orderId}/accept-return`,
+      `https://giftyfy-backend.onrender.com/api/orders/${orderId}/accept-return`,
       {},
       {
         headers: {
@@ -84,7 +84,7 @@ const acceptReturn = async (orderId) => {
 const rejectOrder = async (notification) => {
   try {
     await axios.delete(
-      `http://localhost:4000/api/delivery/notifications/${notification._id}/reject`,
+      `https://giftyfy-backend.onrender.com/api/delivery/notifications/${notification._id}/reject`,
       {
         headers: {
           Authorization: `Bearer ${token}`,

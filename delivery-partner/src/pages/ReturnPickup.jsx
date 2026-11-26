@@ -145,7 +145,7 @@ function ReturnPickup() {
       setLoading(true);
 
       const res = await axios.get(
-        "http://localhost:4000/api/orders/return-pickups",
+        "https://giftyfy-backend.onrender.com/api/orders/return-pickups",
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -192,7 +192,7 @@ function ReturnPickup() {
       setPickingId(id);
 
       const res = await axios.put(
-        `http://localhost:4000/api/orders/${id}/return-picked`,
+        `https://giftyfy-backend.onrender.com/api/orders/${id}/return-picked`,
         {},
         {
           headers: {

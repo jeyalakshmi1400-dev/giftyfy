@@ -56,7 +56,7 @@ const location = useLocation();
         );
 
       const { data } = await axios.get(
-        "http://localhost:4000/api/delivery/dashboard",
+        "https://giftyfy-backend.onrender.com/api/delivery/dashboard",
         {
           headers: {
             Authorization:

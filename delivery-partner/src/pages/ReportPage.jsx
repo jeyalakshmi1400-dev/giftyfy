@@ -31,7 +31,7 @@ const tableRef = useRef(null);
         );
 
       const res = await axios.get(
-        "http://localhost:4000/api/delivery/reports",
+        "https://giftyfy-backend.onrender.com/api/delivery/reports",
         {
           headers: {
             Authorization:

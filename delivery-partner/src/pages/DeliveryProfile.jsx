@@ -1,19 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import {
   FaUser,
   FaEdit,
   FaPlus,
   FaTimes,
+  FaCamera,
 } from "react-icons/fa";
 
 import "../styles/deliveryprofile.css";
+
+// Local development uses localhost; deployed builds use the Render backend.
+const API_BASE_URL = import.meta.env.DEV
+  ? "https://giftyfy-backend.onrender.com"
+  : "https://giftyfy-backend.onrender.com";
+
+const DEFAULT_PROFILE_IMAGE =
+  "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
 
 const DeliveryProfile = () => {
   const [partner, setPartner] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [newPincode, setNewPincode] = useState("");
   const [salary, setSalary] = useState(null);
+  const [photoFile, setPhotoFile] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState("");
+  const photoInputRef = useRef(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -41,7 +53,7 @@ const DeliveryProfile = () => {
       const token = localStorage.getItem("deliveryToken");
 
       const { data } = await axios.get(
-        "http://localhost:4000/api/delivery/profile",
+        `${API_BASE_URL}/api/delivery/profile`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -87,7 +99,7 @@ const DeliveryProfile = () => {
       const token = localStorage.getItem("deliveryToken");
 
       const { data } = await axios.get(
-        "http://localhost:4000/api/salary/my",
+        `${API_BASE_URL}/api/salary/my`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -187,10 +199,49 @@ const DeliveryProfile = () => {
       });
 
       setNewPincode("");
+      setPhotoFile(null);
+      setPhotoPreview("");
+      if (photoInputRef.current) {
+        photoInputRef.current.value = "";
+      }
       setEditMode(false);
     } else {
       setEditMode(true);
     }
+  };
+
+  // =====================================================
+  // SELECT PROFILE PHOTO
+  // =====================================================
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Please select an image smaller than 5 MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setPhotoFile(file);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPhotoPreview(String(reader.result || ""));
+    };
+    reader.onerror = () => {
+      alert("Could not preview this image. Please select it again.");
+      setPhotoFile(null);
+      setPhotoPreview("");
+    };
+    reader.readAsDataURL(file);
   };
 
   // =====================================================
@@ -200,7 +251,17 @@ const DeliveryProfile = () => {
   const handleUpdate = async () => {
     try {
       const token = localStorage.getItem("deliveryToken");
+      if (!token) {
+        alert("Please login again.");
+        return;
+      }
 
+      const authHeaders = {
+        Authorization: `Bearer ${token}`,
+      };
+
+      // Save the normal profile fields as JSON. This keeps the pincode
+      // array in the format already expected by the backend controller.
       const payload = {
         name: formData.name,
         email: formData.email,
@@ -209,17 +270,31 @@ const DeliveryProfile = () => {
         pincode: formData.pincode,
       };
 
-      const { data } = await axios.put(
-        "http://localhost:4000/api/delivery/profile",
+      const { data: profileResponse } = await axios.put(
+        `${API_BASE_URL}/api/delivery/profile`,
         payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
+        { headers: authHeaders }
       );
 
-      const updatedPartner = data.partner;
+      let updatedPartner = profileResponse.partner;
+
+      // Upload the photo separately as multipart/form-data. The backend
+      // route uses upload.deliveryProfile.single("photo") and stores
+      // req.file.path (the Cloudinary URL) in partner.photo.
+      if (photoFile) {
+        const imageFormData = new FormData();
+        imageFormData.append("photo", photoFile);
+
+        const { data: photoResponse } = await axios.put(
+          `${API_BASE_URL}/api/delivery/profile`,
+          imageFormData,
+          {
+            headers: authHeaders,
+          }
+        );
+
+        updatedPartner = photoResponse.partner || updatedPartner;
+      }
 
       const updatedPincodes = Array.isArray(
         updatedPartner?.pincode
@@ -238,15 +313,23 @@ const DeliveryProfile = () => {
         name: updatedPartner?.name || "",
         email: updatedPartner?.email || "",
         phone: updatedPartner?.phone || "",
-        vehicleNumber:
-          updatedPartner?.vehicleNumber || "",
+        vehicleNumber: updatedPartner?.vehicleNumber || "",
         pincode: updatedPincodes,
       });
 
       setNewPincode("");
+      setPhotoFile(null);
+      setPhotoPreview("");
+      if (photoInputRef.current) {
+        photoInputRef.current.value = "";
+      }
       setEditMode(false);
 
-      alert("Profile Updated Successfully");
+      alert(
+        photoFile
+          ? "Profile and photo updated successfully."
+          : "Profile Updated Successfully"
+      );
     } catch (error) {
       console.log("Profile update error:", error);
 
@@ -261,11 +344,13 @@ const DeliveryProfile = () => {
   // PROFILE IMAGE
   // =====================================================
 
- const profileImage = partner?.photo
-  ? partner.photo.startsWith("http")
-    ? partner.photo
-    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(partner.photo)}`
-  : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+  const profileImage = photoPreview || (
+    partner?.photo
+      ? /^https?:\/\//i.test(partner.photo)
+        ? partner.photo
+        : `${API_BASE_URL}/uploads/${encodeURIComponent(partner.photo)}`
+      : DEFAULT_PROFILE_IMAGE
+  );
   // =====================================================
   // DISPLAY PINCODES
   // =====================================================
@@ -338,9 +423,61 @@ const DeliveryProfile = () => {
 
               <img
                 src={profileImage}
-                alt="profile"
+                alt="Delivery partner profile"
                 className="delivery-profile-image"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = DEFAULT_PROFILE_IMAGE;
+                }}
               />
+
+              {editMode && (
+                <div
+                  className="delivery-profile-photo-controls"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: "8px",
+                    marginTop: "10px",
+                  }}
+                >
+                  <input
+                    ref={photoInputRef}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/avif"
+                    onChange={handlePhotoChange}
+                    style={{ display: "none" }}
+                  />
+
+                  <button
+                    type="button"
+                    onClick={() => photoInputRef.current?.click()}
+                    style={{
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "7px",
+                      padding: "8px 13px",
+                      border: "1px solid #d0d5dd",
+                      borderRadius: "7px",
+                      background: "#ffffff",
+                      color: "#344054",
+                      cursor: "pointer",
+                      fontWeight: 600,
+                    }}
+                  >
+                    <FaCamera />
+                    Change Photo
+                  </button>
+
+                  {photoFile && (
+                    <small style={{ maxWidth: "190px", textAlign: "center", overflowWrap: "anywhere" }}>
+                      {photoFile.name}
+                    </small>
+                  )}
+                </div>
+              )}
 
               {editMode ? (
                 <input
