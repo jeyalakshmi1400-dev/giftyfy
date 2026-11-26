@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from "react";
 import axios from "axios";
-import "../styles/deliveryWallet.css";
+import "../styles/deliverywallet.css";
 
 /* ---------- Inline icon set (no external icon library required) ---------- */
 const Icon = {
