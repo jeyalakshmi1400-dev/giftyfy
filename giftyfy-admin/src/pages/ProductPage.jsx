@@ -20,13 +20,13 @@ const productsPerPage = 10;
 
   // Fetch
   const fetchProducts = async () => {
-    const res = await axios.get("http://localhost:4000/api/product");
+    const res = await axios.get("https://giftyfy-backend.onrender.com/api/product");
     console.log(res.data);
     setProducts(res.data);
   };
 
   const fetchCategories = async () => {
-    const res = await axios.get("http://localhost:4000/api/categories");
+    const res = await axios.get("https://giftyfy-backend.onrender.com/api/categories");
     setCategoryies(res.data);
   };
 
@@ -68,7 +68,7 @@ const productsPerPage = 10;
   const deleteProduct = async (id) => {
     const token = localStorage.getItem("token");
 
-    await axios.delete(`http://localhost:4000/api/product/${id}`, {
+    await axios.delete(`https://giftyfy-backend.onrender.com/api/product/${id}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -244,12 +244,12 @@ useEffect(() => {
     ? p.variants?.[0]?.images?.[0]
       ? p.variants[0].images[0].startsWith("http")
         ? p.variants[0].images[0]
-        : `http://localhost:4000/uploads/${encodeURIComponent(p.variants[0].images[0])}`
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(p.variants[0].images[0])}`
       : "/no-image.png"
     : p.image?.[0]
       ? p.image[0].startsWith("http")
         ? p.image[0]
-        : `http://localhost:4000/uploads/${encodeURIComponent(p.image[0])}`
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(p.image[0])}`
       : "/no-image.png"
 }
                     className="giftyfy-product-image"

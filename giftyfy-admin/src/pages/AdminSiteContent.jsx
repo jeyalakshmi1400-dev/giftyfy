@@ -46,7 +46,7 @@ export default function AdminSiteContent() {
         localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:4000/api/site-content",
+        "https://giftyfy-backend.onrender.com/api/site-content",
         {
           headers: {
             Authorization:
@@ -127,7 +127,7 @@ export default function AdminSiteContent() {
         localStorage.getItem("token");
 
       await axios.put(
-        "http://localhost:4000/api/site-content",
+        "https://giftyfy-backend.onrender.com/api/site-content",
         formData,
         {
           headers: {

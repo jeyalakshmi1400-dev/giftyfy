@@ -41,7 +41,7 @@ export default function DeliveryPartnerList() {
   const fetchPartners = async () => {
     setIsLoading(true);
     try {
-      const res = await axios.get("http://localhost:4000/api/delivery", {
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/delivery", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -65,7 +65,7 @@ export default function DeliveryPartnerList() {
   const approve = async (id) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/delivery/approve/${id}`,
+        `https://giftyfy-backend.onrender.com/api/delivery/approve/${id}`,
         {
           isApproved: true,
           monthlySalary: Number(monthlySalary),
@@ -89,7 +89,7 @@ export default function DeliveryPartnerList() {
   // ==========================
   const deletePartner = async (id) => {
     try {
-      await axios.delete(`http://localhost:4000/api/delivery/${id}`, {
+      await axios.delete(`https://giftyfy-backend.onrender.com/api/delivery/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -112,7 +112,7 @@ export default function DeliveryPartnerList() {
   const toggleBlock = async (id) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/delivery/block/${id}`,
+        `https://giftyfy-backend.onrender.com/api/delivery/block/${id}`,
         {},
         {
           headers: {
@@ -138,7 +138,7 @@ export default function DeliveryPartnerList() {
   const updateSalary = async () => {
     try {
       await axios.put(
-        `http://localhost:4000/api/delivery/salary/${salaryPartner._id}`,
+        `https://giftyfy-backend.onrender.com/api/delivery/salary/${salaryPartner._id}`,
         {
           monthlySalary: Number(monthlySalary),
         },
@@ -204,7 +204,7 @@ export default function DeliveryPartnerList() {
 
   return image.startsWith("http")
     ? image
-    : `http://localhost:4000/uploads/${encodeURIComponent(image)}`;
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(image)}`;
 };
 
   const openView = (p) => {
@@ -359,7 +359,7 @@ export default function DeliveryPartnerList() {
                       src={
   p.photo?.startsWith("http")
     ? p.photo
-    : `http://localhost:4000/uploads/${encodeURIComponent(p.photo || "")}`
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(p.photo || "")}`
 }
                       alt={p.name}
                       onError={(e) => (e.currentTarget.style.visibility = "hidden")}

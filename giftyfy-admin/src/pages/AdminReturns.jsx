@@ -134,7 +134,7 @@ function AdminReturns() {
     try {
       setLoading(true);
       const res = await axios.get(
-        "http://localhost:4000/api/orders/returns",
+        "https://giftyfy-backend.onrender.com/api/orders/returns",
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -229,7 +229,7 @@ function AdminReturns() {
       setActionLoadingId(id);
 
       await axios.put(
-        `http://localhost:4000/api/orders/assign-return/${id}`,
+        `https://giftyfy-backend.onrender.com/api/orders/assign-return/${id}`,
         {},
         {
           headers: {
@@ -250,7 +250,7 @@ function AdminReturns() {
       setActionLoadingId(id);
 
       await axios.put(
-        `http://localhost:4000/api/orders/refund/${id}`,
+        `https://giftyfy-backend.onrender.com/api/orders/refund/${id}`,
         {},
         {
           headers: {
@@ -536,7 +536,7 @@ function AdminReturns() {
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   width="40"
   alt={item.name}

@@ -1894,7 +1894,7 @@ export default function AddProduct() {
     try {
       if (id) {
         // UPDATE PRODUCT
-        await axios.put(`http://localhost:4000/api/product/${id}`, formData, {
+        await axios.put(`https://giftyfy-backend.onrender.com/api/product/${id}`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -1903,7 +1903,7 @@ export default function AddProduct() {
         alert("Product updated successfully ✅");
       } else {
         // CREATE PRODUCT
-        await axios.post("http://localhost:4000/api/product", formData, {
+        await axios.post("https://giftyfy-backend.onrender.com/api/product", formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
@@ -1947,7 +1947,7 @@ export default function AddProduct() {
   };
   const fetchCategories = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/categories");
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/categories");
       setCategoryies(res.data);
     } catch (error) {
       console.log(error);
@@ -1955,7 +1955,7 @@ export default function AddProduct() {
   }
   const fetchCities = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/product/cities");
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/product/cities");
       setCities(res.data);
     } catch (error) {
       console.log(error);
@@ -1964,7 +1964,7 @@ export default function AddProduct() {
   const fetchPincodes = async (city, index) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/pincodes/${city}`
+        `https://giftyfy-backend.onrender.com/api/product/pincodes/${city}`
       );
       const pins = res.data;
       const options = [
@@ -2062,7 +2062,7 @@ export default function AddProduct() {
   img =>
     img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
 );
     const newPreview = (col.images || []).map(
       file => URL.createObjectURL(file)
@@ -2097,7 +2097,7 @@ export default function AddProduct() {
   };
   const fetchProduct = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/product/${id}`);
+      const res = await axios.get(`https://giftyfy-backend.onrender.com/api/product/${id}`);
       const data = res.data;
       // Set product basic info
       setProduct({
@@ -2138,7 +2138,7 @@ setPreview(
   uniqueImages.map(img =>
     img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
   )
 );
       } else {
@@ -2171,7 +2171,7 @@ setPreview(
   ? col.images.map(img =>
       img?.startsWith("http")
         ? img
-        : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
     )
   : [],
           showImages: true,
@@ -2194,14 +2194,14 @@ setPreview(
   setTemplatePreview(
     data.customization.templateImage.startsWith("http")
       ? data.customization.templateImage
-      : `http://localhost:4000/uploads/${encodeURIComponent(data.customization.templateImage)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(data.customization.templateImage)}`
   );
 }
 if (data.customization?.maskImage) {
   setMaskPreview(
     data.customization.maskImage.startsWith("http")
       ? data.customization.maskImage
-      : `http://localhost:4000/uploads/${encodeURIComponent(data.customization.maskImage)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(data.customization.maskImage)}`
   );
 }
     } catch (err) {
@@ -2211,7 +2211,7 @@ if (data.customization?.maskImage) {
   const generateAIDescription = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/ai/generate-description",
+        "https://giftyfy-backend.onrender.com/api/ai/generate-description",
         {
           productName: product.name,
         }

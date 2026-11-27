@@ -12,7 +12,7 @@ export default function ProductView() {
   const fetchProduct = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/${id}`
+        `https://giftyfy-backend.onrender.com/api/product/${id}`
       );
       setProduct(res.data);
     } catch (err) {
@@ -50,7 +50,7 @@ src={
   product.image?.[0]
     ? product.image[0].startsWith("http")
       ? product.image[0]
-      : `http://localhost:4000/uploads/${encodeURIComponent(product.image[0])}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(product.image[0])}`
     : "/no-image.png"
 }
 alt=""
@@ -135,7 +135,7 @@ className="product-image"
                  src={
   img?.startsWith("http")
     ? img
-    : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
 }
                   alt=""
                 />

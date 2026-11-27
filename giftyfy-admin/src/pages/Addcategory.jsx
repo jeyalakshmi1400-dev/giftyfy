@@ -86,7 +86,7 @@ const navigate = useNavigate();
   const fetchCategories = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get("http://localhost:4000/api/categories");
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/categories");
       setCategories(res.data);
     } catch (error) {
       console.log(error);
@@ -100,7 +100,7 @@ const navigate = useNavigate();
 
       const token = localStorage.getItem("token");
 
-      await axios.put(`http://localhost:4000/api/categories/block/${id}`,{},{
+      await axios.put(`https://giftyfy-backend.onrender.com/api/categories/block/${id}`,{},{
         headers:{
           Authorization:`Bearer ${token}`
         }
@@ -127,7 +127,7 @@ const navigate = useNavigate();
 if (category === "__new__" && image) {
    formData.append("image", image);
 }
-    await axios.post("http://localhost:4000/api/categories",formData,{
+    await axios.post("https://giftyfy-backend.onrender.com/api/categories",formData,{
       
     headers:{
       Authorization:`Bearer ${token}`,
@@ -178,7 +178,7 @@ if (category === "__new__" && image) {
     formData.append("date",date);
     if(image) {formData.append("image",image);}
 
-    await axios.put(`http://localhost:4000/api/categories/${editId}`,formData,
+    await axios.put(`https://giftyfy-backend.onrender.com/api/categories/${editId}`,formData,
     {
       headers:{
         Authorization:`Bearer ${token}`,
@@ -246,7 +246,7 @@ const deleteCategory = async (id) =>{
   try{
     const token = localStorage.getItem("token");
 
-    await axios.delete(`http://localhost:4000/api/categories/${id}`,{
+    await axios.delete(`https://giftyfy-backend.onrender.com/api/categories/${id}`,{
       headers:{
         Authorization:`Bearer ${token}`
       }
@@ -412,7 +412,7 @@ useEffect(() => {
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   alt="category"
   className="cp-thumb"

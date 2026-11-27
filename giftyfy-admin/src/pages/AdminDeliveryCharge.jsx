@@ -112,7 +112,7 @@ const AdminDeliveryCharge = () => {
   const fetchSettings = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/delivery-setting"
+        "https://giftyfy-backend.onrender.com/api/delivery-setting"
       );
 
       setSettings({
@@ -183,7 +183,7 @@ const AdminDeliveryCharge = () => {
 
   try {
     await axios.put(
-      "http://localhost:4000/api/delivery-setting",
+      "https://giftyfy-backend.onrender.com/api/delivery-setting",
       updatedSettings
     );
 
@@ -232,7 +232,7 @@ const AdminDeliveryCharge = () => {
   const saveSettings = async () => {
     try {
       await axios.put(
-        "http://localhost:4000/api/delivery-setting",
+        "https://giftyfy-backend.onrender.com/api/delivery-setting",
         settings
       );
 

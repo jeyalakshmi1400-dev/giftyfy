@@ -11,7 +11,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/site-content")
+      .get("https://giftyfy-backend.onrender.com/api/site-content")
       .then((res) => {
         setSite(res.data);
       })
@@ -21,7 +21,7 @@ const InvoicePDF = ({ order, shippingRef, invoiceRef }) => {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:4000/api/logo").then((res) => {
+    axios.get("https://giftyfy-backend.onrender.com/api/logo").then((res) => {
       setLogo(res.data);
     });
   }, []);
@@ -47,7 +47,7 @@ console.log("Invoice Total:", order.totalAmount);
   logo?.image
     ? logo.image.startsWith("http")
       ? logo.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(logo.image)}`
     : logoDefault
 }
               className="sl-logo"
@@ -171,7 +171,7 @@ console.log("Invoice Total:", order.totalAmount);
                 src={
                   item.image?.startsWith("http")
                     ? item.image
-                    : `http://localhost:4000/uploads/${item.image}`
+                    : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
                 }
                 className="sl-item-image"
                 alt=""
@@ -250,7 +250,7 @@ console.log("Invoice Total:", order.totalAmount);
   logo?.image
     ? logo.image.startsWith("http")
       ? logo.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(logo.image)}`
     : logoDefault
 }
               alt="logo"
@@ -356,7 +356,7 @@ console.log("Invoice Total:", order.totalAmount);
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   alt=""
   className="inv-item-image"
@@ -398,7 +398,7 @@ console.log("Invoice Total:", order.totalAmount);
   src={
     img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
   }
   alt=""
   className="inv-extra-image"

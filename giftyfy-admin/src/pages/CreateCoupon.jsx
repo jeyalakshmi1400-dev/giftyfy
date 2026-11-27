@@ -27,7 +27,7 @@ export default function CreateCoupon() {
   useEffect(() => {
     if (isEdit) {
       axios
-        .get("http://localhost:4000/api/coupons")
+        .get("https://giftyfy-backend.onrender.com/api/coupons")
         .then((res) => {
           const coupon = res.data.coupons.find((c) => c._id === id);
 
@@ -56,7 +56,7 @@ export default function CreateCoupon() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/categories")
+      .get("https://giftyfy-backend.onrender.com/api/categories")
       .then((res) => {
         console.log("Category Response:", res.data);
         setCategories(res.data);   // ✅ direct array
@@ -78,7 +78,7 @@ export default function CreateCoupon() {
       if (isEdit) {
         // 🔥 UPDATE
         await axios.put(
-          `http://localhost:4000/api/coupons/update/${id}`,
+          `https://giftyfy-backend.onrender.com/api/coupons/update/${id}`,
           form
         );
 
@@ -89,7 +89,7 @@ export default function CreateCoupon() {
       } else {
         // 🔥 CREATE
         await axios.post(
-          "http://localhost:4000/api/coupons/add",
+          "https://giftyfy-backend.onrender.com/api/coupons/add",
           form
         );
 

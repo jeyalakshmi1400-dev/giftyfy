@@ -12,7 +12,7 @@ export default function CouponList() {
 
 const fetchCoupons = async () => {
   try {
-    const res = await axios.get("http://localhost:4000/api/coupons");
+    const res = await axios.get("https://giftyfy-backend.onrender.com/api/coupons");
 
     console.log("Coupons API Response:", res.data);
 
@@ -30,7 +30,7 @@ const fetchCoupons = async () => {
     if (!window.confirm("Delete this coupon?")) return;
 
     try {
-      await axios.delete(`http://localhost:4000/api/coupons/${id}`);
+      await axios.delete(`https://giftyfy-backend.onrender.com/api/coupons/${id}`);
       fetchCoupons();
     } catch (err) {
       console.log(err);
@@ -39,7 +39,7 @@ const fetchCoupons = async () => {
 
   const toggleActive = async (id) => {
     try {
-      await axios.put(`http://localhost:4000/api/coupons/toggle/${id}`);
+      await axios.put(`https://giftyfy-backend.onrender.com/api/coupons/toggle/${id}`);
       fetchCoupons();
     } catch (err) {
       console.log(err);

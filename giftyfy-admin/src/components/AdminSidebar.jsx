@@ -78,7 +78,7 @@ const AdminSidebar = ({ collapsed, setCollapsed }) => {
         localStorage.getItem("adminToken") || localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:4000/api/admin/notifications",
+        "https://giftyfy-backend.onrender.com/api/admin/notifications",
         {
           headers: {
             Authorization: `Bearer ${token}`,

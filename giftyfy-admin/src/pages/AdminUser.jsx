@@ -24,7 +24,7 @@ export default function AdminUsers() {
   const fetchUsers = async () => {
     const token = localStorage.getItem("token");
 
-    const res = await axios.get("http://localhost:4000/api/users", {
+    const res = await axios.get("https://giftyfy-backend.onrender.com/api/users", {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -42,7 +42,7 @@ export default function AdminUsers() {
     const token = localStorage.getItem("token");
 
     await axios.put(
-      `http://localhost:4000/api/users/block/${id}`,
+      `https://giftyfy-backend.onrender.com/api/users/block/${id}`,
       {},
       {
         headers: {
@@ -76,7 +76,7 @@ export default function AdminUsers() {
       const token = localStorage.getItem("token");
 
       await axios.delete(
-        `http://localhost:4000/api/users/${id}`,
+        `https://giftyfy-backend.onrender.com/api/users/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -399,8 +399,8 @@ export default function AdminUsers() {
 const imgSrc = item.image?.startsWith("http")
   ? item.image
   : item.image?.startsWith("uploads")
-    ? `http://localhost:4000/${item.image}`
-    : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`;
+    ? `https://giftyfy-backend.onrender.com/${item.image}`
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`;
 
                         return (
                           <div key={j} className="usrm-order-item">

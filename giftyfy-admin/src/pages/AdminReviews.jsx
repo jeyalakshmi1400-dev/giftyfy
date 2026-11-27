@@ -18,7 +18,7 @@ const reviewsPerPage = 10;
         localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:4000/api/reviews/admin",
+        "https://giftyfy-backend.onrender.com/api/reviews/admin",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ const reviewsPerPage = 10;
     const token = localStorage.getItem("token");
 
     const res = await axios.put(
-  `http://localhost:4000/api/reviews/block/${id}`,
+  `https://giftyfy-backend.onrender.com/api/reviews/block/${id}`,
   {},
   { headers: { Authorization: `Bearer ${token}` } }
 );
@@ -79,14 +79,14 @@ const getProductImage = (product) => {
 
     return img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`;
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`;
   }
 
   // SINGLE IMAGE STRING
   if (typeof product.image === "string" && product.image) {
     return product.image.startsWith("http")
       ? product.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(product.image)}`;
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(product.image)}`;
   }
 
   // VARIANT PRODUCT IMAGE
@@ -101,7 +101,7 @@ const getProductImage = (product) => {
 
       return img?.startsWith("http")
         ? img
-        : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`;
+        : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`;
     }
   }
 

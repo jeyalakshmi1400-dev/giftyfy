@@ -54,7 +54,7 @@ const AdminDashboard = () => {
         localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:4000/api/admin/dash/dashboard",
+        "https://giftyfy-backend.onrender.com/api/admin/dash/dashboard",
         {
           headers: {
             Authorization: `Bearer ${token}`,

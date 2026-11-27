@@ -20,7 +20,7 @@ export default function AdminRegister() {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/admin/register",
+        "https://giftyfy-backend.onrender.com/api/admin/register",
         form
       );
 

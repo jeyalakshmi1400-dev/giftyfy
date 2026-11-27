@@ -21,7 +21,7 @@ export default function AdminDeliveryPayments() {
     try {
 
       const res = await axios.get(
-        "http://localhost:4000/api/delivery-payment/all",
+        "https://giftyfy-backend.onrender.com/api/delivery-payment/all",
         {
           headers: {
             Authorization:
@@ -69,7 +69,7 @@ export default function AdminDeliveryPayments() {
     try {
 
       await axios.put(
-        `http://localhost:4000/api/delivery-payment/approve/${id}`,
+        `https://giftyfy-backend.onrender.com/api/delivery-payment/approve/${id}`,
         {},
         {
           headers: {
@@ -109,7 +109,7 @@ export default function AdminDeliveryPayments() {
     try {
 
       await axios.put(
-        `http://localhost:4000/api/delivery-payment/reject/${id}`,
+        `https://giftyfy-backend.onrender.com/api/delivery-payment/reject/${id}`,
         {},
         {
           headers: {

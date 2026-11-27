@@ -10,12 +10,12 @@ const InvoicePDFNew = ({ order, shippingRef, invoiceRef }) => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:4000/api/site-content")
+      .get("https://giftyfy-backend.onrender.com/api/site-content")
       .then((res) => setSite(res.data))
       .catch(console.error);
 
     axios
-      .get("http://localhost:4000/api/logo")
+      .get("https://giftyfy-backend.onrender.com/api/logo")
       .then((res) => setLogo(res.data))
       .catch(console.error);
   }, []);
@@ -83,7 +83,7 @@ console.log("Total:", order?.totalAmount);
   logo?.image
     ? logo.image.startsWith("http")
       ? logo.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(logo.image)}`
     : logoDefault
 }
               alt="logo"
@@ -264,7 +264,7 @@ console.log("Total:", order?.totalAmount);
                           src={
                             item.image?.startsWith("http")
                               ? item.image
-                              : `http://localhost:4000/uploads/${item.image}`
+                              : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
                           }
                           alt=""
                           className="ship-product-image"
@@ -389,7 +389,7 @@ console.log("Total:", order?.totalAmount);
   logo?.image
     ? logo.image.startsWith("http")
       ? logo.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(logo.image)}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(logo.image)}`
     : logoDefault
 }
             alt="logo"
@@ -581,7 +581,7 @@ console.log("Total:", order?.totalAmount);
                     src={
                       item.image?.startsWith("http")
                         ? item.image
-                        : `http://localhost:4000/uploads/${item.image}`
+                        : `https://giftyfy-backend.onrender.com/uploads/${item.image}`
                     }
                     alt=""
                     className="invoice-product-image"

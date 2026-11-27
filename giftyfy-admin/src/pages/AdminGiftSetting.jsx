@@ -22,7 +22,7 @@ export default function AdminGiftSetting() {
       try {
 
         const res = await axios.get(
-          "http://localhost:4000/api/gift-setting",
+          "https://giftyfy-backend.onrender.com/api/gift-setting",
           {
             headers:{
               Authorization:
@@ -79,7 +79,7 @@ export default function AdminGiftSetting() {
 
       await axios.put(
 
-        "http://localhost:4000/api/gift-setting",
+        "https://giftyfy-backend.onrender.com/api/gift-setting",
 
         {
           giftWrapEnabled:

@@ -24,7 +24,7 @@ const [logo, setLogo] = useState(null);
   const fetchBanners = async () => {
 
     const res = await axios.get(
-      "http://localhost:4000/api/banner"
+      "https://giftyfy-backend.onrender.com/api/banner"
     );
 
     setBanners(res.data);
@@ -37,7 +37,7 @@ const [logo, setLogo] = useState(null);
   const fetchLogo = async () => {
 
     const res = await axios.get(
-      "http://localhost:4000/api/logo"
+      "https://giftyfy-backend.onrender.com/api/logo"
     );
 
     setLogo(res.data);
@@ -71,7 +71,7 @@ const [logo, setLogo] = useState(null);
     );
 
     await axios.post(
-      "http://localhost:4000/api/banner",
+      "https://giftyfy-backend.onrender.com/api/banner",
       formData
     );
 
@@ -92,7 +92,7 @@ const [logo, setLogo] = useState(null);
   async (id) => {
 
     await axios.delete(
-      `http://localhost:4000/api/banner/${id}`
+      `https://giftyfy-backend.onrender.com/api/banner/${id}`
     );
 
     alert("Banner Deleted");
@@ -108,7 +108,7 @@ const [logo, setLogo] = useState(null);
   async (id) => {
 
     await axios.put(
-      `http://localhost:4000/api/banner/active/${id}`
+      `https://giftyfy-backend.onrender.com/api/banner/active/${id}`
     );
 
     fetchBanners();
@@ -132,7 +132,7 @@ const [logo, setLogo] = useState(null);
     );
 
     await axios.post(
-      "http://localhost:4000/api/logo",
+      "https://giftyfy-backend.onrender.com/api/logo",
       formData
     );
 
@@ -262,7 +262,7 @@ const [logo, setLogo] = useState(null);
                 src={
   banner.image?.startsWith("http")
     ? banner.image
-    : `http://localhost:4000/uploads/${encodeURIComponent(banner.image || "")}`
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(banner.image || "")}`
 }
                 alt="banner"
                 style={{
@@ -430,7 +430,7 @@ const [logo, setLogo] = useState(null);
 src={
   logo.image?.startsWith("http")
     ? logo.image
-    : `http://localhost:4000/uploads/${logo.image}`
+    : `https://giftyfy-backend.onrender.com/uploads/${logo.image}`
 }
       alt="logo"
       style={{

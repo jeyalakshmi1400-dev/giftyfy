@@ -26,7 +26,7 @@ export default function AdminPayments() {
   const fetchPayments = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/payment/all",
+        "https://giftyfy-backend.onrender.com/api/payment/all",
         {
           headers: {
             Authorization: `Bearer ${token}`,

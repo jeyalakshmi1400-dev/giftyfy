@@ -57,7 +57,7 @@ export default function AdminCODPage() {
         localStorage.getItem("adminToken");
 
       const { data } = await axios.get(
-        "http://localhost:4000/api/admin/cod-orders",
+        "https://giftyfy-backend.onrender.com/api/admin/cod-orders",
         {
           headers: {
             Authorization: `Bearer ${adminToken}`,
@@ -118,7 +118,7 @@ export default function AdminCODPage() {
         localStorage.getItem("adminToken");
 
       const res = await axios.put(
-        `http://localhost:4000/api/admin/verify-cod/${orderId}`,
+        `https://giftyfy-backend.onrender.com/api/admin/verify-cod/${orderId}`,
         {},
         {
           headers: {
@@ -869,7 +869,7 @@ export default function AdminCODPage() {
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   alt=""
 />

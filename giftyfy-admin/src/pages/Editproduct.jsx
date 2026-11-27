@@ -41,7 +41,7 @@ export default function Editproduct() {
   const fetchPincodes = async (city, index) => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/pincodes/${city}`
+        `https://giftyfy-backend.onrender.com/api/product/pincodes/${city}`
       );
 
       const pins = res.data;
@@ -67,7 +67,7 @@ export default function Editproduct() {
   const fetchProduct = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:4000/api/product/${id}`
+        `https://giftyfy-backend.onrender.com/api/product/${id}`
       );
 
       const data = res.data;
@@ -83,7 +83,7 @@ if (data.category === "Dress" && data.variants) {
   data.image.map((img) =>
     img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
   )
 );
       }
@@ -122,7 +122,7 @@ if (data.category === "Dress" && data.variants) {
   const fetchCities = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:4000/api/product/cities"
+        "https://giftyfy-backend.onrender.com/api/product/cities"
       );
       setCities(res.data);
     } catch (err) {
@@ -194,7 +194,7 @@ if (data.category === "Dress" && data.variants) {
 
     try {
       await axios.put(
-        `http://localhost:4000/api/product/${id}`,
+        `https://giftyfy-backend.onrender.com/api/product/${id}`,
         formData
       );
 
@@ -315,7 +315,7 @@ if (data.category === "Dress" && data.variants) {
               src={
   img?.startsWith("http")
     ? img
-    : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+    : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
 }
               width="80"
             />

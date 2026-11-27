@@ -111,7 +111,7 @@ export default function SalaryManagement() {
   // ------------------------------------------------------------------
   const fetchSalaries = async () => {
     try {
-      const res = await axios.get("http://localhost:4000/api/salary", {
+      const res = await axios.get("https://giftyfy-backend.onrender.com/api/salary", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -172,7 +172,7 @@ export default function SalaryManagement() {
 
     try {
       await axios.put(
-        `http://localhost:4000/api/salary/pay/${salaryId}`,
+        `https://giftyfy-backend.onrender.com/api/salary/pay/${salaryId}`,
         {},
         {
           headers: {
@@ -192,7 +192,7 @@ export default function SalaryManagement() {
   const updateSalary = async () => {
     try {
       await axios.put(
-        `http://localhost:4000/api/salary/${editSalary.id}`,
+        `https://giftyfy-backend.onrender.com/api/salary/${editSalary.id}`,
         {
           basicSalary: Number(editSalary.basicSalary),
           incentive: Number(editSalary.incentive),

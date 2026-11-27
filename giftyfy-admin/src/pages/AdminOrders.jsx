@@ -139,7 +139,7 @@ const exportToExcel = () => {
         localStorage.getItem("token");
 
       const res = await axios.get(
-        "http://localhost:4000/api/orders",
+        "https://giftyfy-backend.onrender.com/api/orders",
         {
           headers: {
             Authorization: `Bearer ${token}`
@@ -213,7 +213,7 @@ const updateOrderStatus = async (order) => {
     });
 
     await axios.put(
-      `http://localhost:4000/api/orders/${order._id}/status`,
+      `https://giftyfy-backend.onrender.com/api/orders/${order._id}/status`,
       {
         status: nextStatus,
         customizationStatus,
@@ -342,7 +342,7 @@ switch (nextStatus) {
   try {
     const imageUrl = imageName?.startsWith("http")
       ? imageName
-      : `http://localhost:4000/uploads/${encodeURIComponent(imageName || "")}`;
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(imageName || "")}`;
 
     const response = await axios.get(imageUrl, {
       responseType: "blob",
@@ -460,7 +460,7 @@ const loadLogoDataURL = async () => {
   try {
 
     const response = await axios.get(
-      "http://localhost:4000/api/logo"
+      "https://giftyfy-backend.onrender.com/api/logo"
     );
 
     console.log(
@@ -492,7 +492,7 @@ const loadLogoDataURL = async () => {
     }
 const logoUrl = logo.image.startsWith("http")
   ? logo.image
-  : `http://localhost:4000/uploads/${logo.image}`;
+  : `https://giftyfy-backend.onrender.com/uploads/${logo.image}`;
 
     console.log(
       "LOGO FILE:",
@@ -769,18 +769,18 @@ const downloadOrderPDF = async (order) => {
 
       // /uploads/file.jpg
       if (raw.startsWith("/uploads/")) {
-        return `http://localhost:4000${raw}`;
+        return `https://giftyfy-backend.onrender.com${raw}`;
       }
 
       // uploads/file.jpg
       if (raw.startsWith("uploads/")) {
-        return `http://localhost:4000/${raw}`;
+        return `https://giftyfy-backend.onrender.com/${raw}`;
       }
 
       // /file.jpg
       const cleaned = raw.replace(/^\/+/, "");
 
-      return `http://localhost:4000/uploads/${cleaned}`;
+      return `https://giftyfy-backend.onrender.com/uploads/${cleaned}`;
     };
 
     // =====================================================
@@ -4268,7 +4268,7 @@ const cancelOrder = async () => {
     const token = localStorage.getItem("token");
 
     await axios.put(
-      `http://localhost:4000/api/orders/${selectedOrderId}/status`,
+      `https://giftyfy-backend.onrender.com/api/orders/${selectedOrderId}/status`,
       {
         status: "Cancelled",
         reason: cancelReason,
@@ -4419,7 +4419,7 @@ const cancelOrder = async () => {
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   alt=""
   className="admin-modal-img"
@@ -4480,7 +4480,7 @@ const cancelOrder = async () => {
   src={
     img?.startsWith("http")
       ? img
-      : `http://localhost:4000/uploads/${encodeURIComponent(img || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(img || "")}`
   }
   alt="Customized"
   className="admin-custom-preview"
@@ -4857,7 +4857,7 @@ const cancelOrder = async () => {
   src={
     item.image?.startsWith("http")
       ? item.image
-      : `http://localhost:4000/uploads/${encodeURIComponent(item.image || "")}`
+      : `https://giftyfy-backend.onrender.com/uploads/${encodeURIComponent(item.image || "")}`
   }
   alt=""
   className="admin-orders-product-img"

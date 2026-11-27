@@ -20,7 +20,7 @@ import {
    CONSTANTS
 ========================================================= */
 
-const DEFAULT_UPLOADS_URL = "http://localhost:4000/uploads/";
+const DEFAULT_UPLOADS_URL = "https://giftyfy-backend.onrender.com/uploads/";
 
 const SHAPE_OPTIONS = [
   { value: "rect", label: "Rectangle" },
