@@ -15,7 +15,7 @@ export default function AdminLogin() {
 
     try {
       const res = await axios.post(
-        "http://localhost:4000/api/admin/login", // ✅ FIXED
+        "https://giftyfy-backend.onrender.com/api/admin/login", // ✅ FIXED
         { email, password }
       );
 
